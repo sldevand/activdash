@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ActivHome</string>
+    <string name="action_settings">Paramètres</string>
+    <string name="no_wifi">Oups ! Vous devez activer le WIFI ou les Données mobiles</string>
+    <string name="no_prefs">Pas de paramètre détecté!</string>
+    <string name="no_prefs_button">Aller aux paramètres</string>
+
+    <string name="label_network">Réseau</string>
+    <string name="key_shared_prefs">fr.geringan.activdash.sharedprefs</string>
+
+    <string name="key_base_url">baseUrl</string>
+    <string name="key_api_domain">apiDomain</string>
+    <string name="key_node_port">nodePort</string>
+    <string name="key_entrypoint_url">entryPointUrl</string>
+
+    <string name="title_base_url">Url de base</string>
+    <string name="title_api_domain">Domaine API</string>
+    <string name="title_node_port">Port Node</string>
+    <string name="title_entrypoint_url">Entrypoint Url</string>
+
+    <string name="summary_base_url">exemple = "http://192.168.1.52"</string>
+    <string name="summary_api_domain">exemple = "activapi.fr"</string>
+    <string name="summary_node_port">exemple = 5901</string>
+    <string name="summary_entrypoint_url">exemple = dashboard/resultat.php?"</string>
+
+    <string name="default_base_url">http://192.168.1.52</string>
+    <string name="default_api_domain">activapi.fr</string>
+    <string name="default_node_port">5901</string>
+    <string name="default_entrypoint_url">dashboard/resultat.php?</string>
+
+    <string name="http_bad_response_error">Une erreur %1$s est survenue!</string>
+
+    <string name="appwidget_text">EXEMPLE</string>
+    <string name="configure">Configurer</string>
+    <string name="add_widget">Ajouter widget</string>
+    <string name="http_query">Requete Http</string>
+    <string name="activ_server">ActivServer</string>
+
+    <string name="thermostat">Thermostat</string>
+    <string name="thermostat_minus">-</string>
+    <string name="thermostat_plus">+</string>
+    <string name="thermostat_consigne">-273 °C</string>
+
+    <string name="thermometer_value">-273°C</string>
+    <string name="thermostat_mode_name">AUCUN</string>
+    <string name="thermostat_plan_name">AUCUN</string>
+    <string name="thermostat_state_name">AUCUN</string>
+
+
+    <string name="chart_today">Aujourd\'hui</string>
+    <string name="chart_yesterday">Hier</string>
+    <string name="chart_week">Semaine</string>
+    <string name="chart_month">Mois</string>
+    <string name="title_activity_thermostat_controller">Thermostat</string>
+    <string name="play_widget_icon">Play widget icon</string>
+    <string name="item_capteur_name">Nom</string>
+    <string name="texte_example">text</string>
+</resources>

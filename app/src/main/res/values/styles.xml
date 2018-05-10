@@ -1,0 +1,72 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="cardViewStyle">@style/CardView</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="RecycleItemsStyle">
+        <item name="android:paddingLeft">@dimen/item_padding_left</item>
+        <item name="android:textAppearance">?attr/textAppearanceListItem</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="RecycleValueItemStyle" parent="RecycleItemsStyle">
+        <item name="android:textAppearance">?attr/textAppearanceListItemSecondary</item>
+
+    </style>
+
+    <style name="MyCustomTabLayout" parent="Widget.Design.TabLayout">
+        <item name="android:background">@color/white</item>
+        <item name="tabTextAppearance">@style/TabLayoutStyle</item>
+        <item name="tabSelectedTextColor">@color/colorAccent</item>
+        <item name="tabIndicatorColor">@color/colorAccent</item>
+        <item name="android:layout_height">@dimen/tablayout_height</item>
+    </style>
+
+    <style name="TabLayoutStyle" parent="@android:style/TextAppearance.Widget.TabWidget">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@android:color/background_dark</item>
+        <item name="android:textAllCaps">true</item>
+
+    </style>
+
+    <style name="ThermostatControlsStyle">
+        <item name="android:background">@color/almostBlack</item>
+        <item name="android:textColor">@color/smokeWhite</item>
+        <item name="android:textSize">25sp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+
+    </style>
+
+    <style name="ThermostatDisplayStyle">
+        <item name="android:background">@color/almostBlack</item>
+        <item name="android:textColor">@color/smokeWhite</item>
+        <item name="android:textSize">40sp</item>
+    </style>
+
+    <style name="ThermometerDisplayStyle">
+        <item name="android:background">@color/smokeWhite</item>
+        <item name="android:textColor">@color/almostBlack</item>
+        <item name="android:textSize">30sp</item>
+    </style>
+
+
+</resources>

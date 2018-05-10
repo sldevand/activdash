@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="RecycleItemsStyle">
+        <item name="android:paddingStart">@dimen/item_padding_left</item>
+        <item name="android:textAppearance">?attr/textAppearanceListItem</item>
+        <item name="android:gravity">center_vertical</item>
+
+    </style>
+</resources>

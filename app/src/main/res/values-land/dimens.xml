@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="thermostat_marginTop">80dp</dimen>
+    <dimen name="thermostat_rounded_corner">20dp</dimen>
+    <dimen name="thermostat_display_width">200dp</dimen>
+    <dimen name="thermostat_display_height">200dp</dimen>
+
+
+</resources>

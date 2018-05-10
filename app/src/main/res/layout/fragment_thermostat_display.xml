@@ -1,0 +1,196 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="fr.geringan.activdash.activities.ThermostatControllerActivity$PlaceholderFragment">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/thermostat_cardView"
+        android:layout_width="@dimen/thermostat_display_width"
+        android:layout_height="@dimen/thermostat_display_width"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/thermostat_marginTop"
+        app:cardBackgroundColor="@color/almostBlack"
+        app:cardCornerRadius="@dimen/thermostat_rounded_corner"
+
+        tools:style="@style/CardView">
+
+        <LinearLayout
+            android:layout_width="@dimen/thermostat_display_width"
+            android:layout_height="@dimen/thermostat_display_height"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/plus_thermostat"
+                style="@style/ThermostatControlsStyle"
+                android:text="@string/thermostat_plus" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/consigne_thermostat"
+                style="@style/ThermostatDisplayStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/thermostat_consigne" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/minus_thermostat"
+                style="@style/ThermostatControlsStyle"
+                android:text="@string/thermostat_minus" />
+        </LinearLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="@dimen/thermometer_display_width"
+        android:layout_height="@dimen/thermometer_display_height"
+        android:layout_below="@id/thermostat_cardView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/thermometer_marginTop"
+        app:cardBackgroundColor="@color/almostBlack"
+        app:cardCornerRadius="@dimen/thermostat_rounded_corner"
+        tools:style="@style/CardView">
+
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/value_thermometer"
+            style="@style/ThermometerDisplayStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/thermometer_value" />
+
+    </android.support.v7.widget.CardView>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+
+
+        android:layout_marginBottom="@dimen/appwidget_min_height"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/thermometer_display_height"
+
+            android:layout_weight="3"
+            app:cardBackgroundColor="@color/white"
+            tools:style="@style/CardView">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/imgThermostatMode"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="@dimen/activity_vertical_padding"
+                    android:src="@drawable/ic_mode_eco"
+                    android:tint="@color/almostBlack" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/txtThermostatMode"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:text="@string/thermostat_mode_name"
+                    android:textAlignment="center"
+
+                    />
+
+            </LinearLayout>
+
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/thermometer_display_height"
+            android:layout_marginLeft="@dimen/thermometer_infos_inner_margin"
+            android:layout_marginRight="@dimen/thermometer_infos_inner_margin"
+            android:layout_weight="2"
+            app:cardBackgroundColor="@color/white"
+            tools:style="@style/CardView">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:padding="@dimen/activity_vertical_padding"
+                    android:tint="@color/almostBlack"
+                    app:srcCompat="@drawable/ic_planning"
+
+                    />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/txtThermostatPlan"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:text="@string/thermostat_plan_name"
+                    android:textAlignment="center"
+
+                    />
+
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/thermometer_display_height"
+
+            android:layout_weight="3"
+            app:cardBackgroundColor="@color/white"
+            tools:style="@style/CardView">
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/imgThermostatEtat"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="@dimen/activity_vertical_padding"
+                    app:srcCompat="@drawable/ic_power" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/txtThermostatEtat"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:text="@string/thermostat_state_name" />
+
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

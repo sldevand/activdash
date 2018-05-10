@@ -1,0 +1,38 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:selectableItemBackground"
+    android:padding="4dp">
+
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/imageDimmer"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/actionneur_icon_minheight"
+        android:layout_weight="3"
+        android:src="@mipmap/ic_slider"
+
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/textDimmer"
+            style="@style/RecycleItemsStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <android.support.v7.widget.AppCompatSeekBar
+            android:id="@+id/seekbarDimmer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.4"
+            android:max="255" />
+    </LinearLayout>
+</LinearLayout>
+

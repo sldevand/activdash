@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="@string/key_shared_prefs">
+
+    <PreferenceCategory android:title="@string/label_network">
+
+        <EditTextPreference
+            android:defaultValue="@string/default_base_url"
+            android:dialogTitle="@string/title_base_url"
+            android:key="@string/key_base_url"
+            android:summary="@string/summary_base_url"
+            android:title="@string/title_base_url" />
+
+        <EditTextPreference
+            android:defaultValue="@string/default_api_domain"
+            android:dialogTitle="@string/title_api_domain"
+            android:key="@string/key_api_domain"
+            android:summary="@string/summary_api_domain"
+            android:title="@string/title_api_domain" />
+
+        <EditTextPreference
+            android:defaultValue="@string/default_node_port"
+            android:dialogTitle="@string/summary_node_port"
+            android:key="@string/key_node_port"
+            android:summary="@string/summary_node_port"
+            android:title="@string/title_node_port" />
+
+        <EditTextPreference
+            android:defaultValue="@string/default_entrypoint_url"
+            android:dialogTitle="@string/summary_entrypoint_url"
+            android:key="@string/key_entrypoint_url"
+            android:summary="@string/summary_entrypoint_url"
+            android:title="@string/title_entrypoint_url" />
+
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
