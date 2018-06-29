@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 public class CapteurDataModel extends DataModel {
 
-    protected String nom;
+    private String nom;
     private String valeur1;
     private String valeur2;
     private String radioid;
@@ -25,23 +25,18 @@ public class CapteurDataModel extends DataModel {
     public String getNom() {
         return nom;
     }
-
     public String getValeur1() {
         return valeur1;
     }
-
     public String getValeur2() {
         return valeur2;
     }
-
     public String getRadioid() {
         return radioid;
     }
-
     public int getActif() {
         return actif;
     }
-
     public String getReleve() {
         return releve;
     }

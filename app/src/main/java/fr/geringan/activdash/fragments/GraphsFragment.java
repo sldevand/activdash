@@ -33,7 +33,6 @@ public class GraphsFragment extends CommonNetworkFragment {
     protected String m_baseAddress = PrefsManager.baseAddress + "/" + PrefsManager.apiDomain + "/mesures/";
     protected String m_thermoAddress = m_baseAddress + "get-sensors/thermo";
     protected GraphsAdapter adapter;
-    RecyclerView recyclerView;
 
     public static GraphsFragment newInstance(int position) {
         GraphsFragment fragment = new GraphsFragment();
@@ -54,7 +53,7 @@ public class GraphsFragment extends CommonNetworkFragment {
         super.onViewCreated(view, savedInstanceState);
 
 
-        recyclerView = view.findViewById(R.id.list_graphs);
+        RecyclerView recyclerView = view.findViewById(R.id.list_graphs);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new GraphsAdapter();
         recyclerView.setAdapter(adapter);
@@ -124,7 +123,6 @@ public class GraphsFragment extends CommonNetworkFragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-
     }
 
     @Override
@@ -133,12 +131,12 @@ public class GraphsFragment extends CommonNetworkFragment {
     }
 
     @Override
-    public void initializeSocketioListeners() {}
+    public void initializeSocketioListeners() {
+        //intentional empty method
+    }
 
     @Override
     public void onResponseOk(String response) {
         progressBar.setVisibility(View.GONE);
     }
-
-
 }

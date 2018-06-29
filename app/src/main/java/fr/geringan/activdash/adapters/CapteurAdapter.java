@@ -53,7 +53,7 @@ public class CapteurAdapter extends CommonNetworkAdapter<CapteurAdapter.ViewHold
 
     @Override
     public void httpToDataModel(String response) throws IllegalAccessException {
-        if (response.equals("404")) {
+        if ("404".equals(response)) {
             return;
         }
         JSONArray jsonArray;

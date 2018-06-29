@@ -43,7 +43,7 @@ public class GraphsDataModel extends DataModel implements Parcelable {
     }
 
     //GETTERS
-    public String getSensor_id() {
+    public String getSensorId() {
         return sensor_id;
     }
 

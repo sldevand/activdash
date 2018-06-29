@@ -31,6 +31,7 @@ public abstract class CommonNetworkFragment extends Fragment {
                         break;
                     default:
                         onResponseOk(response);
+                        break;
                 }
             }
         });

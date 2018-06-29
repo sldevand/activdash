@@ -1,6 +1,7 @@
 package fr.geringan.activdash.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageView;
@@ -50,12 +51,12 @@ public class ThermostatFragment extends CommonNetworkFragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_thermostat_display, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         txtConsigne = view.findViewById(R.id.consigne_thermostat);
         txtMinus = view.findViewById(R.id.minus_thermostat);
@@ -132,7 +133,7 @@ public class ThermostatFragment extends CommonNetworkFragment {
 
     public void updateThermostatDisplays(JSONObject obj) throws JSONException, IllegalAccessException {
         if (obj == null)
-            throw new RuntimeException("updateThermostatDisplay : JSON Object is null !!");
+            throw new JSONException("updateThermostatDisplay : JSON Object is null !!");
 
         thermostat = new ThermostatDataModel(obj);
         ModeDataModel mode = thermostat.getMode();
@@ -279,7 +280,6 @@ public class ThermostatFragment extends CommonNetworkFragment {
                             }
                         });
                     }
-
                 }
             }
         } catch (JSONException e) {
@@ -292,16 +292,17 @@ public class ThermostatFragment extends CommonNetworkFragment {
             case SocketIOHolder.EVENT_THERMOSTAT:
                 updateThermostatDisplays(obj);
                 break;
-
             case SocketIOHolder.EVENT_BOILER:
                 updateSensorDisplay(obj);
+                break;
+            default:
                 break;
         }
     }
 
     @Override
     public void onResponseOk(String response) {
-
+        //intentional empty method
     }
 
     private class BoilerState {

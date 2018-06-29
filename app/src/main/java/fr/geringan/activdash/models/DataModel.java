@@ -9,6 +9,7 @@ import java.lang.reflect.Field;
 public abstract class DataModel {
 
 
+    @SuppressWarnings("WeakerAccess")
     protected JSONObject dataJSON;
 
     protected DataModel(JSONObject data) throws JSONException, IllegalAccessException {

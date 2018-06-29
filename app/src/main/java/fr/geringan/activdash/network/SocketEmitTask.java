@@ -25,7 +25,9 @@ public class SocketEmitTask extends AsyncTask<Object, Void, String> {
     }
 
     @Override
-    protected void onPostExecute(String result) {}
+    protected void onPostExecute(String result) {
+        //intentional empty method
+    }
 
     @Override
     protected void onCancelled() {

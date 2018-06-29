@@ -46,7 +46,7 @@ public class DimmerAdapter extends CommonNetworkAdapter<DimmerAdapter.ViewHolder
 
     protected void httpToDataModel(String response) throws IllegalAccessException {
 
-        if (response.equals("404")) {
+        if ("404".equals(response)) {
             return;
         }
 

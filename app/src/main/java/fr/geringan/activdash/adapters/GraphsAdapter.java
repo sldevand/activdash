@@ -90,7 +90,7 @@ public class GraphsAdapter extends CommonNetworkAdapter<GraphsAdapter.ViewHolder
         @Override
         public void setData(GraphsDataModel graphDM) {
             title.setText(graphDM.getNom());
-            radioId.setText(graphDM.getSensor_id());
+            radioId.setText(graphDM.getSensorId());
             chartPopulate(graphDM);
         }
 

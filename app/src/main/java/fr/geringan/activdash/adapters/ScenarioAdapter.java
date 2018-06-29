@@ -48,7 +48,7 @@ public class ScenarioAdapter extends CommonNetworkAdapter<ScenarioAdapter.ViewHo
 
     @Override
     public void httpToDataModel(String response) throws IllegalAccessException, JSONException {
-        if (response.equals("404")) {
+        if ("404".equals(response)) {
             return;
         }
 

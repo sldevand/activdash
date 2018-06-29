@@ -132,7 +132,7 @@ public class InterAdapter extends CommonNetworkAdapter<InterAdapter.ViewHolder> 
             currentDataModel = interData;
         }
 
-        void setEtat(InterDataModel interData) {
+        private void setEtat(InterDataModel interData) {
             int resource = R.mipmap.ic_power_off;
             if (interData.etat == 1) resource = R.mipmap.ic_power_on;
             img.setImageResource(resource);
