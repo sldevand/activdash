@@ -1,3 +1,5 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/505f462b3bd44cef93898273a086f767)](https://www.codacy.com/app/sldevand/activdash?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=sldevand/activdash&amp;utm_campaign=Badge_Grade)
+
 ActivDash
 ======
 **ActivDash** is a home automation Android App that consumes the web service activapi.fr
