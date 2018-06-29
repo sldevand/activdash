@@ -11,8 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import java.util.Optional;
-
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.adapters.ScenarioAdapter;
 import fr.geringan.activdash.utils.PrefsManager;
@@ -59,8 +57,12 @@ public class ScenariosFragment extends CommonNetworkFragment {
     }
 
     @Override
-    public void initializeSocketioListeners() {}
+    public void initializeSocketioListeners() {
+        //intentional empty method
+    }
 
     @Override
-    public void onResponseOk(String response) {}
+    public void onResponseOk(String response) {
+        //intentional empty method
+    }
 }
