@@ -2,9 +2,7 @@
 
 ActivDash
 ======
-**ActivDash** is a home automation Android App that consumes the web service activapi.fr
-included in my home made home automation solution ActivHome.
-<br> 
+**ActivDash** is a home automation Android App that consumes the ActivAPI web service included in my home made home automation solution ActivHome.
 
 ## Live Example
 <!--![live example] -->
@@ -13,7 +11,7 @@ Coming soon...
 ## Serve
 You can clone this repository and create an Android project for build on your device.
 ```
-git clone https://github.com/sldevand/Departements.git
+git clone https://github.com/sldevand/activdash
 ```
 ## Tests
 
