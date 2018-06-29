@@ -70,15 +70,11 @@ public class DashWidget extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-        if (intent.getAction().equals(ACTION_SCENARIO)) {
+        if (ACTION_SCENARIO.equals(intent.getAction())) {
             String url = intent.getStringExtra(ACTIONURL_EXTRA);
             GetHttp getData = new GetHttp();
             getData.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url);
-        } else {
-
-
         }
-
     }
 
     @Override

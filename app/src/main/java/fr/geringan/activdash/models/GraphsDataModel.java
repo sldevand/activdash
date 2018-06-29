@@ -27,10 +27,6 @@ public class GraphsDataModel extends DataModel implements Parcelable {
     private String nom;
     private JSONArray data;
 
-    GraphsDataModel() {
-        super();
-    }
-
     public GraphsDataModel(JSONObject data) throws JSONException, IllegalAccessException {
         super(data);
     }
@@ -49,11 +45,6 @@ public class GraphsDataModel extends DataModel implements Parcelable {
     //GETTERS
     public String getSensor_id() {
         return sensor_id;
-    }
-
-    //SETTERS
-    public void setSensor_id(String sensor_id) {
-        this.sensor_id = sensor_id;
     }
 
     public String getId() {

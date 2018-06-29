@@ -16,7 +16,6 @@ import java.util.Iterator;
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.models.ScenarioDataModel;
 import fr.geringan.activdash.network.SocketIOHolder;
-import fr.geringan.activdash.viewholders.CommonViewHolder;
 
 public class ScenarioAdapter extends CommonNetworkAdapter<ScenarioAdapter.ViewHolder> {
     private ArrayList<ScenarioDataModel> dataSet;
@@ -66,7 +65,7 @@ public class ScenarioAdapter extends CommonNetworkAdapter<ScenarioAdapter.ViewHo
         return 200;
     }
 
-    public class ViewHolder extends CommonViewHolder<ScenarioDataModel> {
+    public class ViewHolder extends android.support.v7.widget.RecyclerView.ViewHolder {
         private TextView txtName;
         private ImageView img;
         private ScenarioDataModel currentDataModel;

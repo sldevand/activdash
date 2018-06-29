@@ -1,6 +1,6 @@
 package fr.geringan.activdash.adapters;
 
-import android.util.Log;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.models.DimmerDataModel;
 import fr.geringan.activdash.network.SocketIOHolder;
-import fr.geringan.activdash.viewholders.CommonViewHolder;
 
 
 public class DimmerAdapter extends CommonNetworkAdapter<DimmerAdapter.ViewHolder> {
@@ -31,6 +30,7 @@ public class DimmerAdapter extends CommonNetworkAdapter<DimmerAdapter.ViewHolder
             return 0;
     }
 
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
@@ -40,7 +40,7 @@ public class DimmerAdapter extends CommonNetworkAdapter<DimmerAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(DimmerAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull DimmerAdapter.ViewHolder holder, int position) {
         holder.setData(this.dataSet.get(position));
     }
 
@@ -104,7 +104,7 @@ public class DimmerAdapter extends CommonNetworkAdapter<DimmerAdapter.ViewHolder
         SocketIOHolder.emit(event, dataModel);
     }
 
-    public class ViewHolder extends CommonViewHolder<DimmerDataModel> {
+    public class ViewHolder extends android.support.v7.widget.RecyclerView.ViewHolder {
 
         private TextView txtName;
         private ImageView img;

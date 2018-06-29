@@ -7,13 +7,11 @@ import android.view.MenuItem;
 
 import fr.geringan.activdash.fragments.PrefsFragment;
 
-
 public class SettingsActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         getFragmentManager().beginTransaction().add(android.R.id.content, new PrefsFragment()).commit();
     }
 
@@ -24,9 +22,8 @@ public class SettingsActivity extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
-
-
 }

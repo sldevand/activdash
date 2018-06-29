@@ -23,9 +23,7 @@ public class DimmerDataModel extends DataModel {
     }
 
     @Override
-    protected void writeToJSON() {
-
-    }
+    protected void writeToJSON() {}
 
     public void changeEtat(int etat) {
         try {

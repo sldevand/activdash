@@ -11,9 +11,8 @@ import java.util.ArrayList;
 
 import fr.geringan.activdash.interfaces.HttpResponse;
 import fr.geringan.activdash.models.DataModel;
-import fr.geringan.activdash.viewholders.CommonViewHolder;
 
-public abstract class CommonNetworkAdapter<V extends CommonViewHolder> extends RecyclerView.Adapter<V> implements HttpResponse {
+public abstract class CommonNetworkAdapter<V extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<V> implements HttpResponse {
 
     public Context context;
     public ArrayList<? extends DataModel> dataSet = null;

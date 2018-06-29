@@ -308,8 +308,10 @@ public class AppController extends AppCompatActivity {
                     return "Capteurs";
                 case 3:
                     return "Graphs";
+                default:
+                    return null;
             }
-            return null;
+
         }
     }
 }

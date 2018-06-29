@@ -9,10 +9,9 @@ import java.lang.reflect.Field;
 public abstract class DataModel {
 
 
-    JSONObject dataJSON;
+    protected JSONObject dataJSON;
 
     protected DataModel(JSONObject data) throws JSONException, IllegalAccessException {
-
         setDataJSON(data);
     }
 
@@ -28,7 +27,7 @@ public abstract class DataModel {
             String name = field.getName();
             String type = field.getType().getSimpleName();
 
-            if (!name.equals("CREATOR")) {
+            if (!"CREATOR".equals(name)) {
                 if (type.equalsIgnoreCase("int") && dataJSON.has(name)) {
                     field.setInt(this, dataJSON.getInt(name));
                 } else if (dataJSON.has(name)) {
@@ -79,7 +78,7 @@ public abstract class DataModel {
                 if (field.get(this) != null) {
                     value = field.get(this).toString();
                 }
-                if (type.equals("JSONArray")) value = "JSONArray [...]";
+                if ("JSONArray".equals(type)) value = "JSONArray [...]";
                 descriptif.append(type).append(" ").append(name).append(" = ").append(value).append("\n");
             } catch (IllegalAccessException e) {
                 e.printStackTrace();

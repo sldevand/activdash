@@ -114,8 +114,9 @@ public class ThermostatControllerActivity extends AppCompatActivity {
                     return ThermostatFragment.newInstance();
                 case 2:
                     return ThermostatFragment.newInstance();
+                default:
+                    return null;
             }
-            return null;
         }
 
         @Override
@@ -133,8 +134,9 @@ public class ThermostatControllerActivity extends AppCompatActivity {
                     return "Graphs";
                 case 2:
                     return "Planification";
+                default:
+                    return null;
             }
-            return null;
         }
     }
 }

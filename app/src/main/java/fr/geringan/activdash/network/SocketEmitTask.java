@@ -4,7 +4,7 @@ import android.os.AsyncTask;
 
 public class SocketEmitTask extends AsyncTask<Object, Void, String> {
 
-    private String result = "KO";
+
     private String _event;
 
     SocketEmitTask(String event) {
@@ -13,7 +13,7 @@ public class SocketEmitTask extends AsyncTask<Object, Void, String> {
 
     @Override
     protected String doInBackground(Object... args) {
-
+        String result = "KO";
         try {
             Thread.sleep(60);
             SocketIOHolder.socket.emit(_event, args[0]);
@@ -25,8 +25,7 @@ public class SocketEmitTask extends AsyncTask<Object, Void, String> {
     }
 
     @Override
-    protected void onPostExecute(String result) {
-    }
+    protected void onPostExecute(String result) {}
 
     @Override
     protected void onCancelled() {

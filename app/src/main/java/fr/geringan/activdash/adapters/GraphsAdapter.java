@@ -1,6 +1,7 @@
 package fr.geringan.activdash.adapters;
 
 import android.annotation.SuppressLint;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +26,6 @@ import java.util.List;
 
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.models.GraphsDataModel;
-import fr.geringan.activdash.viewholders.CommonViewHolder;
 
 public class GraphsAdapter extends CommonNetworkAdapter<GraphsAdapter.ViewHolder> {
     private ArrayList<GraphsDataModel> dataSet = new ArrayList<>();
@@ -42,6 +42,7 @@ public class GraphsAdapter extends CommonNetworkAdapter<GraphsAdapter.ViewHolder
         dataSet.clear();
     }
 
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
@@ -51,7 +52,7 @@ public class GraphsAdapter extends CommonNetworkAdapter<GraphsAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.setData(this.dataSet.get(position));
     }
 
@@ -72,12 +73,11 @@ public class GraphsAdapter extends CommonNetworkAdapter<GraphsAdapter.ViewHolder
     }
 
 
-    public class ViewHolder extends CommonViewHolder<GraphsDataModel> implements OnChartValueSelectedListener {
+    public class ViewHolder extends android.support.v7.widget.RecyclerView.ViewHolder implements OnChartValueSelectedListener {
 
         private AppCompatTextView title;
         private AppCompatTextView radioId;
         private LineChart chart;
-        private GraphsDataModel _currentChart;
 
         private ViewHolder(View itemView) {
             super(itemView);
@@ -92,12 +92,11 @@ public class GraphsAdapter extends CommonNetworkAdapter<GraphsAdapter.ViewHolder
             title.setText(graphDM.getNom());
             radioId.setText(graphDM.getSensor_id());
             chartPopulate(graphDM);
-            _currentChart = graphDM;
         }
 
         private void chartPopulate(GraphsDataModel graphDM) {
-            LineData lineData = null;
-            LineDataSet lineDataSet = null;
+            LineData lineData;
+            LineDataSet lineDataSet;
 
             try {
                 lineDataSet = fromJSONArrayToLineDataSet(graphDM.getData());
@@ -164,7 +163,7 @@ public class GraphsAdapter extends CommonNetworkAdapter<GraphsAdapter.ViewHolder
             return new LineDataSet(entries, "Températures");
         }
 
-        public long formatDateFromStringToLong(String date, SimpleDateFormat dateFormat) throws ParseException {
+        private long formatDateFromStringToLong(String date, SimpleDateFormat dateFormat) throws ParseException {
             Date dateDepart = dateFormat.parse(date);
             return dateDepart.getTime();
         }

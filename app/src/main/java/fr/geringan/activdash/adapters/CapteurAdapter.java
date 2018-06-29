@@ -19,7 +19,6 @@ import java.util.ArrayList;
 
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.models.CapteurDataModel;
-import fr.geringan.activdash.viewholders.CommonViewHolder;
 
 import static java.lang.Float.parseFloat;
 
@@ -83,7 +82,7 @@ public class CapteurAdapter extends CommonNetworkAdapter<CapteurAdapter.ViewHold
         return dataSet;
     }
 
-    public class ViewHolder extends CommonViewHolder<CapteurDataModel> {
+    public class ViewHolder extends android.support.v7.widget.RecyclerView.ViewHolder {
         private TextView txtStatus;
         private TextView txtName;
         private TextView txtValue1;
@@ -135,10 +134,11 @@ public class CapteurAdapter extends CommonNetworkAdapter<CapteurAdapter.ViewHold
             txtStatus.setText(txtActif);
         }
 
-        private  void displayIconAndValues(String radioId, String valeur1, String valeur2) {
+        private void displayIconAndValues(String radioId, String valeur1, String valeur2) {
 
             String value1Units = "°C";
             String value2Units = "";
+
             if (radioId.contains("dht11")) value2Units = "%RH";
             if (radioId.contains("tinfo")) {
                 img.setImageResource(R.mipmap.ic_electricity);
@@ -150,19 +150,21 @@ public class CapteurAdapter extends CommonNetworkAdapter<CapteurAdapter.ViewHold
             }
 
             DecimalFormat df = new DecimalFormat("0.#");
+            String v1 = "";
+            String v2 = "";
 
             if (!valeur1.isEmpty()) {
                 float val1 = parseFloat(valeur1);
-                valeur1 = df.format(val1);
+                v1 = df.format(val1);
             }
 
             if (!valeur2.isEmpty()) {
                 float val2 = parseFloat(valeur2);
-                valeur2 = df.format(val2);
+                v2 = df.format(val2);
             }
 
-            String val1 = valeur1 + " " + value1Units;
-            String val2 = valeur2 + " " + value2Units;
+            String val1 = v1 + " " + value1Units;
+            String val2 = v2 + " " + value2Units;
 
             txtValue1.setText(val1);
             txtValue2.setText(val2);

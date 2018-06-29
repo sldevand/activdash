@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.models.InterDataModel;
 import fr.geringan.activdash.network.SocketIOHolder;
-import fr.geringan.activdash.viewholders.CommonViewHolder;
 
 public class InterAdapter extends CommonNetworkAdapter<InterAdapter.ViewHolder> {
     private ArrayList<InterDataModel> dataSet = null;
@@ -90,7 +89,7 @@ public class InterAdapter extends CommonNetworkAdapter<InterAdapter.ViewHolder> 
         }
     }
 
-    public class ViewHolder extends CommonViewHolder<InterDataModel> {
+    public class ViewHolder extends android.support.v7.widget.RecyclerView.ViewHolder {
 
         private TextView txtName;
         private ImageView img;

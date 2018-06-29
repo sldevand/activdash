@@ -19,7 +19,7 @@ import fr.geringan.activdash.adapters.CommonNetworkAdapter;
 
 public class CommonGetHttp extends AsyncTask<String, Void, String> {
 
-    OnHttpResponseListener responseListener;
+    private OnHttpResponseListener responseListener;
     private CommonNetworkAdapter<?> _adapter;
     private String _address;
 
