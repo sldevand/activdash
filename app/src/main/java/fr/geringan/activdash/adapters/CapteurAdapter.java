@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.models.CapteurDataModel;
+import fr.geringan.activdash.viewholders.CommonViewHolder;
 
 import static java.lang.Float.parseFloat;
 
@@ -51,9 +52,9 @@ public class CapteurAdapter extends CommonNetworkAdapter<CapteurAdapter.ViewHold
     }
 
     @Override
-    public int httpToDataModel(String response) throws IllegalAccessException {
+    public void httpToDataModel(String response) throws IllegalAccessException {
         if (response.equals("404")) {
-            return 404;
+            return;
         }
         JSONArray jsonArray;
 
@@ -75,14 +76,13 @@ public class CapteurAdapter extends CommonNetworkAdapter<CapteurAdapter.ViewHold
         }
 
 
-        return 200;
     }
 
     public ArrayList<CapteurDataModel> getDataSet() {
         return dataSet;
     }
 
-    public class ViewHolder extends android.support.v7.widget.RecyclerView.ViewHolder {
+    public class ViewHolder extends CommonViewHolder<CapteurDataModel> {
         private TextView txtStatus;
         private TextView txtName;
         private TextView txtValue1;

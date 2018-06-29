@@ -88,16 +88,14 @@ public class AppController extends AppCompatActivity {
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
-
-
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        // SocketIOHolder.stop();
     }
 
     @Override
@@ -124,24 +122,12 @@ public class AppController extends AppCompatActivity {
                 progressBar.setIndeterminate(true);
                 progressBar.show();
 
-                boolean socketOK = false;
-
                 if (SocketIOHolder.socket == null) {
-                    socketOK = SocketIOHolder.launch();
+                    SocketIOHolder.launch();
                 } else {
-                    socketOK = SocketIOHolder.start();
+                   SocketIOHolder.start();
                 }
-
-                //  progressBar.dismiss();
                 initializeSocketioListeners();
-                /*} else {
-
-                    progressBar.dismiss();
-                    Snackbar.make(mViewPager, getResources().getString(R.string.node_connect_error)
-                                    + PrefsManager.baseAddress + ":" + PrefsManager.nodePort,
-                            Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                }*/
 
             } else {
                 setContentView(R.layout.activity_error);
@@ -177,20 +163,22 @@ public class AppController extends AppCompatActivity {
 
                         menuItem.setChecked(true);
                         mDrawerLayout.closeDrawers();
-                        Intent intent = null;
+                        Intent intent;
                         switch (menuItem.getItemId()) {
 
                             case R.id.nav_activ_server:
                                 intent = new Intent(AppController.this, ActivServerActivity.class);
                                 startActivity(intent);
-                                return true;
+                                break;
 
                             case R.id.nav_thermostat:
                                 intent = new Intent(AppController.this, ThermostatControllerActivity.class);
                                 startActivity(intent);
+                                break;
+                            default:
                                 return true;
-                        }
 
+                        }
                         return true;
                     }
                 });

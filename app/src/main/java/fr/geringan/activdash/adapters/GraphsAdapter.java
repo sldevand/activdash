@@ -26,6 +26,7 @@ import java.util.List;
 
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.models.GraphsDataModel;
+import fr.geringan.activdash.viewholders.CommonViewHolder;
 
 public class GraphsAdapter extends CommonNetworkAdapter<GraphsAdapter.ViewHolder> {
     private ArrayList<GraphsDataModel> dataSet = new ArrayList<>();
@@ -57,9 +58,9 @@ public class GraphsAdapter extends CommonNetworkAdapter<GraphsAdapter.ViewHolder
     }
 
     @Override
-    public int httpToDataModel(String response) throws IllegalAccessException, JSONException {
+    public void httpToDataModel(String response) throws IllegalAccessException, JSONException {
         if ("404".equals(response)) {
-            return 404;
+            return;
         }
 
         JSONObject graph = new JSONObject(response);
@@ -69,11 +70,10 @@ public class GraphsAdapter extends CommonNetworkAdapter<GraphsAdapter.ViewHolder
 
         dataSet.add(dm);
 
-        return 200;
     }
 
 
-    public class ViewHolder extends android.support.v7.widget.RecyclerView.ViewHolder implements OnChartValueSelectedListener {
+    public class ViewHolder extends CommonViewHolder<GraphsDataModel> implements OnChartValueSelectedListener {
 
         private AppCompatTextView title;
         private AppCompatTextView radioId;
@@ -177,7 +177,7 @@ public class GraphsAdapter extends CommonNetworkAdapter<GraphsAdapter.ViewHolder
 
         @Override
         public void onNothingSelected() {
-
+            //intentional empty body
         }
 
     }

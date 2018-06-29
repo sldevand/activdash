@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -17,6 +16,7 @@ import java.util.ArrayList;
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.models.DimmerDataModel;
 import fr.geringan.activdash.network.SocketIOHolder;
+import fr.geringan.activdash.viewholders.CommonViewHolder;
 
 
 public class DimmerAdapter extends CommonNetworkAdapter<DimmerAdapter.ViewHolder> {
@@ -44,10 +44,10 @@ public class DimmerAdapter extends CommonNetworkAdapter<DimmerAdapter.ViewHolder
         holder.setData(this.dataSet.get(position));
     }
 
-    protected int httpToDataModel(String response) throws IllegalAccessException {
+    protected void httpToDataModel(String response) throws IllegalAccessException {
 
         if (response.equals("404")) {
-            return 404;
+            return;
         }
 
         JSONArray jsonArray = null;
@@ -72,7 +72,6 @@ public class DimmerAdapter extends CommonNetworkAdapter<DimmerAdapter.ViewHolder
             }
         }
 
-        return 200;
     }
 
     public void setEtat(DimmerDataModel dataModel) throws JSONException, IllegalAccessException {
@@ -104,22 +103,18 @@ public class DimmerAdapter extends CommonNetworkAdapter<DimmerAdapter.ViewHolder
         SocketIOHolder.emit(event, dataModel);
     }
 
-    public class ViewHolder extends android.support.v7.widget.RecyclerView.ViewHolder {
+    public class ViewHolder extends CommonViewHolder<DimmerDataModel> {
 
         private TextView txtName;
-        private ImageView img;
         private SeekBar dimmer;
 
         ViewHolder(View itemView) {
             super(itemView);
 
             txtName = itemView.findViewById(R.id.textDimmer);
-            img = itemView.findViewById(R.id.imageDimmer);
             dimmer = itemView.findViewById(R.id.seekbarDimmer);
-
         }
 
-        @Override
         public void setData(final DimmerDataModel dimmerData) {
 
             txtName.setText(dimmerData.nom);
@@ -139,7 +134,9 @@ public class DimmerAdapter extends CommonNetworkAdapter<DimmerAdapter.ViewHolder
                 }
 
                 @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {}
+                public void onStartTrackingTouch(SeekBar seekBar) {
+                    //intentional empty body
+                }
             });
         }
     }

@@ -1,5 +1,6 @@
 package fr.geringan.activdash.adapters;
 
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.models.InterDataModel;
 import fr.geringan.activdash.network.SocketIOHolder;
+import fr.geringan.activdash.viewholders.CommonViewHolder;
 
 public class InterAdapter extends CommonNetworkAdapter<InterAdapter.ViewHolder> {
     private ArrayList<InterDataModel> dataSet = null;
@@ -27,6 +29,7 @@ public class InterAdapter extends CommonNetworkAdapter<InterAdapter.ViewHolder> 
             return 0;
     }
 
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
@@ -36,14 +39,14 @@ public class InterAdapter extends CommonNetworkAdapter<InterAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(InterAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull InterAdapter.ViewHolder holder, int position) {
         holder.setData(this.dataSet.get(position));
     }
 
     @Override
-    public int httpToDataModel(String response) throws IllegalAccessException {
+    public void httpToDataModel(String response) throws IllegalAccessException {
         if ("404".equals(response)) {
-            return 404;
+            return;
         }
         JSONArray jsonArray = null;
         try {
@@ -65,7 +68,6 @@ public class InterAdapter extends CommonNetworkAdapter<InterAdapter.ViewHolder> 
             }
         }
 
-        return 200;
     }
 
     public void setEtat(InterDataModel dataModel) throws JSONException, IllegalAccessException {
@@ -89,7 +91,7 @@ public class InterAdapter extends CommonNetworkAdapter<InterAdapter.ViewHolder> 
         }
     }
 
-    public class ViewHolder extends android.support.v7.widget.RecyclerView.ViewHolder {
+    public class ViewHolder extends CommonViewHolder<InterDataModel> {
 
         private TextView txtName;
         private ImageView img;

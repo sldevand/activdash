@@ -13,11 +13,10 @@ import fr.geringan.activdash.network.GetHttp;
 
 
 public class DashWidget extends AppWidgetProvider {
-    private static final String INTENT_CLICK1 = "fr.geringan.activdash.activities.click";
     private final static String ACTION_SCENARIO = "fr.geringan.activdashwidget.action.OPEN_TUTO";
     public static String ACTIONURL_EXTRA = "actionUrl";
 
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
+    public static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
         CharSequence widgetText = DashWidgetConfigureActivity.loadPrefs(context, appWidgetId).get(0);
@@ -26,7 +25,7 @@ public class DashWidget extends AppWidgetProvider {
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.dash_widget);
 
         remoteViews.setTextViewText(R.id.appwidget_text, widgetText);
-        int img = img = R.mipmap.ic_play;
+        int img = R.mipmap.ic_play;
         if (widgetText != null) {
             String text = widgetText.toString();
 

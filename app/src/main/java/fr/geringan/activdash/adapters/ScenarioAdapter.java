@@ -1,5 +1,6 @@
 package fr.geringan.activdash.adapters;
 
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import java.util.Iterator;
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.models.ScenarioDataModel;
 import fr.geringan.activdash.network.SocketIOHolder;
+import fr.geringan.activdash.viewholders.CommonViewHolder;
 
 public class ScenarioAdapter extends CommonNetworkAdapter<ScenarioAdapter.ViewHolder> {
     private ArrayList<ScenarioDataModel> dataSet;
@@ -29,10 +31,11 @@ public class ScenarioAdapter extends CommonNetworkAdapter<ScenarioAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int i) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int i) {
         holder.setData(dataSet.get(i));
     }
 
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
@@ -44,9 +47,9 @@ public class ScenarioAdapter extends CommonNetworkAdapter<ScenarioAdapter.ViewHo
 
 
     @Override
-    public int httpToDataModel(String response) throws IllegalAccessException, JSONException {
+    public void httpToDataModel(String response) throws IllegalAccessException, JSONException {
         if (response.equals("404")) {
-            return 404;
+            return;
         }
 
         JSONObject scenarios = new JSONObject(response);
@@ -62,10 +65,9 @@ public class ScenarioAdapter extends CommonNetworkAdapter<ScenarioAdapter.ViewHo
         // Sorting
         Collections.sort(dataSet);
 
-        return 200;
     }
 
-    public class ViewHolder extends android.support.v7.widget.RecyclerView.ViewHolder {
+    public class ViewHolder extends CommonViewHolder<ScenarioDataModel> {
         private TextView txtName;
         private ImageView img;
         private ScenarioDataModel currentDataModel;
