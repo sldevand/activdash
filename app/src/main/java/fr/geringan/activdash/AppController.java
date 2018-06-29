@@ -279,15 +279,17 @@ public class AppController extends AppCompatActivity {
 
             switch (position) {
                 case 0:
-                    return ScenariosFragment.newInstance(position);
+                    return ScenariosFragment.newInstance();
                 case 1:
                     return ActionneursFragment.newInstance(position);
                 case 2:
-                    return CapteursFragment.newInstance(position);
+                    return CapteursFragment.newInstance();
                 case 3:
                     return GraphsFragment.newInstance(position);
+                default:
+                    return null;
             }
-            return null;
+
         }
 
         @Override

@@ -28,22 +28,20 @@ public class ThermostatFragment extends CommonNetworkFragment {
     protected String m_baseAddress = PrefsManager.apiAdress + "/thermostat";
     protected String m_sensorAddress = PrefsManager.apiAdress + "/mesures/get-sensor24thermid1";
 
-    AppCompatTextView txtMinus = null;
-    AppCompatTextView txtPlus = null;
-    AppCompatTextView txtConsigne = null;
-    AppCompatTextView txtThermometre = null;
-    AppCompatTextView txtThermostatMode = null;
-    AppCompatTextView txtThermostatPlan = null;
-    AppCompatTextView txtThermostatEtat = null;
+    private AppCompatTextView txtMinus = null;
+    private AppCompatTextView txtPlus = null;
+    private AppCompatTextView txtConsigne = null;
+    private AppCompatTextView txtThermometre = null;
+    private AppCompatTextView txtThermostatMode = null;
+    private AppCompatTextView txtThermostatPlan = null;
+    private AppCompatTextView txtThermostatEtat = null;
 
-    AppCompatImageView imgThermostatEtat = null;
-    AppCompatImageView imgThermostatMode = null;
+    private AppCompatImageView imgThermostatEtat = null;
+    private AppCompatImageView imgThermostatMode = null;
 
-    ThermostatDataModel thermostat;
-    ModeDataModel mode;
-    BoilerState boiler;
+    private ThermostatDataModel thermostat;
 
-    public static ThermostatFragment newInstance(int position) {
+    public static ThermostatFragment newInstance() {
         ThermostatFragment fragment = new ThermostatFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -137,8 +135,8 @@ public class ThermostatFragment extends CommonNetworkFragment {
             throw new RuntimeException("updateThermostatDisplay : JSON Object is null !!");
 
         thermostat = new ThermostatDataModel(obj);
-        mode = thermostat.getMode();
-        boiler = getBoilerState(thermostat.getEtat());
+        ModeDataModel mode = thermostat.getMode();
+        BoilerState boiler = getBoilerState(thermostat.getEtat());
 
         imgThermostatEtat.setColorFilter(ContextCompat.getColor(getView().getContext(), boiler.getColor()));
         txtThermostatEtat.setText(boiler.getEtat());
@@ -199,6 +197,7 @@ public class ThermostatFragment extends CommonNetworkFragment {
             default:
                 color = R.color.almostBlack;
                 etatStr = BoilerState.BOILER_UNDEFINED;
+                break;
         }
         return new BoilerState(etatStr, color);
     }
@@ -228,7 +227,7 @@ public class ThermostatFragment extends CommonNetworkFragment {
             default:
                 modeImg = android.R.drawable.ic_menu_close_clear_cancel;
                 color = R.color.almostBlack;
-
+                break;
         }
         return new ModeImage(modeImg, color);
     }
@@ -260,7 +259,7 @@ public class ThermostatFragment extends CommonNetworkFragment {
 
         try {
 
-            JSONArray jsonArray = null;
+            JSONArray jsonArray;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
                 jsonArray = new JSONArray(args);
                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -306,61 +305,49 @@ public class ThermostatFragment extends CommonNetworkFragment {
     }
 
     private class BoilerState {
-        public static final String BOILER_ON = "On";
-        public static final String BOILER_OFF = "Off";
-        public static final String BOILER_UNDEFINED = "?";
-        public static final int BOILER_STATE_ON = 1;
-        public static final int BOILER_STATE_OFF = 0;
+        private static final String BOILER_ON = "On";
+        private static final String BOILER_OFF = "Off";
+        private static final String BOILER_UNDEFINED = "?";
+        private static final int BOILER_STATE_ON = 1;
+        private static final int BOILER_STATE_OFF = 0;
         private String etat;
         private int color;
 
-        public BoilerState(String etat, int color) {
+        private BoilerState(String etat, int color) {
             this.etat = etat;
             this.color = color;
         }
 
-        public String getEtat() {
+        private String getEtat() {
             return etat;
         }
-
-        public void setEtat(String etat) {
-            this.etat = etat;
-        }
-
         public int getColor() {
             return color;
         }
-
         public void setColor(int color) {
             this.color = color;
         }
     }
 
     private class ModeImage {
-        public static final String MODE_NIGHT = "Nuit";
-        public static final String MODE_ECO = "Eco";
-        public static final String MODE_COMFORT = "Confort";
-        public static final String MODE_NO_FREEZE = "Hors Gel";
+        private static final String MODE_NIGHT = "Nuit";
+        private static final String MODE_ECO = "Eco";
+        private static final String MODE_COMFORT = "Confort";
+        private static final String MODE_NO_FREEZE = "Hors gel";
         private int img;
         private int color;
 
-        public ModeImage(int img, int color) {
+        private ModeImage(int img, int color) {
             this.img = img;
             this.color = color;
         }
 
-        public int getImg() {
+        private int getImg() {
             return img;
         }
-
-        public void setImg(int img) {
-            this.img = img;
-        }
-
         public int getColor() {
             return color;
         }
-
         public void setColor(int color) {
             this.color = color;
         }

@@ -43,7 +43,7 @@ public class InterAdapter extends CommonNetworkAdapter<InterAdapter.ViewHolder> 
 
     @Override
     public int httpToDataModel(String response) throws IllegalAccessException {
-        if (response.equals("404")) {
+        if ("404".equals(response)) {
             return 404;
         }
         JSONArray jsonArray = null;
@@ -92,9 +92,9 @@ public class InterAdapter extends CommonNetworkAdapter<InterAdapter.ViewHolder> 
 
     public class ViewHolder extends CommonViewHolder<InterDataModel> {
 
-        TextView txtName;
-        ImageView img;
-        InterDataModel currentDataModel;
+        private TextView txtName;
+        private ImageView img;
+        private InterDataModel currentDataModel;
 
         ViewHolder(View itemView) {
             super(itemView);

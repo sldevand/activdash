@@ -19,7 +19,6 @@ public abstract class CommonNetworkFragment extends Fragment {
         CommonGetHttp get_dat = new CommonGetHttp(adapter);
         final ProgressBar progBar = pBar;
 
-        final String apiAdress = address;
         final View v = getActivity().findViewById(android.R.id.content);
 
         get_dat.setOnResponseListener(new CommonGetHttp.OnHttpResponseListener() {
@@ -29,13 +28,13 @@ public abstract class CommonNetworkFragment extends Fragment {
                 switch (response) {
                     case "404":
                         onBadResponse(response, progBar, v);
-                        return;
+                        break;
                     default:
                         onResponseOk(response);
                 }
             }
         });
-        get_dat.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, apiAdress);
+        get_dat.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, address);
     }
 
     public abstract void onResponseOk(String response);

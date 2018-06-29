@@ -133,9 +133,7 @@ public class GraphsFragment extends CommonNetworkFragment {
     }
 
     @Override
-    public void initializeSocketioListeners() {
-
-    }
+    public void initializeSocketioListeners() {}
 
     @Override
     public void onResponseOk(String response) {

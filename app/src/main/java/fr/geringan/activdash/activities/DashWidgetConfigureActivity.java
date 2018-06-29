@@ -21,9 +21,9 @@ public class DashWidgetConfigureActivity extends Activity {
     private static final String PREF_TITLE_KEY = "title_";
     private static final String PREF_HTTP_KEY = "http_";
 
-    int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
-    EditText mAppWidgetText, mAppWidgetHttp;
-    View.OnClickListener mOnClickListener = new View.OnClickListener() {
+    private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
+    private EditText mAppWidgetText, mAppWidgetHttp;
+    private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         public void onClick(View v) {
             final Context context = DashWidgetConfigureActivity.this;
 
@@ -49,12 +49,8 @@ public class DashWidgetConfigureActivity extends Activity {
         }
     };
 
-    public DashWidgetConfigureActivity() {
-        super();
-    }
-
     // Write the prefix to the SharedPreferences object for this widget
-    static void savePrefs(Context context, int appWidgetId, ArrayList<String> prefsArray) {
+    public static void savePrefs(Context context, int appWidgetId, ArrayList<String> prefsArray) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
 
 
@@ -65,7 +61,7 @@ public class DashWidgetConfigureActivity extends Activity {
 
     // Read the prefix from the SharedPreferences object for this widget.
     // If there is no preference saved, get the default from a resource
-    static ArrayList<String> loadPrefs(Context context, int appWidgetId) {
+    public static ArrayList<String> loadPrefs(Context context, int appWidgetId) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
         String titleValue = prefs.getString(PREF_PREFIX_KEY + PREF_TITLE_KEY + appWidgetId, null);
         String httpValue = prefs.getString(PREF_PREFIX_KEY + PREF_HTTP_KEY + appWidgetId, null);
@@ -77,7 +73,7 @@ public class DashWidgetConfigureActivity extends Activity {
         return prefsArray;
     }
 
-    static void deleteTitlePref(Context context, int appWidgetId) {
+    public static void deleteTitlePref(Context context, int appWidgetId) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
         prefs.remove(PREF_PREFIX_KEY + PREF_TITLE_KEY + appWidgetId);
         prefs.remove(PREF_PREFIX_KEY + PREF_HTTP_KEY + appWidgetId);

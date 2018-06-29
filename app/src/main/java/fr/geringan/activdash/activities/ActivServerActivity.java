@@ -20,8 +20,8 @@ public class ActivServerActivity extends AppCompatActivity {
     public String m_stateAddress = m_baseAddress + "getpiassistnode";
     public String m_switchAddress = m_baseAddress + "piassistnode=";
     public String m_logAddress = m_baseAddress + "log";
-    SwitchCompat activServerSwitch;
-    WebView logWebView;
+    private SwitchCompat activServerSwitch;
+    private WebView logWebView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

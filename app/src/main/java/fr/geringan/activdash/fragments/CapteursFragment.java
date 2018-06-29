@@ -1,6 +1,7 @@
 package fr.geringan.activdash.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -29,27 +30,23 @@ import io.socket.emitter.Emitter;
 public class CapteursFragment extends CommonNetworkFragment {
 
     public String m_address = PrefsManager.baseAddress + "/" + PrefsManager.apiDomain + "/mesures/get-sensors";
-    protected CapteurAdapter adapter;
-    RecyclerView recyclerView;
+    private CapteurAdapter adapter;
 
-    public static CapteursFragment newInstance(int tag) {
-        CapteursFragment fragment = new CapteursFragment();
-
-
-        return fragment;
+    public static CapteursFragment newInstance() {
+        return new CapteursFragment();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_capteurs, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        recyclerView = view.findViewById(R.id.listCapteurs);
+        RecyclerView recyclerView = view.findViewById(R.id.listCapteurs);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new CapteurAdapter();
         recyclerView.setAdapter(adapter);
@@ -69,10 +66,6 @@ public class CapteursFragment extends CommonNetworkFragment {
 
         execGetData(m_address, adapter, progress);
 
-    }
-
-    public void updateListView() {
-        recyclerView.setAdapter(adapter);
     }
 
     public void capteursDataUpdate(Object... args) throws IllegalAccessException {

@@ -1,6 +1,7 @@
 package fr.geringan.activdash.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
@@ -17,6 +18,7 @@ public abstract class CommonNetworkAdapter<V extends CommonViewHolder> extends R
     public Context context;
     public ArrayList<? extends DataModel> dataSet = null;
 
+    @NonNull
     @Override
     public V onCreateViewHolder(ViewGroup parent, int viewType) {
         return null;

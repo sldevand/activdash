@@ -85,7 +85,6 @@ public class DimmerAdapter extends CommonNetworkAdapter<DimmerAdapter.ViewHolder
                 if (dm.getDataJSON().getString("id").equalsIgnoreCase(id)) {
 
                     dataSet.get(iter).etat = obj.getInt("etat");
-                    Log.d("setEtat", String.valueOf(dataSet.get(iter).etat));
 
                     notifyDataSetChanged();
                     return;
@@ -107,9 +106,9 @@ public class DimmerAdapter extends CommonNetworkAdapter<DimmerAdapter.ViewHolder
 
     public class ViewHolder extends CommonViewHolder<DimmerDataModel> {
 
-        TextView txtName;
-        ImageView img;
-        SeekBar dimmer;
+        private TextView txtName;
+        private ImageView img;
+        private SeekBar dimmer;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -140,8 +139,7 @@ public class DimmerAdapter extends CommonNetworkAdapter<DimmerAdapter.ViewHolder
                 }
 
                 @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-                }
+                public void onStartTrackingTouch(SeekBar seekBar) {}
             });
         }
     }

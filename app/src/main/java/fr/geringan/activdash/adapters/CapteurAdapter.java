@@ -1,6 +1,7 @@
 package fr.geringan.activdash.adapters;
 
 
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -35,6 +36,7 @@ public class CapteurAdapter extends CommonNetworkAdapter<CapteurAdapter.ViewHold
             return 0;
     }
 
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
@@ -44,7 +46,7 @@ public class CapteurAdapter extends CommonNetworkAdapter<CapteurAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.setData(this.dataSet.get(position));
 
     }
@@ -54,7 +56,7 @@ public class CapteurAdapter extends CommonNetworkAdapter<CapteurAdapter.ViewHold
         if (response.equals("404")) {
             return 404;
         }
-        JSONArray jsonArray = null;
+        JSONArray jsonArray;
 
         try {
             jsonArray = new JSONArray(response);
@@ -81,21 +83,17 @@ public class CapteurAdapter extends CommonNetworkAdapter<CapteurAdapter.ViewHold
         return dataSet;
     }
 
-    public void setDataSet(ArrayList<CapteurDataModel> dataSet) {
-        this.dataSet = dataSet;
-    }
-
     public class ViewHolder extends CommonViewHolder<CapteurDataModel> {
-        public TextView txtStatus;
-        TextView txtName;
-        TextView txtValue1;
-        TextView txtValue2;
-        TextView txtDate;
-        ImageView img;
-        CapteurDataModel _currentCapteur;
+        private TextView txtStatus;
+        private TextView txtName;
+        private TextView txtValue1;
+        private TextView txtValue2;
+        private TextView txtDate;
+        private ImageView img;
+        private CapteurDataModel _currentCapteur;
 
 
-        public ViewHolder(View itemView) {
+        private  ViewHolder(View itemView) {
             super(itemView);
             txtName = itemView.findViewById(R.id.textNameCapteur);
             txtValue1 = itemView.findViewById(R.id.textValue1Capteur);
@@ -125,8 +123,8 @@ public class CapteurAdapter extends CommonNetworkAdapter<CapteurAdapter.ViewHold
             _currentCapteur = capteur;
         }
 
-        public void displayActif(int actif) {
-            String txtActif = "";
+        private  void displayActif(int actif) {
+            String txtActif;
             if (actif == 1) {
                 txtActif = "OK";
                 txtStatus.setTextColor(ContextCompat.getColor(context, R.color.colorOk));
@@ -137,7 +135,7 @@ public class CapteurAdapter extends CommonNetworkAdapter<CapteurAdapter.ViewHold
             txtStatus.setText(txtActif);
         }
 
-        public void displayIconAndValues(String radioId, String valeur1, String valeur2) {
+        private  void displayIconAndValues(String radioId, String valeur1, String valeur2) {
 
             String value1Units = "°C";
             String value2Units = "";

@@ -1,6 +1,7 @@
 package fr.geringan.activdash.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -30,31 +31,27 @@ public class ActionneursFragment extends CommonNetworkFragment {
     public String m_interAddress = m_baseAddress + "inter";
     public String m_dimmerAddress = m_baseAddress + "dimmer";
 
-    RecyclerView interRecyclerView;
-    InterAdapter interAdapter;
-    RecyclerView dimmerRecyclerView;
-    DimmerAdapter dimmerAdapter;
-    ProgressBar progressDimmer;
-    ProgressBar progressInter;
+    private InterAdapter interAdapter;
+    private DimmerAdapter dimmerAdapter;
+    private ProgressBar progressDimmer;
+    private ProgressBar progressInter;
 
 
     public static ActionneursFragment newInstance(int Tag) {
-        ActionneursFragment fragment = new ActionneursFragment();
-        //fragment.setTargetFragment(fragment,Tag);
-        return fragment;
+        return new ActionneursFragment();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_actionneurs, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        interRecyclerView = view.findViewById(R.id.listInters);
+        RecyclerView interRecyclerView = view.findViewById(R.id.listInters);
         interRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         interAdapter = new InterAdapter();
         interRecyclerView.setAdapter(interAdapter);
@@ -72,7 +69,7 @@ public class ActionneursFragment extends CommonNetworkFragment {
             }
         });
 
-        dimmerRecyclerView = view.findViewById(R.id.listDimmers);
+        RecyclerView dimmerRecyclerView = view.findViewById(R.id.listDimmers);
         dimmerRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         dimmerAdapter = new DimmerAdapter();
         dimmerRecyclerView.setAdapter(dimmerAdapter);

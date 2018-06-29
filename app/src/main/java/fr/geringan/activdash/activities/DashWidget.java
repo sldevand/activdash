@@ -42,6 +42,7 @@ public class DashWidget extends AppWidgetProvider {
                     break;
                 default:
                     img = R.mipmap.ic_play;
+                    break;
             }
         }
         remoteViews.setImageViewResource(R.id.appwidget_img, img);

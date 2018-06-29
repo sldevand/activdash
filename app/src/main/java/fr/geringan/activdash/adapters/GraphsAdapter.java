@@ -30,10 +30,6 @@ import fr.geringan.activdash.viewholders.CommonViewHolder;
 public class GraphsAdapter extends CommonNetworkAdapter<GraphsAdapter.ViewHolder> {
     private ArrayList<GraphsDataModel> dataSet = new ArrayList<>();
 
-    public GraphsAdapter() {
-        super();
-    }
-
     @Override
     public int getItemCount() {
         if (dataSet != null) {
@@ -61,7 +57,7 @@ public class GraphsAdapter extends CommonNetworkAdapter<GraphsAdapter.ViewHolder
 
     @Override
     public int httpToDataModel(String response) throws IllegalAccessException, JSONException {
-        if (response.equals("404")) {
+        if ("404".equals(response)) {
             return 404;
         }
 
@@ -78,12 +74,12 @@ public class GraphsAdapter extends CommonNetworkAdapter<GraphsAdapter.ViewHolder
 
     public class ViewHolder extends CommonViewHolder<GraphsDataModel> implements OnChartValueSelectedListener {
 
-        AppCompatTextView title;
-        AppCompatTextView radioId;
-        LineChart chart;
-        GraphsDataModel _currentChart;
+        private AppCompatTextView title;
+        private AppCompatTextView radioId;
+        private LineChart chart;
+        private GraphsDataModel _currentChart;
 
-        public ViewHolder(View itemView) {
+        private ViewHolder(View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.titleGraph);
             radioId = itemView.findViewById(R.id.radioidGraph);
@@ -95,9 +91,7 @@ public class GraphsAdapter extends CommonNetworkAdapter<GraphsAdapter.ViewHolder
         public void setData(GraphsDataModel graphDM) {
             title.setText(graphDM.getNom());
             radioId.setText(graphDM.getSensor_id());
-
             chartPopulate(graphDM);
-
             _currentChart = graphDM;
         }
 

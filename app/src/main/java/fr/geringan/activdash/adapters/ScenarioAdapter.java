@@ -67,9 +67,9 @@ public class ScenarioAdapter extends CommonNetworkAdapter<ScenarioAdapter.ViewHo
     }
 
     public class ViewHolder extends CommonViewHolder<ScenarioDataModel> {
-        TextView txtName;
-        ImageView img;
-        ScenarioDataModel currentDataModel;
+        private TextView txtName;
+        private ImageView img;
+        private ScenarioDataModel currentDataModel;
 
 
         ViewHolder(final View itemView) {
@@ -107,6 +107,7 @@ public class ScenarioAdapter extends CommonNetworkAdapter<ScenarioAdapter.ViewHo
                     break;
                 default:
                     imgRes = R.mipmap.ic_play;
+                    break;
             }
 
             img.setImageResource(imgRes);

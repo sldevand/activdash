@@ -1,6 +1,7 @@
 package fr.geringan.activdash.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import java.util.Optional;
+
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.adapters.ScenarioAdapter;
 import fr.geringan.activdash.utils.PrefsManager;
@@ -17,31 +20,27 @@ import fr.geringan.activdash.utils.PrefsManager;
 public class ScenariosFragment extends CommonNetworkFragment {
 
     public String m_address = PrefsManager.baseAddress + "/" + PrefsManager.apiDomain + "/scenarios/";
-    protected ScenarioAdapter adapter;
-    RecyclerView recyclerView;
+    private ScenarioAdapter adapter;
 
-    public static ScenariosFragment newInstance(int tag) {
-        ScenariosFragment fragment = new ScenariosFragment();
-
-        return fragment;
+    public static ScenariosFragment newInstance() {
+        return new ScenariosFragment();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_scenarios, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
 
-        recyclerView = view.findViewById(R.id.listScenarios);
+        RecyclerView recyclerView = view.findViewById(R.id.listScenarios);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new ScenarioAdapter();
         recyclerView.setAdapter(adapter);
-
         RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this.getContext(), DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(itemDecoration);
 
@@ -60,12 +59,8 @@ public class ScenariosFragment extends CommonNetworkFragment {
     }
 
     @Override
-    public void initializeSocketioListeners() {
-
-    }
+    public void initializeSocketioListeners() {}
 
     @Override
-    public void onResponseOk(String response) {
-
-    }
+    public void onResponseOk(String response) {}
 }
