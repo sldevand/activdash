@@ -5,7 +5,14 @@ ActivDash
 **ActivDash** is a home automation Android App that consumes the ActivAPI web service included in my home made home automation solution ActivHome.
 
 ## Live Example
-![main-screen](resources/main-screen.gif)![graph-screen](resources/graph-screen.gif)![thermostat](resources/thermostat.gif)
+### Main
+![main-screen](resources/main-screen.gif)
+
+### Graph
+![graph-screen](resources/graph-screen.gif)
+
+### Thermostat
+![thermostat](resources/thermostat.gif)
 
 ## Serve
 You can clone this repository and create an Android project for build on your device.
