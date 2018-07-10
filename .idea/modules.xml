@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/ActivDash.iml" filepath="$PROJECT_DIR$/ActivDash.iml" />
-      <module fileurl="file://C:\Users\sebastien\AndroidStudioProjects\ActivDash\.idea\ActivDash.iml" filepath="C:\Users\sebastien\AndroidStudioProjects\ActivDash\.idea\ActivDash.iml" />
+      <module fileurl="file://$PROJECT_DIR$/activdash.iml" filepath="$PROJECT_DIR$/activdash.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
