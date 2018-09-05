@@ -69,8 +69,7 @@
     <string name="mobile_data_enabled">Mobile data enabled</string>
     <string name="not_connected_to_internet">Not connected to Internet</string>
     <string name="wifi_state_change">android.net.wifi.STATE_CHANGE</string>
-    <string name="todo">TODO</string>
-    <string name="node_status">node status</string>
+    <string name="node_status">Node Status</string>
 
 
 </resources>
