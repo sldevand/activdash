@@ -1,12 +1,14 @@
 package fr.geringan.activdash.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import fr.geringan.activdash.viewholders.CommonViewHolder;
 import fr.geringan.activdash.models.DataModel;
@@ -18,14 +20,15 @@ public abstract class CommonNetworkAdapter<V extends CommonViewHolder> extends R
     private ArrayList<? extends DataModel> dataSet=null;
 
 
+    @NonNull
     @Override
-    public V onCreateViewHolder( ViewGroup parent, int viewType) {
+    public V onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return null;
     }
 
     @Override
-    public void onBindViewHolder(V holder, int i){
-        holder.setData(dataSet.get(i));
+    public void onBindViewHolder(@NonNull V holder, int i){
+        Objects.requireNonNull(holder).setData(dataSet.get(i));
     }
 
     @Override
@@ -43,4 +46,5 @@ public abstract class CommonNetworkAdapter<V extends CommonViewHolder> extends R
     }
 
     protected abstract void httpToDataModel(String response) throws IllegalAccessException, JSONException;
+
 }

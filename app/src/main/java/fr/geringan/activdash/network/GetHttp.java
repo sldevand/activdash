@@ -1,7 +1,6 @@
 package fr.geringan.activdash.network;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -12,20 +11,15 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-
 public class GetHttp extends AsyncTask<String, Void, String> {
 
     private OnHttpResponseListener responseListener;
 
     @Override
     protected String doInBackground(String... strings) {
-
-
         InputStream in = null;
         String _address = strings[0];
-
         if (_address != null && !_address.equals("")) {
-            Log.e("doInBackground", "BEGIN = " + _address);
             try {
                 URL url = new URL(_address);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -39,10 +33,7 @@ public class GetHttp extends AsyncTask<String, Void, String> {
                 return "404";
             } finally {
                 try {
-
-                    if (in != null) {
-                        in.close();
-                    }
+                    if (in != null) in.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

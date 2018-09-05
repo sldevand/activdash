@@ -105,7 +105,7 @@ public class GraphsFragment extends CommonNetworkFragment {
                     }
 
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 }
             }
         });

@@ -12,30 +12,29 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import fr.geringan.activdash.R;
+import fr.geringan.activdash.interfaces.IActionneurAdapter;
+import fr.geringan.activdash.models.DataModel;
 import fr.geringan.activdash.models.DimmerDataModel;
 import fr.geringan.activdash.network.SocketIOHolder;
 import fr.geringan.activdash.viewholders.CommonViewHolder;
 
 
-public class DimmerAdapter extends CommonNetworkAdapter<DimmerAdapter.ViewHolder> {
-    private ArrayList<DimmerDataModel> dataSet = null;
+public class DimmerAdapter extends CommonNetworkAdapter<DimmerAdapter.ViewHolder> implements IActionneurAdapter {
+    private List<DimmerDataModel> dataSet = new ArrayList<>();
 
     @Override
     public int getItemCount() {
-        if (dataSet != null) {
-            return dataSet.size();
-        } else
-            return 0;
+        return dataSet.size();
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.item_dimmer, parent, false);
-        context = view.getContext();
         return new ViewHolder(view);
     }
 
@@ -44,58 +43,31 @@ public class DimmerAdapter extends CommonNetworkAdapter<DimmerAdapter.ViewHolder
         holder.setData(this.dataSet.get(position));
     }
 
-    protected void httpToDataModel(String response) throws IllegalAccessException {
+    @Override
+    protected void httpToDataModel(String response) throws IllegalAccessException, JSONException {
+        if ("404".equals(response)) return;
 
-        if ("404".equals(response)) {
-            return;
+        JSONArray jsonArray = new JSONArray(response);
+        dataSet.clear();
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject json = jsonArray.getJSONObject(i);
+            dataSet.add(new DimmerDataModel(json));
         }
-
-        JSONArray jsonArray = null;
-        try {
-            jsonArray = new JSONArray(response);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        dataSet = new ArrayList<>();
-
-        if (jsonArray != null) {
-            for (int i = 0; i < jsonArray.length(); i++) {
-
-                try {
-                    JSONObject json = jsonArray.getJSONObject(i);
-                    dataSet.add(new DimmerDataModel(json));
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
     }
 
-    public void setEtat(DimmerDataModel dataModel) throws JSONException, IllegalAccessException {
+    @Override
+    public void setEtat(DataModel dataModel) throws JSONException, IllegalAccessException {
         JSONObject obj = dataModel.getDataJSON();
         int iter = 0;
-        try {
-            String id = obj.getString("id");
-            for (DimmerDataModel dm : dataSet) {
-
-                if (dm.getDataJSON().getString("id").equalsIgnoreCase(id)) {
-
-                    dataSet.get(iter).etat = obj.getInt("etat");
-
-                    notifyDataSetChanged();
-                    return;
-
-                }
-                iter++;
+        String id = obj.getString("id");
+        for (DimmerDataModel dm : dataSet) {
+            if (dm.getDataJSON().getString("id").equalsIgnoreCase(id)) {
+                dataSet.get(iter).setEtat( obj.getInt("etat"));
+                notifyItemChanged(iter);
+                return;
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
+            iter++;
         }
-
-
     }
 
     private void onDimmerChanged(final int progress, final DimmerDataModel dataModel, final String event) {
@@ -110,7 +82,6 @@ public class DimmerAdapter extends CommonNetworkAdapter<DimmerAdapter.ViewHolder
 
         ViewHolder(View itemView) {
             super(itemView);
-
             txtName = itemView.findViewById(R.id.textDimmer);
             dimmer = itemView.findViewById(R.id.seekbarDimmer);
         }
@@ -118,10 +89,8 @@ public class DimmerAdapter extends CommonNetworkAdapter<DimmerAdapter.ViewHolder
         public void setData(final DimmerDataModel dimmerData) {
 
             txtName.setText(dimmerData.nom);
-            dimmer.setProgress(dimmerData.etat);
-
+            dimmer.setProgress(dimmerData.getEtat());
             dimmer.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
                 public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                     if (b) {
                         onDimmerChanged(seekBar.getProgress(), dimmerData, SocketIOHolder.EMIT_DIMMER);

@@ -45,7 +45,7 @@ public class GraphsAdapter extends CommonNetworkAdapter<GraphsAdapter.ViewHolder
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.item_graph, parent, false);
         context = view.getContext();
@@ -71,7 +71,6 @@ public class GraphsAdapter extends CommonNetworkAdapter<GraphsAdapter.ViewHolder
         dataSet.add(dm);
 
     }
-
 
     public class ViewHolder extends CommonViewHolder<GraphsDataModel> implements OnChartValueSelectedListener {
 
@@ -114,9 +113,9 @@ public class GraphsAdapter extends CommonNetworkAdapter<GraphsAdapter.ViewHolder
                 chart.invalidate();
 
             } catch (JSONException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             } catch (ParseException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }
 

@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import java.util.Objects;
+
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.adapters.ScenarioAdapter;
 import fr.geringan.activdash.utils.PrefsManager;
@@ -34,12 +36,13 @@ public class ScenariosFragment extends CommonNetworkFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
         RecyclerView recyclerView = view.findViewById(R.id.listScenarios);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new ScenarioAdapter();
         recyclerView.setAdapter(adapter);
-        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this.getContext(), DividerItemDecoration.VERTICAL);
+        RecyclerView.ItemDecoration itemDecoration =
+                new DividerItemDecoration(  Objects.requireNonNull(this.getContext()),
+                                            DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(itemDecoration);
 
         final ProgressBar progress = view.findViewById(R.id.progressScenario);

@@ -1,7 +1,6 @@
 package fr.geringan.activdash.network;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.json.JSONException;
 
@@ -15,13 +14,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import fr.geringan.activdash.adapters.CommonNetworkAdapter;
-
+import fr.geringan.activdash.exceptions.DataModelException;
 
 public class CommonGetHttp extends AsyncTask<String, Void, String> {
 
     private OnHttpResponseListener responseListener;
     private CommonNetworkAdapter<?> _adapter;
-    private String _address;
+    private static final String HTTP_NOT_FOUND=String.valueOf(HttpURLConnection.HTTP_NOT_FOUND);
 
     public CommonGetHttp(CommonNetworkAdapter<?> adapter) {
         _adapter = adapter;
@@ -29,10 +28,9 @@ public class CommonGetHttp extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... params) {
-
         InputStream in = null;
-        _address = params[0];
-        Log.e("doInBackground", "BEGIN = " + _address);
+        String _address = params[0];
+
         try {
             URL url = new URL(_address);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -43,10 +41,9 @@ public class CommonGetHttp extends AsyncTask<String, Void, String> {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-            return "404";
+            return HTTP_NOT_FOUND;
         } finally {
             try {
-
                 if (in != null) {
                     in.close();
                 }
@@ -54,21 +51,18 @@ public class CommonGetHttp extends AsyncTask<String, Void, String> {
                 e.printStackTrace();
             }
         }
-        return "404";
+        return HTTP_NOT_FOUND;
     }
 
     @Override
     protected void onPostExecute(String result) {
-        Log.e("onPostExecute", "FINISHED! = " + _address);
-        if (this.responseListener != null) responseListener.onResponse(result);
-        if (result != null && !result.equals("404")) {
-            try {
-                _adapter.setHttpResponse(result);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        if (null == result || HTTP_NOT_FOUND.equals(result)) return;
+
+        try {
+            if (this.responseListener != null) responseListener.onResponse(result);
+            _adapter.setHttpResponse(result);
+        } catch (IllegalAccessException | JSONException | DataModelException e) {
+            e.printStackTrace();
         }
     }
 
@@ -87,7 +81,6 @@ public class CommonGetHttp extends AsyncTask<String, Void, String> {
     }
 
     public interface OnHttpResponseListener {
-        void onResponse(String response);
+        void onResponse(String response) throws IllegalAccessException, DataModelException, JSONException;
     }
-
 }

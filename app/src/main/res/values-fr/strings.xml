@@ -20,12 +20,12 @@
     <string name="title_entrypoint_url">Entrypoint Url</string>
 
     <string name="summary_base_url">exemple = "http://192.168.1.52"</string>
-    <string name="summary_api_domain">exemple = "activapi.fr"</string>
+    <string name="summary_api_domain">exemple = "activapi.fr/api"</string>
     <string name="summary_node_port">exemple = 5901</string>
     <string name="summary_entrypoint_url">exemple = dashboard/resultat.php?"</string>
 
     <string name="default_base_url">http://192.168.1.52</string>
-    <string name="default_api_domain">activapi.fr</string>
+    <string name="default_api_domain">activapi.fr/api</string>
     <string name="default_node_port">5901</string>
     <string name="default_entrypoint_url">dashboard/resultat.php?</string>
 
@@ -56,4 +56,17 @@
     <string name="play_widget_icon">Play widget icon</string>
     <string name="item_capteur_name">Nom</string>
     <string name="texte_example">text</string>
+    <string name="refresh">Actualiser</string>
+    <string name="scenarios">Scenarios</string>
+    <string name="actuators">Actionneurs</string>
+    <string name="sensors">Capteurs</string>
+    <string name="graphs">Graphs</string>
+    <string name="action">Action</string>
+    <string name="node_connected">Node Connecté!</string>
+    <string name="node_timeout">Node temps de connexion expiré</string>
+    <string name="node_disconnected">Node déconnecté!</string>
+    <string name="wifi_enabled">Wifi activé</string>
+    <string name="mobile_data_enabled">Données mobiles activées</string>
+    <string name="not_connected_to_internet">Pas connecté à internet</string>
+    <string name="wifi_state_change">android.net.wifi.STATE_CHANGE</string>
 </resources>

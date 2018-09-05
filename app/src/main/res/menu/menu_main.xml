@@ -2,6 +2,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="fr.geringan.activdash.AppController">
+
+
+    <item
+        android:id="@+id/node_status"
+        android:orderInCategory="200"
+        android:icon="@mipmap/ic_node_off"
+        app:showAsAction="ifRoom"
+        android:title="@string/node_status" />
+
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

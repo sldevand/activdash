@@ -1,14 +1,10 @@
 package fr.geringan.activdash;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -18,6 +14,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,44 +28,50 @@ import java.util.Arrays;
 import fr.geringan.activdash.activities.ActivServerActivity;
 import fr.geringan.activdash.activities.SettingsActivity;
 import fr.geringan.activdash.activities.ThermostatControllerActivity;
-import fr.geringan.activdash.fragments.ActionneursFragment;
-import fr.geringan.activdash.fragments.CapteursFragment;
+import fr.geringan.activdash.fragments.ActuatorsFragment;
 import fr.geringan.activdash.fragments.GraphsFragment;
 import fr.geringan.activdash.fragments.ScenariosFragment;
+import fr.geringan.activdash.fragments.SensorsFragment;
+import fr.geringan.activdash.network.NetworkChangeReceiver;
+import fr.geringan.activdash.network.NetworkUtil;
 import fr.geringan.activdash.network.SocketIOHolder;
 import fr.geringan.activdash.utils.PrefsManager;
+import fr.geringan.activdash.utils.Tools;
 import io.socket.client.Socket;
-import io.socket.emitter.Emitter;
 
-public class AppController extends AppCompatActivity {
+public class AppController extends AppCompatActivity implements NetworkChangeReceiver.OnNetworkChangedListener {
 
-    protected SectionsPagerAdapter mSectionsPagerAdapter;
-    protected ViewPager mViewPager;
+    private static final String TAG = AppController.class.getSimpleName();
+    private static final Integer MAIN_VIEW = 1;
+    private static final Integer NO_PREFS_VIEW = 2;
+    private static final Integer ERROR_VIEW = 3;
+    public boolean nodeIsConnected = false;
     protected ProgressDialog progressBar;
-    protected ConnectivityManager cm;
-    protected boolean isConnected;
     protected DrawerLayout mDrawerLayout;
+    protected NetworkChangeReceiver networkChangeReceiver;
+    protected IntentFilter intentFilter;
+    private Integer selectedView = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Utils.init(this);
-
-        cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo activeNetwork = null;
-        if (cm != null) {
-            activeNetwork = cm.getActiveNetworkInfo();
+        selectedView = 0;
+        checkConnectivity();
+        if (null == networkChangeReceiver) {
+            intentFilter = new IntentFilter();
+            intentFilter.addAction("android.net.wifi.STATE_CHANGE");
+            networkChangeReceiver = new NetworkChangeReceiver();
+            networkChangeReceiver.setOnNetworkChangedListener(this);
+            super.registerReceiver(networkChangeReceiver, intentFilter);
         }
-        isConnected = activeNetwork != null && activeNetwork.isConnected();
+    }
 
-        if (isConnected) {
-            createViewPager();
-            createNavigationDrawer();
-        } else {
-            createErrorView();
-        }
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.node_status).setIcon((nodeIsConnected) ? R.mipmap.ic_node_on : R.mipmap.ic_node_off);
+
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -96,6 +99,8 @@ public class AppController extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
+        if (null != networkChangeReceiver) super.unregisterReceiver(networkChangeReceiver);
+        if (null != progressBar) progressBar.dismiss();
     }
 
     @Override
@@ -107,152 +112,150 @@ public class AppController extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        if (null != networkChangeReceiver)
+            super.registerReceiver(networkChangeReceiver, intentFilter);
+    }
 
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-        PrefsManager.launch(this);
-
-        if (PrefsManager.areTherePrefs()) {
-
-            if (isConnected) {
-                progressBar = new ProgressDialog(this);
-                progressBar.setCancelable(true);
-                progressBar.setMessage("Connection à node...");
-                progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                progressBar.setIndeterminate(true);
-                progressBar.show();
-
-                if (SocketIOHolder.socket == null) {
-                    SocketIOHolder.launch();
-                } else {
-                   SocketIOHolder.start();
-                }
-                initializeSocketioListeners();
-
-            } else {
-                setContentView(R.layout.activity_error);
-                Toolbar toolbar = findViewById(R.id.toolbar);
-                setSupportActionBar(toolbar);
-            }
-
-        } else {
-
-            setContentView(R.layout.activity_no_prefs);
-            Toolbar toolbar = findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
-
-            Button prefsButton = findViewById(R.id.noPrefsButton);
-
-            prefsButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(AppController.this, SettingsActivity.class);
-                    startActivity(intent);
-                }
-            });
-        }
+    public void createProgressBar() {
+        progressBar = new ProgressDialog(this);
+        progressBar.setCancelable(true);
+        progressBar.setMessage("Connection à node...");
+        progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressBar.setIndeterminate(true);
+        progressBar.show();
     }
 
     public void createNavigationDrawer() {
         mDrawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        navigationView.setNavigationItemSelectedListener(menuItem -> {
+            menuItem.setChecked(true);
+            mDrawerLayout.closeDrawers();
+            Intent intent;
+            switch (menuItem.getItemId()) {
+                case R.id.nav_activ_server:
+                    intent = new Intent(AppController.this, ActivServerActivity.class);
+                    startActivity(intent);
+                    break;
 
-                        menuItem.setChecked(true);
-                        mDrawerLayout.closeDrawers();
-                        Intent intent;
-                        switch (menuItem.getItemId()) {
-
-                            case R.id.nav_activ_server:
-                                intent = new Intent(AppController.this, ActivServerActivity.class);
-                                startActivity(intent);
-                                break;
-
-                            case R.id.nav_thermostat:
-                                intent = new Intent(AppController.this, ThermostatControllerActivity.class);
-                                startActivity(intent);
-                                break;
-                            default:
-                                return true;
-
-                        }
-                        return true;
-                    }
-                });
+                case R.id.nav_thermostat:
+                    intent = new Intent(AppController.this, ThermostatControllerActivity.class);
+                    startActivity(intent);
+                    break;
+                default:
+                    return true;
+            }
+            return true;
+        });
     }
 
     public void createViewPager() {
-        setContentView(R.layout.activity_main);
+        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        ViewPager mViewPager = findViewById(R.id.container);
+        TabLayout tabLayout = findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(mViewPager);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setOffscreenPageLimit(3);
 
+    }
+
+    public void createToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
         assert actionbar != null;
         actionbar.setDisplayHomeAsUpEnabled(true);
-
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_drawer);
-
-
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
-        mViewPager = findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.setOffscreenPageLimit(3);
-
-        TabLayout tabLayout = findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(mViewPager);
     }
 
-    public void createErrorView() {
+    public void showMainView() {
+        setContentView(R.layout.activity_main);
+        createToolbar();
+        createViewPager();
+        createNavigationDrawer();
+        createProgressBar();
+        SocketIOHolder.launch();
+        initializeSocketioListeners();
+        selectedView = MAIN_VIEW;
+    }
+
+    public void showErrorView() {
         setContentView(R.layout.activity_error);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        AppCompatButton refreshButton = findViewById(R.id.refreshBtn);
+        refreshButton.setOnClickListener(v -> recreate());
+        selectedView = ERROR_VIEW;
+    }
+
+    public void showNoPrefsView() {
+        setContentView(R.layout.activity_no_prefs);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        Button prefsButton = findViewById(R.id.noPrefsButton);
+
+        prefsButton.setOnClickListener(view -> {
+            Intent intent = new Intent(AppController.this, SettingsActivity.class);
+            startActivity(intent);
+        });
+        selectedView = NO_PREFS_VIEW;
     }
 
     public void initializeSocketioListeners() {
-        if (SocketIOHolder.socket != null) {
+        if (null == SocketIOHolder.socket) return;
 
-
-            SocketIOHolder.socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
-
-                @Override
-                public void call(Object... args) {
-                    Snackbar.make(mViewPager, "Node Connecté!", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+        View v = findViewById(android.R.id.content);
+        SocketIOHolder.socket
+                .on(Socket.EVENT_CONNECT, args -> {
+                    nodeIsConnected = true;
+                    supportInvalidateOptionsMenu();
                     if (progressBar != null) progressBar.dismiss();
-                }
-            });
-
-            SocketIOHolder.socket.on(Socket.EVENT_CONNECT_TIMEOUT, new Emitter.Listener() {
-
-                @Override
-                public void call(Object... args) {
-                    Snackbar.make(mViewPager, "Node Timeout!", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                })
+                .on(Socket.EVENT_CONNECT_TIMEOUT, args -> {
+                    Tools.shortSnackbar(v, R.string.node_timeout);
+                    nodeIsConnected = false;
+                    supportInvalidateOptionsMenu();
                     if (progressBar != null) progressBar.dismiss();
-                }
-            });
-
-            SocketIOHolder.socket.on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
-
-                @Override
-                public void call(Object... args) {
-                    Snackbar.make(mViewPager, "Node Déconnecté!", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                })
+                .on(Socket.EVENT_DISCONNECT, args -> {
+                    nodeIsConnected = false;
+                    supportInvalidateOptionsMenu();
                     if (progressBar != null) progressBar.dismiss();
-                }
-            });
+                })
+                .on("message", args -> Tools.shortSnackbar(v, Arrays.toString(args)));
+    }
 
-            SocketIOHolder.socket.on("message", new Emitter.Listener() {
-                @Override
-                public void call(Object... args) {
-                    Snackbar.make(mViewPager, Arrays.toString(args), Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                }
-            });
+    @Override
+    public void onChange(Integer conStatus, String conStatusStr) {
+        routeErrorViews(conStatus, conStatusStr);
+    }
+
+    public void checkConnectivity() {
+        Integer conStatus = NetworkUtil.getConnectivityStatus(this);
+        String conStatusStr = NetworkUtil.getConnectivityStatusString(this);
+        routeViews(conStatus, conStatusStr);
+    }
+
+    public boolean routeErrorViews(Integer state, String stateStr) {
+        PrefsManager.launch(this);
+        if (!PrefsManager.areTherePrefs()) {
+            showNoPrefsView();
+            return true;
+        }
+
+        if (NetworkUtil.TYPE_NOT_CONNECTED == state) {
+            showErrorView();
+            return true;
+        }
+        return false;
+    }
+
+    public void routeViews(Integer state, String stateStr) {
+
+        if (routeErrorViews(state, stateStr)) return;
+        if (!selectedView.equals(MAIN_VIEW)) {
+            showMainView();
         }
     }
 
@@ -269,15 +272,14 @@ public class AppController extends AppCompatActivity {
                 case 0:
                     return ScenariosFragment.newInstance();
                 case 1:
-                    return ActionneursFragment.newInstance(position);
+                    return ActuatorsFragment.newInstance();
                 case 2:
-                    return CapteursFragment.newInstance();
+                    return SensorsFragment.newInstance();
                 case 3:
                     return GraphsFragment.newInstance(position);
                 default:
                     return null;
             }
-
         }
 
         @Override
@@ -289,17 +291,16 @@ public class AppController extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Scenarios";
+                    return getString(R.string.scenarios);
                 case 1:
-                    return "Actionneurs";
+                    return getString(R.string.actuators);
                 case 2:
-                    return "Capteurs";
+                    return getString(R.string.sensors);
                 case 3:
-                    return "Graphs";
+                    return getString(R.string.graphs);
                 default:
                     return null;
             }
-
         }
     }
 }

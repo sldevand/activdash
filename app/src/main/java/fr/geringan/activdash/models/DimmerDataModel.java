@@ -5,7 +5,7 @@ import org.json.JSONObject;
 
 public class DimmerDataModel extends DataModel {
 
-    public int etat;
+    private int etat;
     public String nom;
 
     public DimmerDataModel() {
@@ -34,6 +34,14 @@ public class DimmerDataModel extends DataModel {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public int getEtat() {
+        return etat;
+    }
+
+    public void setEtat(int etat) {
+        this.etat = etat;
     }
 }
 

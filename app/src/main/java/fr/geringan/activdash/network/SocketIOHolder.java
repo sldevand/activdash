@@ -38,26 +38,25 @@ public final class SocketIOHolder {
     public static Socket socket;
     private static SocketEmitTask _task;
 
-    public static boolean launch() {
+    public static void launch() {
         try {
+
             String socketIOUrl = baseAddress + ":" + nodePort;
-            socket = IO.socket(socketIOUrl);
-            socket.io().timeout(5000);
-            return start();
+            if (null == socket) {
+                socket = IO.socket(socketIOUrl);
+                socket.io().timeout(5000);
+            }
+            start();
 
         } catch (URISyntaxException e) {
             e.printStackTrace();
-            return false;
-
         }
     }
 
-    public static boolean start() {
+    private static void start() {
         if (socket != null && !socket.connected()) {
             socket.connect();
         }
-
-        return socket.connected();
     }
 
     public static void stop() {
@@ -72,7 +71,6 @@ public final class SocketIOHolder {
         if (_task == null) _task = new SocketEmitTask(event);
 
         if (_task.getStatus() != AsyncTask.Status.RUNNING) {
-
             _task = new SocketEmitTask(event);
             _task.execute(data);
 
@@ -89,9 +87,7 @@ public final class SocketIOHolder {
             try {
                 _task = new SocketEmitTask(event);
                 _task.execute(dm.getDataJSON());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
+            } catch (JSONException | IllegalAccessException | IllegalStateException e) {
                 e.printStackTrace();
             }
         } else {

@@ -12,29 +12,28 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import fr.geringan.activdash.R;
+import fr.geringan.activdash.interfaces.IActionneurAdapter;
+import fr.geringan.activdash.models.DataModel;
 import fr.geringan.activdash.models.InterDataModel;
 import fr.geringan.activdash.network.SocketIOHolder;
 import fr.geringan.activdash.viewholders.CommonViewHolder;
 
-public class InterAdapter extends CommonNetworkAdapter<InterAdapter.ViewHolder> {
-    private ArrayList<InterDataModel> dataSet = null;
+public class InterAdapter extends CommonNetworkAdapter<InterAdapter.ViewHolder> implements IActionneurAdapter {
+    private List<InterDataModel> dataSet = new ArrayList<>();
 
     @Override
     public int getItemCount() {
-        if (dataSet != null) {
-            return dataSet.size();
-        } else
-            return 0;
+        return dataSet.size();
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.item_inter, parent, false);
-        context = view.getContext();
         return new ViewHolder(view);
     }
 
@@ -44,50 +43,27 @@ public class InterAdapter extends CommonNetworkAdapter<InterAdapter.ViewHolder> 
     }
 
     @Override
-    public void httpToDataModel(String response) throws IllegalAccessException {
-        if ("404".equals(response)) {
-            return;
-        }
-        JSONArray jsonArray = null;
-        try {
-            jsonArray = new JSONArray(response);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+    public void httpToDataModel(String response) throws IllegalAccessException, JSONException {
+        if ("404".equals(response)) return;
 
-        dataSet = new ArrayList<>();
-        if (jsonArray != null) {
-            for (int i = 0; i < jsonArray.length(); i++) {
-
-                try {
-                    JSONObject json = jsonArray.getJSONObject(i);
-                    dataSet.add(new InterDataModel(json));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
+        JSONArray jsonArray = new JSONArray(response);
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject json = jsonArray.getJSONObject(i);
+            dataSet.add(new InterDataModel(json));
         }
-
     }
 
-    public void setEtat(InterDataModel dataModel) throws JSONException, IllegalAccessException {
+    @Override
+    public void setEtat(DataModel dataModel) throws JSONException, IllegalAccessException {
         JSONObject obj = dataModel.getDataJSON();
         int iter = 0;
-        try {
-            String id = obj.getString("id");
-            for (InterDataModel dm : dataSet) {
-
-                if (dm.getDataJSON().getString("id").equalsIgnoreCase(id)) {
-
-                    dataSet.get(iter).setEtat(obj.getInt("etat"));
-
-                    notifyItemChanged(iter);
-
-                }
-                iter++;
+        String id = obj.getString("id");
+        for (InterDataModel dm : dataSet) {
+            if (dm.getDataJSON().getString("id").equalsIgnoreCase(id)) {
+                dataSet.get(iter).setEtat(obj.getInt("etat"));
+                notifyItemChanged(iter);
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
+            iter++;
         }
     }
 
@@ -99,30 +75,18 @@ public class InterAdapter extends CommonNetworkAdapter<InterAdapter.ViewHolder> 
 
         ViewHolder(View itemView) {
             super(itemView);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int etat;
-                    if (currentDataModel.etat == 1)
-                        etat = 0;
-                    else
-                        etat = 1;
-
-                    try {
-                        currentDataModel.changeEtat(etat);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
-                    SocketIOHolder.emit(SocketIOHolder.EMIT_INTER, currentDataModel);
-
-                }
-            });
-
             txtName = itemView.findViewById(R.id.textInter);
             img = itemView.findViewById(R.id.imageInter);
 
+            itemView.setOnClickListener(view -> {
+                int state = 1 == currentDataModel.etat ? 0 : 1;
+                try {
+                    currentDataModel.changeEtat(state);
+                    SocketIOHolder.emit(SocketIOHolder.EMIT_INTER, currentDataModel);
+                } catch (JSONException | IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            });
         }
 
         @Override
