@@ -20,7 +20,7 @@ import org.json.JSONObject;
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.adapters.GraphsAdapter;
 import fr.geringan.activdash.network.GetHttp;
-import fr.geringan.activdash.utils.PrefsManager;
+import fr.geringan.activdash.helpers.PrefsManager;
 
 
 public class GraphsFragment extends CommonNetworkFragment {

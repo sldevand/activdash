@@ -26,7 +26,7 @@ import fr.geringan.activdash.adapters.SensorAdapter;
 import fr.geringan.activdash.exceptions.DataModelException;
 import fr.geringan.activdash.models.SensorDataModel;
 import fr.geringan.activdash.network.SocketIOHolder;
-import fr.geringan.activdash.utils.PrefsManager;
+import fr.geringan.activdash.helpers.PrefsManager;
 
 public class SensorsFragment extends CommonNetworkFragment {
 

@@ -1,27 +1,24 @@
 package fr.geringan.activdash.activities;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
-import android.support.v4.view.GravityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
 import java.util.Arrays;
 
-import fr.geringan.activdash.AppController;
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.interfaces.SocketIOEventsListener;
 import fr.geringan.activdash.network.SocketIOHolder;
-import fr.geringan.activdash.utils.Tools;
+import fr.geringan.activdash.helpers.Tools;
 
 public abstract class RootActivity extends AppCompatActivity implements SocketIOEventsListener {
 
 
     protected View rootView;
     protected ProgressDialog progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

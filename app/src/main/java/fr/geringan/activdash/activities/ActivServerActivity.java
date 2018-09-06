@@ -2,7 +2,6 @@ package fr.geringan.activdash.activities;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.view.Menu;
 import android.webkit.WebView;
@@ -10,7 +9,7 @@ import android.webkit.WebView;
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.network.GetHttp;
 import fr.geringan.activdash.network.SocketIOHolder;
-import fr.geringan.activdash.utils.PrefsManager;
+import fr.geringan.activdash.helpers.PrefsManager;
 
 
 public class ActivServerActivity extends RootActivity {

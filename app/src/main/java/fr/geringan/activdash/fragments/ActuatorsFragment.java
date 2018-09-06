@@ -25,7 +25,7 @@ import fr.geringan.activdash.models.DataModel;
 import fr.geringan.activdash.models.DimmerDataModel;
 import fr.geringan.activdash.models.InterDataModel;
 import fr.geringan.activdash.network.SocketIOHolder;
-import fr.geringan.activdash.utils.PrefsManager;
+import fr.geringan.activdash.helpers.PrefsManager;
 
 
 public class ActuatorsFragment extends CommonNetworkFragment {

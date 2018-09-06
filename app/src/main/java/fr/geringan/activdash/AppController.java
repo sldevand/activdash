@@ -13,17 +13,13 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
 import com.github.mikephil.charting.utils.Utils;
-
-import java.util.Arrays;
 
 import fr.geringan.activdash.activities.ActivServerActivity;
 import fr.geringan.activdash.activities.RootActivity;
@@ -33,13 +29,11 @@ import fr.geringan.activdash.fragments.ActuatorsFragment;
 import fr.geringan.activdash.fragments.GraphsFragment;
 import fr.geringan.activdash.fragments.ScenariosFragment;
 import fr.geringan.activdash.fragments.SensorsFragment;
-import fr.geringan.activdash.interfaces.SocketIOEventsListener;
 import fr.geringan.activdash.network.NetworkChangeReceiver;
 import fr.geringan.activdash.network.NetworkUtil;
 import fr.geringan.activdash.network.SocketIOHolder;
-import fr.geringan.activdash.utils.PrefsManager;
-import fr.geringan.activdash.utils.Tools;
-import io.socket.client.Socket;
+import fr.geringan.activdash.helpers.PrefsManager;
+import fr.geringan.activdash.helpers.Tools;
 
 public class AppController extends RootActivity implements NetworkChangeReceiver.OnNetworkChangedListener {
 

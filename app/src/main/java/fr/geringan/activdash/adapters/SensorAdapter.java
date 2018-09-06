@@ -19,7 +19,7 @@ import java.util.List;
 
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.models.SensorDataModel;
-import fr.geringan.activdash.utils.Tools;
+import fr.geringan.activdash.helpers.Tools;
 import fr.geringan.activdash.viewholders.CommonViewHolder;
 
 import static java.lang.Float.parseFloat;

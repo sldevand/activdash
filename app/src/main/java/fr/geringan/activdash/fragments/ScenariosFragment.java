@@ -15,7 +15,7 @@ import java.util.Objects;
 
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.adapters.ScenarioAdapter;
-import fr.geringan.activdash.utils.PrefsManager;
+import fr.geringan.activdash.helpers.PrefsManager;
 
 public class ScenariosFragment extends CommonNetworkFragment {
 

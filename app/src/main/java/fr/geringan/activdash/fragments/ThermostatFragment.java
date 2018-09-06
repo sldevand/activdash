@@ -19,7 +19,7 @@ import fr.geringan.activdash.models.ModeDataModel;
 import fr.geringan.activdash.models.ThermostatDataModel;
 import fr.geringan.activdash.network.GetHttp;
 import fr.geringan.activdash.network.SocketIOHolder;
-import fr.geringan.activdash.utils.PrefsManager;
+import fr.geringan.activdash.helpers.PrefsManager;
 import io.socket.emitter.Emitter;
 
 public class ThermostatFragment extends CommonNetworkFragment {

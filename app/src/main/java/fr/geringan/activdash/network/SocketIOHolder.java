@@ -12,8 +12,8 @@ import fr.geringan.activdash.models.DataModel;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 
-import static fr.geringan.activdash.utils.PrefsManager.baseAddress;
-import static fr.geringan.activdash.utils.PrefsManager.nodePort;
+import static fr.geringan.activdash.helpers.PrefsManager.baseAddress;
+import static fr.geringan.activdash.helpers.PrefsManager.nodePort;
 
 public final class SocketIOHolder {
 
