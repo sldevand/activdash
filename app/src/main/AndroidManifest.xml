@@ -8,7 +8,6 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
-
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher"
@@ -21,6 +20,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -46,7 +46,6 @@
                 android:resource="@xml/dash_widget_info" />
         </receiver>
 
-
         <activity android:name=".activities.DashWidgetConfigureActivity">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
@@ -61,8 +60,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".AppController" />
         </activity>
-
-
         <activity
             android:name=".activities.ThermostatControllerActivity"
             android:label="@string/title_activity_thermostat_controller"
@@ -73,6 +70,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".AppController" />
         </activity>
+        <activity android:name=".activities.RootActivity"></activity>
     </application>
 
 </manifest>

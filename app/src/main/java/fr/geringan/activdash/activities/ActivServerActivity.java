@@ -4,15 +4,16 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
+import android.view.Menu;
 import android.webkit.WebView;
-import android.widget.CompoundButton;
 
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.network.GetHttp;
+import fr.geringan.activdash.network.SocketIOHolder;
 import fr.geringan.activdash.utils.PrefsManager;
 
 
-public class ActivServerActivity extends AppCompatActivity {
+public class ActivServerActivity extends RootActivity {
 
     private final static String ON_STATE = "on";
     private final static String OFF_STATE = "off";
@@ -36,6 +37,22 @@ public class ActivServerActivity extends AppCompatActivity {
         logWebView = findViewById(R.id.web_view_log);
         logWebViewRefresh();
 
+        initializeSocketioListeners();
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.node_status)
+                .setIcon((SocketIOHolder.socket.connected()) ? R.mipmap.ic_node_on : R.mipmap.ic_node_off);
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
     }
 
     private void logWebViewRefresh() {

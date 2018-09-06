@@ -26,12 +26,14 @@ import com.github.mikephil.charting.utils.Utils;
 import java.util.Arrays;
 
 import fr.geringan.activdash.activities.ActivServerActivity;
+import fr.geringan.activdash.activities.RootActivity;
 import fr.geringan.activdash.activities.SettingsActivity;
 import fr.geringan.activdash.activities.ThermostatControllerActivity;
 import fr.geringan.activdash.fragments.ActuatorsFragment;
 import fr.geringan.activdash.fragments.GraphsFragment;
 import fr.geringan.activdash.fragments.ScenariosFragment;
 import fr.geringan.activdash.fragments.SensorsFragment;
+import fr.geringan.activdash.interfaces.SocketIOEventsListener;
 import fr.geringan.activdash.network.NetworkChangeReceiver;
 import fr.geringan.activdash.network.NetworkUtil;
 import fr.geringan.activdash.network.SocketIOHolder;
@@ -39,22 +41,22 @@ import fr.geringan.activdash.utils.PrefsManager;
 import fr.geringan.activdash.utils.Tools;
 import io.socket.client.Socket;
 
-public class AppController extends AppCompatActivity implements NetworkChangeReceiver.OnNetworkChangedListener {
+public class AppController extends RootActivity implements NetworkChangeReceiver.OnNetworkChangedListener {
 
-    private static final String TAG = AppController.class.getSimpleName();
     private static final Integer MAIN_VIEW = 1;
     private static final Integer NO_PREFS_VIEW = 2;
     private static final Integer ERROR_VIEW = 3;
-    public boolean nodeIsConnected = false;
     protected ProgressDialog progressBar;
     protected DrawerLayout mDrawerLayout;
     protected NetworkChangeReceiver networkChangeReceiver;
     protected IntentFilter intentFilter;
+
     private Integer selectedView = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         Utils.init(this);
         selectedView = 0;
         checkConnectivity();
@@ -68,26 +70,12 @@ public class AppController extends AppCompatActivity implements NetworkChangeRec
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        menu.findItem(R.id.node_status).setIcon((nodeIsConnected) ? R.mipmap.ic_node_on : R.mipmap.ic_node_off);
-
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
                 Intent settingsIntent = new Intent(AppController.this, SettingsActivity.class);
                 startActivity(settingsIntent);
                 return true;
-
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
@@ -116,14 +104,7 @@ public class AppController extends AppCompatActivity implements NetworkChangeRec
             super.registerReceiver(networkChangeReceiver, intentFilter);
     }
 
-    public void createProgressBar() {
-        progressBar = new ProgressDialog(this);
-        progressBar.setCancelable(true);
-        progressBar.setMessage("Connection à node...");
-        progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressBar.setIndeterminate(true);
-        progressBar.show();
-    }
+
 
     public void createNavigationDrawer() {
         mDrawerLayout = findViewById(R.id.drawer_layout);
@@ -174,7 +155,7 @@ public class AppController extends AppCompatActivity implements NetworkChangeRec
         createViewPager();
         createNavigationDrawer();
         createProgressBar();
-        SocketIOHolder.launch();
+
         initializeSocketioListeners();
         selectedView = MAIN_VIEW;
     }
@@ -185,6 +166,7 @@ public class AppController extends AppCompatActivity implements NetworkChangeRec
         setSupportActionBar(toolbar);
         AppCompatButton refreshButton = findViewById(R.id.refreshBtn);
         refreshButton.setOnClickListener(v -> recreate());
+
         selectedView = ERROR_VIEW;
     }
 
@@ -192,68 +174,49 @@ public class AppController extends AppCompatActivity implements NetworkChangeRec
         setContentView(R.layout.activity_no_prefs);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         Button prefsButton = findViewById(R.id.noPrefsButton);
+        prefsButton.setVisibility(View.INVISIBLE);
 
-        prefsButton.setOnClickListener(view -> {
-            Intent intent = new Intent(AppController.this, SettingsActivity.class);
-            startActivity(intent);
-        });
         selectedView = NO_PREFS_VIEW;
-    }
-
-    public void initializeSocketioListeners() {
-        if (null == SocketIOHolder.socket) return;
-
-        View v = findViewById(android.R.id.content);
-        SocketIOHolder.socket
-                .on(Socket.EVENT_CONNECT, args -> {
-                    nodeIsConnected = true;
-                    supportInvalidateOptionsMenu();
-                    if (progressBar != null) progressBar.dismiss();
-                })
-                .on(Socket.EVENT_CONNECT_TIMEOUT, args -> {
-                    Tools.shortSnackbar(v, R.string.node_timeout);
-                    nodeIsConnected = false;
-                    supportInvalidateOptionsMenu();
-                    if (progressBar != null) progressBar.dismiss();
-                })
-                .on(Socket.EVENT_DISCONNECT, args -> {
-                    nodeIsConnected = false;
-                    supportInvalidateOptionsMenu();
-                    if (progressBar != null) progressBar.dismiss();
-                })
-                .on("message", args -> Tools.shortSnackbar(v, Arrays.toString(args)));
     }
 
     @Override
     public void onChange(Integer conStatus, String conStatusStr) {
-        routeErrorViews(conStatus, conStatusStr);
+        if (!routeErrorViews(conStatus) && selectedView.equals(ERROR_VIEW)) {
+            Button prefsButton = findViewById(R.id.noPrefsButton);
+            prefsButton.setVisibility(View.VISIBLE);
+            prefsButton.setOnClickListener(view -> {
+                Intent intent = new Intent(AppController.this, SettingsActivity.class);
+                startActivity(intent);
+            });
+        }
     }
 
     public void checkConnectivity() {
         Integer conStatus = NetworkUtil.getConnectivityStatus(this);
-        String conStatusStr = NetworkUtil.getConnectivityStatusString(this);
-        routeViews(conStatus, conStatusStr);
+        routeViews(conStatus);
     }
 
-    public boolean routeErrorViews(Integer state, String stateStr) {
+    public boolean routeErrorViews(Integer state) {
         PrefsManager.launch(this);
         if (!PrefsManager.areTherePrefs()) {
             showNoPrefsView();
+            Tools.longSnackbar(rootView, R.string.no_prefs);
             return true;
         }
 
         if (NetworkUtil.TYPE_NOT_CONNECTED == state) {
             showErrorView();
+            if (!selectedView.equals(ERROR_VIEW))
+                Tools.longSnackbar(rootView, R.string.no_wifi);
             return true;
         }
         return false;
     }
 
-    public void routeViews(Integer state, String stateStr) {
+    public void routeViews(Integer state) {
 
-        if (routeErrorViews(state, stateStr)) return;
+        if (routeErrorViews(state)) return;
         if (!selectedView.equals(MAIN_VIEW)) {
             showMainView();
         }

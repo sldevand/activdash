@@ -7,6 +7,7 @@ import org.json.JSONException;
 
 import java.net.URISyntaxException;
 
+import fr.geringan.activdash.interfaces.SocketIOEventsListener;
 import fr.geringan.activdash.models.DataModel;
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -37,6 +38,7 @@ public final class SocketIOHolder {
     public static final String EMIT_THT_GET_CLOCK = "refreshTher";
     public static Socket socket;
     private static SocketEmitTask _task;
+    private static SocketIOEventsListener mEventsListener;
 
     public static void launch() {
         try {
@@ -93,7 +95,27 @@ public final class SocketIOHolder {
         } else {
             Log.e("emit", "A task is running");
         }
-
-
     }
+
+    public static void initEventListeners() {
+
+        socket
+                .on(Socket.EVENT_CONNECT, args -> {
+                    if (null != mEventsListener) mEventsListener.onSocketIOConnect();
+                })
+                .on(Socket.EVENT_CONNECT_TIMEOUT, args -> {
+                    if (null != mEventsListener) mEventsListener.onSocketIOTimeout();
+                })
+                .on(Socket.EVENT_DISCONNECT, args -> {
+                    if (null != mEventsListener) mEventsListener.onSocketIODisconnect();
+                })
+                .on("message", args -> {
+                    if (null != mEventsListener) mEventsListener.onSocketIOMessage(args);
+                });
+    }
+
+    public static void setEventsListener(SocketIOEventsListener mEventsListener) {
+        SocketIOHolder.mEventsListener = mEventsListener;
+    }
+
 }

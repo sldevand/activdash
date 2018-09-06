@@ -23,69 +23,46 @@ import com.github.mikephil.charting.utils.Utils;
 
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.fragments.ThermostatFragment;
+import fr.geringan.activdash.network.SocketIOHolder;
 
-public class ThermostatControllerActivity extends AppCompatActivity {
+public class ThermostatControllerActivity extends RootActivity {
 
-    protected ConnectivityManager cm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thermostat_controller);
         Utils.init(this);
-
-        cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
-        createViewPager();
+        createMainView();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        getMenuInflater().inflate(R.menu.menu_thermostat_controller, menu);
-        return true;
+    public void createMainView() {
+        createToolbar();
+        TabLayout tabLayout = findViewById(R.id.tabsThermostat);
+        tabLayout.setupWithViewPager(createViewPager());
+        initializeSocketioListeners();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-        return id == R.id.action_settings || super.onOptionsItemSelected(item);
-
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    public void createViewPager() {
-        setContentView(R.layout.activity_thermostat_controller);
-
+    public void createToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbarThermostat);
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
         assert actionbar != null;
         actionbar.setDisplayHomeAsUpEnabled(true);
-        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+    }
 
+    public ViewPager createViewPager(){
+        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         ViewPager mViewPager = findViewById(R.id.containerThermostat);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOffscreenPageLimit(3);
+        return mViewPager;
+    }
 
-        TabLayout tabLayout = findViewById(R.id.tabsThermostat);
-        tabLayout.setupWithViewPager(mViewPager);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 
 

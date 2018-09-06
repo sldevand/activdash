@@ -59,7 +59,7 @@
             android:textColor="@color/colorAccent"
             android:drawableTop="@mipmap/ic_refresh"
             style="?android:attr/borderlessButtonStyle"
-            android:enabled="false"
+            android:visibility="gone"
 
             />
 
