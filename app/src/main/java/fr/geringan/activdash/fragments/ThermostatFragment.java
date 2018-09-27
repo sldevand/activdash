@@ -15,12 +15,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import fr.geringan.activdash.R;
+import fr.geringan.activdash.helpers.PrefsManager;
 import fr.geringan.activdash.models.ModeDataModel;
 import fr.geringan.activdash.models.ThermostatDataModel;
 import fr.geringan.activdash.network.GetHttp;
 import fr.geringan.activdash.network.SocketIOHolder;
-import fr.geringan.activdash.helpers.PrefsManager;
-import io.socket.emitter.Emitter;
 
 public class ThermostatFragment extends CommonNetworkFragment {
 
@@ -79,24 +78,24 @@ public class ThermostatFragment extends CommonNetworkFragment {
         initClickEvents();
     }
 
+    /**
+     *
+     */
     public void getThermostat() {
         GetHttp getData = new GetHttp();
-        getData.setOnResponseListener(new GetHttp.OnHttpResponseListener() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONArray jsonArray = new JSONArray(response);
+        getData.setOnResponseListener(response -> {
+            try {
+                JSONArray jsonArray = new JSONArray(response);
 
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject obj = jsonArray.getJSONObject(i);
-                        updateThermostatDisplays(obj);
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject obj = jsonArray.getJSONObject(i);
+                    updateThermostatDisplays(obj);
                 }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
             }
         });
 
@@ -105,20 +104,17 @@ public class ThermostatFragment extends CommonNetworkFragment {
 
     public void getThermostatSensor() {
         GetHttp getData = new GetHttp();
-        getData.setOnResponseListener(new GetHttp.OnHttpResponseListener() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONArray jsonArray = new JSONArray(response);
+        getData.setOnResponseListener(response -> {
+            try {
+                JSONArray jsonArray = new JSONArray(response);
 
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject obj = jsonArray.getJSONObject(i);
-                        updateSensorDisplay(obj);
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject obj = jsonArray.getJSONObject(i);
+                    updateSensorDisplay(obj);
                 }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         });
 
@@ -153,26 +149,9 @@ public class ThermostatFragment extends CommonNetworkFragment {
     }
 
     private void initClickEvents() {
-        txtPlus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setConsigne(THT_CHANGE_VALUE);
-            }
-        });
-
-        txtConsigne.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SocketIOHolder.emit(SocketIOHolder.EMIT_THT_REFRESH, "");
-            }
-        });
-
-        txtMinus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setConsigne(-THT_CHANGE_VALUE);
-            }
-        });
+        txtPlus.setOnClickListener(v -> setConsigne(THT_CHANGE_VALUE));
+        txtConsigne.setOnClickListener(v -> SocketIOHolder.emit(SocketIOHolder.EMIT_THT_REFRESH, ""));
+        txtMinus.setOnClickListener(v -> setConsigne(-THT_CHANGE_VALUE));
     }
 
     private void setConsigne(double changeValue) {
@@ -237,22 +216,12 @@ public class ThermostatFragment extends CommonNetworkFragment {
     public void initializeSocketioListeners() {
         if (SocketIOHolder.socket != null) {
 
-            SocketIOHolder.socket.off(SocketIOHolder.EVENT_THERMOSTAT);
-            SocketIOHolder.socket.off(SocketIOHolder.EVENT_BOILER);
+            SocketIOHolder.socket
+                    .off(SocketIOHolder.EVENT_THERMOSTAT).off(SocketIOHolder.EVENT_BOILER)
+                    .on(SocketIOHolder.EVENT_THERMOSTAT,
+                    args -> onSocketIOReceive(SocketIOHolder.EVENT_THERMOSTAT, args))
+                    .on(SocketIOHolder.EVENT_BOILER, args -> onSocketIOReceive(SocketIOHolder.EVENT_BOILER, args));
 
-            SocketIOHolder.socket.on(SocketIOHolder.EVENT_THERMOSTAT, new Emitter.Listener() {
-                @Override
-                public void call(Object... args) {
-                    onSocketIOReceive(SocketIOHolder.EVENT_THERMOSTAT, args);
-                }
-            });
-
-            SocketIOHolder.socket.on(SocketIOHolder.EVENT_BOILER, new Emitter.Listener() {
-                @Override
-                public void call(Object... args) {
-                    onSocketIOReceive(SocketIOHolder.EVENT_BOILER, args);
-                }
-            });
         }
     }
 
@@ -322,9 +291,11 @@ public class ThermostatFragment extends CommonNetworkFragment {
         private String getEtat() {
             return etat;
         }
+
         public int getColor() {
             return color;
         }
+
         public void setColor(int color) {
             this.color = color;
         }
@@ -346,9 +317,11 @@ public class ThermostatFragment extends CommonNetworkFragment {
         private int getImg() {
             return img;
         }
+
         public int getColor() {
             return color;
         }
+
         public void setColor(int color) {
             this.color = color;
         }

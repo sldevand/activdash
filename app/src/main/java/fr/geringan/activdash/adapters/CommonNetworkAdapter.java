@@ -10,14 +10,14 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import fr.geringan.activdash.viewholders.CommonViewHolder;
-import fr.geringan.activdash.models.DataModel;
 import fr.geringan.activdash.interfaces.HttpResponse;
+import fr.geringan.activdash.models.DataModel;
+import fr.geringan.activdash.viewholders.CommonViewHolder;
 
 public abstract class CommonNetworkAdapter<V extends CommonViewHolder> extends RecyclerView.Adapter<V> implements HttpResponse {
 
     public Context context;
-    private ArrayList<? extends DataModel> dataSet=null;
+    private ArrayList<? extends DataModel> dataSet = null;
 
 
     @NonNull
@@ -27,15 +27,15 @@ public abstract class CommonNetworkAdapter<V extends CommonViewHolder> extends R
     }
 
     @Override
-    public void onBindViewHolder(@NonNull V holder, int i){
+    public void onBindViewHolder(@NonNull V holder, int i) {
         Objects.requireNonNull(holder).setData(dataSet.get(i));
     }
 
     @Override
     public int getItemCount() {
-        if(dataSet != null){
+        if (dataSet != null) {
             return dataSet.size();
-        }else
+        } else
             return 0;
     }
 
