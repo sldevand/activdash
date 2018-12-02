@@ -27,7 +27,6 @@ public class ThermostatFragment extends CommonNetworkFragment {
 
     protected String m_baseAddress = PrefsManager.apiAdress + "/thermostat";
     protected String m_sensorAddress = PrefsManager.apiAdress + "/mesures/get-sensor24thermid1";
-
     private AppCompatTextView txtMinus = null;
     private AppCompatTextView txtPlus = null;
     private AppCompatTextView txtConsigne = null;
@@ -35,10 +34,8 @@ public class ThermostatFragment extends CommonNetworkFragment {
     private AppCompatTextView txtThermostatMode = null;
     private AppCompatTextView txtThermostatPlan = null;
     private AppCompatTextView txtThermostatEtat = null;
-
     private AppCompatImageView imgThermostatEtat = null;
     private AppCompatImageView imgThermostatMode = null;
-
     private ThermostatDataModel thermostat;
 
     public static ThermostatFragment newInstance() {
@@ -64,7 +61,6 @@ public class ThermostatFragment extends CommonNetworkFragment {
         txtThermostatEtat = view.findViewById(R.id.txtThermostatEtat);
         txtThermostatPlan = view.findViewById(R.id.txtThermostatPlan);
         txtThermostatMode = view.findViewById(R.id.txtThermostatMode);
-
         imgThermostatEtat = view.findViewById(R.id.imgThermostatEtat);
         imgThermostatMode = view.findViewById(R.id.imgThermostatMode);
     }
@@ -78,9 +74,6 @@ public class ThermostatFragment extends CommonNetworkFragment {
         initClickEvents();
     }
 
-    /**
-     *
-     */
     public void getThermostat() {
         GetHttp getData = new GetHttp();
         getData.setOnResponseListener(response -> {
@@ -140,7 +133,6 @@ public class ThermostatFragment extends CommonNetworkFragment {
         txtConsigne.setText(String.valueOf(thermostat.getConsigne()));
         txtThermostatPlan.setText(thermostat.getPlanningName());
 
-
         ModeImage modeImg = getModeImage(mode.getNom());
 
         imgThermostatMode.setImageResource(modeImg.getImg());
@@ -152,6 +144,18 @@ public class ThermostatFragment extends CommonNetworkFragment {
         txtPlus.setOnClickListener(v -> setConsigne(THT_CHANGE_VALUE));
         txtConsigne.setOnClickListener(v -> SocketIOHolder.emit(SocketIOHolder.EMIT_THT_REFRESH, ""));
         txtMinus.setOnClickListener(v -> setConsigne(-THT_CHANGE_VALUE));
+        txtThermostatPlan.setOnClickListener(v -> openPlanList());
+        txtThermostatMode.setOnClickListener(v-> openModeList());
+    }
+
+    private void openModeList() {
+
+        //TODO Open Mode List
+    }
+
+    private void openPlanList() {
+        //TODO Open plan List
+
     }
 
     private void setConsigne(double changeValue) {
@@ -219,7 +223,7 @@ public class ThermostatFragment extends CommonNetworkFragment {
             SocketIOHolder.socket
                     .off(SocketIOHolder.EVENT_THERMOSTAT).off(SocketIOHolder.EVENT_BOILER)
                     .on(SocketIOHolder.EVENT_THERMOSTAT,
-                    args -> onSocketIOReceive(SocketIOHolder.EVENT_THERMOSTAT, args))
+                            args -> onSocketIOReceive(SocketIOHolder.EVENT_THERMOSTAT, args))
                     .on(SocketIOHolder.EVENT_BOILER, args -> onSocketIOReceive(SocketIOHolder.EVENT_BOILER, args));
 
         }
@@ -227,28 +231,28 @@ public class ThermostatFragment extends CommonNetworkFragment {
 
     public void onSocketIOReceive(final String event, Object... args) {
 
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.KITKAT) {
+            return;
+        }
+
         try {
+            JSONArray jsonArray = new JSONArray(args);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                final JSONObject obj = jsonArray.getJSONObject(i);
 
-            JSONArray jsonArray;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-                jsonArray = new JSONArray(args);
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    final JSONObject obj = jsonArray.getJSONObject(i);
-
-                    if (getActivity() != null) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    eventDispatch(event, obj);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                } catch (IllegalAccessException e) {
-                                    e.printStackTrace();
-                                }
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                eventDispatch(event, obj);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            } catch (IllegalAccessException e) {
+                                e.printStackTrace();
                             }
-                        });
-                    }
+                        }
+                    });
                 }
             }
         } catch (JSONException e) {
