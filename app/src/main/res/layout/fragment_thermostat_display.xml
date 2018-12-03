@@ -124,6 +124,7 @@
             tools:style="@style/CardView">
 
             <LinearLayout
+                android:id="@+id/layoutThermostatPlan"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">

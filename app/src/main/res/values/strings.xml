@@ -72,5 +72,6 @@
     <string name="todo" translatable="false">TODO</string>
     <string name="node_status" translatable="false">node status</string>
     <string name="node_connection">Connecting to node…</string>
+    <string name="select_a_plan">Select a plan</string>
 
 </resources>

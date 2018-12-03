@@ -13,33 +13,37 @@ import java.net.URL;
 
 public class GetHttp extends AsyncTask<String, Void, String> {
 
+    private final String NOT_FOUND = "404";
+
     private OnHttpResponseListener responseListener;
 
     @Override
     protected String doInBackground(String... strings) {
+        String address = strings[0];
+        if (null == address || address.equals("")) {
+            return NOT_FOUND;
+        }
         InputStream in = null;
-        String _address = strings[0];
-        if (_address != null && !_address.equals("")) {
-            try {
-                URL url = new URL(_address);
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                in = new BufferedInputStream(urlConnection.getInputStream());
-                return readStream(in);
+        try {
+            URL url = new URL(address);
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            in = new BufferedInputStream(urlConnection.getInputStream());
+            return readStream(in);
 
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "404";
+        } finally {
+            try {
+                if (null != in) in.close();
             } catch (IOException e) {
                 e.printStackTrace();
-                return "404";
-            } finally {
-                try {
-                    if (in != null) in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
         }
-        return "404";
+
+        return NOT_FOUND;
     }
 
     public void setOnResponseListener(OnHttpResponseListener rl) {
@@ -49,8 +53,9 @@ public class GetHttp extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
-        if (this.responseListener != null) responseListener.onResponse(s);
-
+        if (null != this.responseListener) {
+            responseListener.onResponse(s);
+        }
     }
 
     private String readStream(InputStream is) throws IOException {
@@ -60,6 +65,7 @@ public class GetHttp extends AsyncTask<String, Void, String> {
             sb.append(line);
         }
         is.close();
+
         return sb.toString();
     }
 
