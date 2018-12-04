@@ -24,6 +24,7 @@
             tools:style="@style/CardView">
 
             <LinearLayout
+
                 android:layout_width="@dimen/thermostat_display_width"
                 android:layout_height="@dimen/thermostat_display_height"
                 android:orientation="vertical">
@@ -90,6 +91,7 @@
             tools:style="@style/CardView">
 
             <LinearLayout
+                android:id="@+id/layoutThermostatMode"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -129,6 +131,7 @@
             tools:style="@style/CardView">
 
             <LinearLayout
+                android:id="@+id/layoutThermostatPlan"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">

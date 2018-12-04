@@ -29,11 +29,11 @@ import fr.geringan.activdash.fragments.ActuatorsFragment;
 import fr.geringan.activdash.fragments.GraphsFragment;
 import fr.geringan.activdash.fragments.ScenariosFragment;
 import fr.geringan.activdash.fragments.SensorsFragment;
+import fr.geringan.activdash.helpers.PrefsManager;
+import fr.geringan.activdash.helpers.Tools;
 import fr.geringan.activdash.network.NetworkChangeReceiver;
 import fr.geringan.activdash.network.NetworkUtil;
 import fr.geringan.activdash.network.SocketIOHolder;
-import fr.geringan.activdash.helpers.PrefsManager;
-import fr.geringan.activdash.helpers.Tools;
 
 public class AppController extends RootActivity implements NetworkChangeReceiver.OnNetworkChangedListener {
 
@@ -44,7 +44,6 @@ public class AppController extends RootActivity implements NetworkChangeReceiver
     protected DrawerLayout mDrawerLayout;
     protected NetworkChangeReceiver networkChangeReceiver;
     protected IntentFilter intentFilter;
-
     private Integer selectedView = 0;
 
     @Override
@@ -94,11 +93,10 @@ public class AppController extends RootActivity implements NetworkChangeReceiver
     @Override
     public void onResume() {
         super.onResume();
-        if (null != networkChangeReceiver)
+        if (null != networkChangeReceiver) {
             super.registerReceiver(networkChangeReceiver, intentFilter);
+        }
     }
-
-
 
     public void createNavigationDrawer() {
         mDrawerLayout = findViewById(R.id.drawer_layout);
@@ -111,16 +109,14 @@ public class AppController extends RootActivity implements NetworkChangeReceiver
                 case R.id.nav_activ_server:
                     intent = new Intent(AppController.this, ActivServerActivity.class);
                     startActivity(intent);
-                    break;
-
+                    return true;
                 case R.id.nav_thermostat:
                     intent = new Intent(AppController.this, ThermostatControllerActivity.class);
                     startActivity(intent);
-                    break;
+                    return true;
                 default:
                     return true;
             }
-            return true;
         });
     }
 
@@ -149,7 +145,6 @@ public class AppController extends RootActivity implements NetworkChangeReceiver
         createViewPager();
         createNavigationDrawer();
         createProgressBar();
-
         initializeSocketioListeners();
         selectedView = MAIN_VIEW;
     }
@@ -160,7 +155,6 @@ public class AppController extends RootActivity implements NetworkChangeReceiver
         setSupportActionBar(toolbar);
         AppCompatButton refreshButton = findViewById(R.id.refreshBtn);
         refreshButton.setOnClickListener(v -> recreate());
-
         selectedView = ERROR_VIEW;
     }
 
@@ -170,7 +164,6 @@ public class AppController extends RootActivity implements NetworkChangeReceiver
         setSupportActionBar(toolbar);
         Button prefsButton = findViewById(R.id.noPrefsButton);
         prefsButton.setVisibility(View.INVISIBLE);
-
         selectedView = NO_PREFS_VIEW;
     }
 
@@ -224,7 +217,6 @@ public class AppController extends RootActivity implements NetworkChangeReceiver
 
         @Override
         public Fragment getItem(int position) {
-
             switch (position) {
                 case 0:
                     return ScenariosFragment.newInstance();

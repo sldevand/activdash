@@ -68,9 +68,14 @@ public final class SocketIOHolder {
         }
     }
 
+    public static void emitNoControl(String event, String data) {
+        SocketEmitTask task = new SocketEmitTask(event);
+        task.execute(data);
+    }
+
     public static void emit(String event, String data) {
 
-        if (_task == null) _task = new SocketEmitTask(event);
+        if (null == _task) _task = new SocketEmitTask(event);
 
         if (_task.getStatus() != AsyncTask.Status.RUNNING) {
             _task = new SocketEmitTask(event);
@@ -83,7 +88,7 @@ public final class SocketIOHolder {
 
     public static void emit(String event, DataModel dm) {
 
-        if (_task == null) _task = new SocketEmitTask(event);
+        if (null == _task) _task = new SocketEmitTask(event);
 
         if (_task.getStatus() != AsyncTask.Status.RUNNING) {
             try {
