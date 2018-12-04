@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import fr.geringan.activdash.R;
+import fr.geringan.activdash.dialogs.ModeDialogFragment;
 import fr.geringan.activdash.dialogs.PlanDialogFragment;
 import fr.geringan.activdash.helpers.PrefsManager;
 import fr.geringan.activdash.models.ModeDataModel;
@@ -29,7 +31,9 @@ public class ThermostatFragment extends CommonNetworkFragment {
     public static final double THT_CHANGE_VALUE = 0.5;
 
     protected String m_baseAddress = PrefsManager.apiAdress + "/thermostat";
-    protected String m_PlanifName = PrefsManager.apiAdress + "/thermostat/planifname/";
+    protected String m_planifAddress = PrefsManager.apiAdress + "/thermostat/planifname/";
+    protected String m_modesAddress = PrefsManager.apiAdress + "/thermostat/mode/";
+
     protected String m_sensorAddress = PrefsManager.apiAdress + "/mesures/get-sensor24thermid1";
     private AppCompatTextView txtMinus = null;
     private AppCompatTextView txtPlus = null;
@@ -38,6 +42,7 @@ public class ThermostatFragment extends CommonNetworkFragment {
     private AppCompatTextView txtThermostatMode = null;
     private AppCompatTextView txtThermostatPlan = null;
     private LinearLayout llThermostatPlan = null;
+    private LinearLayout llThermostatMode = null;
     private AppCompatTextView txtThermostatEtat = null;
     private AppCompatImageView imgThermostatEtat = null;
     private AppCompatImageView imgThermostatMode = null;
@@ -68,6 +73,7 @@ public class ThermostatFragment extends CommonNetworkFragment {
         txtThermostatPlan = view.findViewById(R.id.txtThermostatPlan);
         llThermostatPlan = view.findViewById(R.id.layoutThermostatPlan);
         txtThermostatMode = view.findViewById(R.id.txtThermostatMode);
+        llThermostatMode = view.findViewById(R.id.layoutThermostatMode);
         imgThermostatEtat = view.findViewById(R.id.imgThermostatEtat);
         imgThermostatMode = view.findViewById(R.id.imgThermostatMode);
     }
@@ -80,6 +86,7 @@ public class ThermostatFragment extends CommonNetworkFragment {
         initializeSocketioListeners();
         initClickEvents();
         getThermostatPlanif();
+        getThermostatModes();
     }
 
     public void getThermostat() {
@@ -130,8 +137,22 @@ public class ThermostatFragment extends CommonNetworkFragment {
                 e.printStackTrace();
             }
         });
-        getData.execute(m_PlanifName);
+        getData.execute(m_planifAddress);
     }
+
+    public void getThermostatModes() {
+        GetHttp getData = new GetHttp();
+        getData.setOnResponseListener(response -> {
+            try {
+                JSONArray modes = new JSONArray(response);
+                llThermostatMode.setOnClickListener(v -> openModeList(modes.toString()));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
+        getData.execute(m_modesAddress);
+    }
+
 
     public void updateSensorDisplay(JSONObject obj) throws JSONException {
         if (obj.has("valeur1")) {
@@ -163,12 +184,21 @@ public class ThermostatFragment extends CommonNetworkFragment {
         txtPlus.setOnClickListener(v -> setConsigne(THT_CHANGE_VALUE));
         txtConsigne.setOnClickListener(v -> SocketIOHolder.emit(SocketIOHolder.EMIT_THT_REFRESH, ""));
         txtMinus.setOnClickListener(v -> setConsigne(-THT_CHANGE_VALUE));
-        txtThermostatMode.setOnClickListener(v -> openModeList());
     }
 
-    private void openModeList() {
+    private void openModeList(String modes) {
+        final FragmentManager fm = getFragmentManager();
+        final ModeDialogFragment dialog = ModeDialogFragment.newInstance(modes);
 
-        //TODO Open Mode List
+        if (null == fm || null == dialog) return;
+
+        dialog.setSelectionListener(mode -> {
+            if (mode.has("id")) {
+                SocketIOHolder.emitNoControl(SocketIOHolder.EMIT_THT_UPDATE_PLAN, "0");
+                SocketIOHolder.emitNoControl(SocketIOHolder.EMIT_THT_MODE, mode.getString("id"));
+            }
+        });
+        dialog.show(fm, "dialog");
     }
 
     private void openPlanList(String plannings) {
@@ -180,7 +210,6 @@ public class ThermostatFragment extends CommonNetworkFragment {
         dialog.setSelectionListener(planning -> {
             if (planning.has("id")) {
                 SocketIOHolder.emit(SocketIOHolder.EMIT_THT_UPDATE_PLAN, planning.getString("id"));
-
             }
         });
         dialog.show(fm, "dialog");

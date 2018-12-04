@@ -73,5 +73,6 @@
     <string name="node_status" translatable="false">node status</string>
     <string name="node_connection">Connecting to node…</string>
     <string name="select_a_plan">Select a plan</string>
+    <string name="select_a_mode">Select a mode</string>
 
 </resources>

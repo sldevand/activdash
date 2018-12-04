@@ -70,7 +70,8 @@
     <string name="not_connected_to_internet">Pas connecté à internet</string>
     <string name="wifi_state_change">android.net.wifi.STATE_CHANGE</string>
     <string name="node_connection">Connection à node…</string>
-    <string name="node_status">Node Status</string>
+    <string name="select_a_plan">Selection planning</string>
+    <string name="select_a_mode">Selection mode</string>
 
 
 </resources>
