@@ -1,13 +1,13 @@
 package fr.geringan.activdash.fragments;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -195,7 +195,15 @@ public class ThermostatFragment extends CommonNetworkFragment {
         dialog.setSelectionListener(mode -> {
             if (mode.has("id")) {
                 SocketIOHolder.emitNoControl(SocketIOHolder.EMIT_THT_UPDATE_PLAN, "0");
-                SocketIOHolder.emitNoControl(SocketIOHolder.EMIT_THT_MODE, mode.getString("id"));
+                new Handler().postDelayed(
+                        () -> {
+                            try {
+                                SocketIOHolder.emitNoControl(SocketIOHolder.EMIT_THT_MODE, mode.getString("id"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        },
+                        300);
             }
         });
         dialog.show(fm, "dialog");
