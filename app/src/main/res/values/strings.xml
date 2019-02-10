@@ -74,5 +74,8 @@
     <string name="node_connection">Connecting to node…</string>
     <string name="select_a_plan">Select a plan</string>
     <string name="select_a_mode">Select a mode</string>
+    <string name="about_app">About this app</string>
+    <string name="about">About…</string>
+    <string name="no_version_found">No version found</string>
 
 </resources>

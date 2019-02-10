@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,12 +49,31 @@ public class ThermostatFragment extends CommonNetworkFragment {
     private AppCompatImageView imgThermostatMode = null;
     private ThermostatDataModel thermostat;
 
+    private ProgressBar progressBar;
 
     public static ThermostatFragment newInstance() {
         ThermostatFragment fragment = new ThermostatFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    private void disableControls() {
+        progressBar.setVisibility(View.VISIBLE);
+        txtMinus.setVisibility(View.GONE);
+        txtPlus.setVisibility(View.GONE);
+        llThermostatPlan.setVisibility(View.GONE);
+        llThermostatMode.setVisibility(View.GONE);
+    }
+
+    private boolean enableControls() {
+        progressBar.setVisibility(View.GONE);
+        txtMinus.setVisibility(View.VISIBLE);
+        txtPlus.setVisibility(View.VISIBLE);
+        llThermostatPlan.setVisibility(View.VISIBLE);
+        llThermostatMode.setVisibility(View.VISIBLE);
+
+        return true;
     }
 
     @Nullable
@@ -76,6 +96,7 @@ public class ThermostatFragment extends CommonNetworkFragment {
         llThermostatMode = view.findViewById(R.id.layoutThermostatMode);
         imgThermostatEtat = view.findViewById(R.id.imgThermostatEtat);
         imgThermostatMode = view.findViewById(R.id.imgThermostatMode);
+        progressBar = view.findViewById(R.id.progressTher);
     }
 
     @Override
@@ -199,6 +220,8 @@ public class ThermostatFragment extends CommonNetworkFragment {
                         () -> {
                             try {
                                 SocketIOHolder.emitNoControl(SocketIOHolder.EMIT_THT_MODE, mode.getString("id"));
+                                disableControls();
+
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -218,6 +241,7 @@ public class ThermostatFragment extends CommonNetworkFragment {
         dialog.setSelectionListener(planning -> {
             if (planning.has("id")) {
                 SocketIOHolder.emit(SocketIOHolder.EMIT_THT_UPDATE_PLAN, planning.getString("id"));
+                disableControls();
             }
         });
         dialog.show(fm, "dialog");
@@ -286,43 +310,57 @@ public class ThermostatFragment extends CommonNetworkFragment {
         if (SocketIOHolder.socket != null) {
 
             SocketIOHolder.socket
-                    .off(SocketIOHolder.EVENT_THERMOSTAT).off(SocketIOHolder.EVENT_BOILER)
+                    .off(SocketIOHolder.EVENT_THERMOSTAT)
+                    .off(SocketIOHolder.EVENT_BOILER)
                     .on(SocketIOHolder.EVENT_THERMOSTAT,
                             args -> onSocketIOReceive(SocketIOHolder.EVENT_THERMOSTAT, args))
-                    .on(SocketIOHolder.EVENT_BOILER, args -> onSocketIOReceive(SocketIOHolder.EVENT_BOILER, args));
+                    .on(SocketIOHolder.EVENT_BOILER,
+                            args -> onSocketIOReceive(SocketIOHolder.EVENT_BOILER, args))
+                    .on(SocketIOHolder.EVENT_PLAN_SAVE,
+                            args -> onSocketIOReceive(SocketIOHolder.EVENT_PLAN_SAVE, args))
+                    .on(SocketIOHolder.EVENT_MODE_SAVE,
+                            args -> onSocketIOReceive(SocketIOHolder.EVENT_MODE_SAVE, args));
 
         }
     }
 
-    public void onSocketIOReceive(final String event, Object... args) {
+    public boolean onSocketIOReceive(final String event, Object... args) {
 
-        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.KITKAT) {
-            return;
+        if (event.equals(SocketIOHolder.EVENT_MODE_SAVE)
+                || event.equals(SocketIOHolder.EVENT_PLAN_SAVE)) {
+            getActivity().runOnUiThread(this::enableControls);
+            return true;
         }
 
         try {
-            JSONArray jsonArray = new JSONArray(args);
-            for (int i = 0; i < jsonArray.length(); i++) {
-                final JSONObject obj = jsonArray.getJSONObject(i);
-
-                if (getActivity() != null) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                eventDispatch(event, obj);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            } catch (IllegalAccessException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                }
-            }
+            return eventsDispatch(event, args);
         } catch (JSONException e) {
             e.printStackTrace();
+            return false;
         }
+    }
+
+    private boolean eventsDispatch(String event, Object... args) throws JSONException {
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.KITKAT
+                || null == getActivity()) {
+            return false;
+        }
+
+        JSONArray jsonArray = new JSONArray(args);
+        for (int i = 0; i < jsonArray.length(); i++) {
+            final JSONObject obj = jsonArray.getJSONObject(i);
+            getActivity().runOnUiThread(() -> {
+                try {
+                    eventDispatch(event, obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+
+        return true;
     }
 
     private void eventDispatch(String event, JSONObject obj) throws JSONException, IllegalAccessException {
@@ -395,4 +433,6 @@ public class ThermostatFragment extends CommonNetworkFragment {
             this.color = color;
         }
     }
+
+
 }

@@ -5,6 +5,14 @@
     android:layout_height="match_parent"
     tools:context="fr.geringan.activdash.activities.ThermostatControllerActivity$PlaceholderFragment">
 
+    <ProgressBar
+        android:id="@+id/progressTher"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:visibility="gone"/>
+
     <android.support.v7.widget.CardView
         android:id="@+id/thermostat_cardView"
         android:layout_width="@dimen/thermostat_display_width"

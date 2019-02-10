@@ -3,6 +3,8 @@ package fr.geringan.activdash;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -25,6 +27,7 @@ import fr.geringan.activdash.activities.ActivServerActivity;
 import fr.geringan.activdash.activities.RootActivity;
 import fr.geringan.activdash.activities.SettingsActivity;
 import fr.geringan.activdash.activities.ThermostatControllerActivity;
+import fr.geringan.activdash.dialogs.AboutDialog;
 import fr.geringan.activdash.fragments.ActuatorsFragment;
 import fr.geringan.activdash.fragments.GraphsFragment;
 import fr.geringan.activdash.fragments.ScenariosFragment;
@@ -69,6 +72,17 @@ public class AppController extends RootActivity implements NetworkChangeReceiver
                 Intent settingsIntent = new Intent(AppController.this, SettingsActivity.class);
                 startActivity(settingsIntent);
                 return true;
+            case R.id.action_about:
+                try {
+                    PackageInfo pinfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+                    final FragmentManager fm = getSupportFragmentManager();
+                    AboutDialog dialog = AboutDialog.newInstance(pinfo.versionName);
+                    dialog.show(fm, "About");
+                    return true;
+                } catch (PackageManager.NameNotFoundException e) {
+                    Tools.longSnackbar(rootView, R.string.no_version_found);
+                    return true;
+                }
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
