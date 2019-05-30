@@ -7,12 +7,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import fr.geringan.activdash.R;
@@ -42,18 +42,15 @@ public class ScenarioAdapter extends CommonNetworkAdapter<ScenarioAdapter.ViewHo
         return new ViewHolder(view);
     }
 
-
     @Override
     public void httpToDataModel(String response) throws IllegalAccessException, JSONException {
         if ("404".equals(response)) return;
 
-        JSONObject scenarios = new JSONObject(response);
+        JSONArray scenarios = new JSONArray(response);
         dataSet.clear();
-        Iterator itr = scenarios.keys();
-        while (itr.hasNext()) {
-            String key = (String) itr.next();
-            ScenarioDataModel dm = new ScenarioDataModel((JSONObject) scenarios.get(key));
-            dataSet.add(dm);
+        for (int i = 0; i < scenarios.length(); i++) {
+            JSONObject json = scenarios.getJSONObject(i);
+            dataSet.add(new ScenarioDataModel(json));
         }
         Collections.sort(dataSet);
     }
@@ -79,7 +76,7 @@ public class ScenarioAdapter extends CommonNetworkAdapter<ScenarioAdapter.ViewHo
             currentDataModel = scenario;
         }
 
-        private Integer getImgRes(final String text){
+        private Integer getImgRes(final String text) {
             switch (text.toLowerCase()) {
                 case "tv":
                     return R.mipmap.ic_tv;
