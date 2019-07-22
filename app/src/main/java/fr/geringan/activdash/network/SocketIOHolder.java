@@ -28,6 +28,8 @@ public final class SocketIOHolder {
     public static final String EMIT_DIMMER = "updateDimmer";
     public static final String EMIT_DIMMERPERSIST = "updateDimmerPersist";
     public static final String EMIT_SCENARIO = "updateScenario";
+    public static final String EMIT_SCENARIO_STOP = "stopScenario";
+    public static final String EMIT_SCENARIO_WATCH = "watchScenario";
     public static final String EMIT_THT_CONS = "updateTherCons";
     public static final String EMIT_THT_DELTA = "updateTherDelta";
     public static final String EMIT_THT_TEMPEXT = "updateTherTempext";

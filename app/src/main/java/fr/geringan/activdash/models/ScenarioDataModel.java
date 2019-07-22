@@ -10,6 +10,8 @@ public class ScenarioDataModel extends DataModel implements Comparable<ScenarioD
 
     protected String nom;
     private String id;
+    protected String status;
+    protected Integer remainingTime;
 
     public ScenarioDataModel() {
         super();
@@ -19,16 +21,29 @@ public class ScenarioDataModel extends DataModel implements Comparable<ScenarioD
         super(dataJSON);
     }
 
-    //GETTERS
     public String getNom() {
         return this.nom;
     }
 
-    //SETTERS
     public void setNom(String nom) {
         this.nom = nom;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Integer getRemainingTime() {
+        return remainingTime;
+    }
+
+    public void setRemainingTime(Integer remainingTime) {
+        this.remainingTime = remainingTime;
+    }
 
     @Override
     public int compareTo(@NonNull ScenarioDataModel dm) {

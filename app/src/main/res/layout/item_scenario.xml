@@ -6,22 +6,55 @@
     android:orientation="horizontal"
     android:padding="4dp">
 
-    <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/imageScenario"
+    <LinearLayout
+        android:id="@+id/layoutScenario"
         android:layout_width="match_parent"
         android:layout_height="@dimen/actionneur_icon_minheight"
-        android:layout_weight="3"
-        android:src="@mipmap/ic_play"
-
-        />
-
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/textScenario"
-        style="@style/RecycleItemsStyle"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:text="texte" />
+        android:orientation="horizontal"
+        android:padding="4dp">
 
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/imageScenario"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@mipmap/ic_play" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/textScenario"
+            style="@style/RecycleItemsStyle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/text" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutScenarioControl"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/actionneur_icon_minheight"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:padding="4dp">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/textRemaining"
+            style="@style/RecycleItemsStyle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/remaining_time"
+            android:visibility="invisible" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/imageScenarioStop"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@mipmap/ic_stop"
+            android:tint="@color/colorAccent"
+            android:visibility="invisible" />
+    </LinearLayout>
 
 </LinearLayout>
