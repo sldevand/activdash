@@ -77,5 +77,7 @@
     <string name="about_app">About this app</string>
     <string name="about">About…</string>
     <string name="no_version_found">No version found</string>
+    <string name="remaining_time" translatable="false">…</string>
+    <string name="text" translatable="false">text</string>
 
 </resources>

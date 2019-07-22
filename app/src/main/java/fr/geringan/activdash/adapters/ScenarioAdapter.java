@@ -55,15 +55,25 @@ public class ScenarioAdapter extends CommonNetworkAdapter<ScenarioAdapter.ViewHo
         Collections.sort(dataSet);
     }
 
+    public List<ScenarioDataModel> getDataSet() {
+        return dataSet;
+    }
+
     public class ViewHolder extends CommonViewHolder<ScenarioDataModel> {
         private TextView txtName;
         private ImageView img;
+        private TextView txtRemainingTime;
+        private ImageView imgStop;
         private ScenarioDataModel currentDataModel;
 
         ViewHolder(final View itemView) {
             super(itemView);
             txtName = itemView.findViewById(R.id.textScenario);
             img = itemView.findViewById(R.id.imageScenario);
+            txtRemainingTime = itemView.findViewById(R.id.textRemaining);
+            imgStop = itemView.findViewById(R.id.imageScenarioStop);
+            imgStop.setOnClickListener(view ->
+                    SocketIOHolder.emit(SocketIOHolder.EMIT_SCENARIO_STOP, currentDataModel));
             itemView.setOnClickListener(view ->
                     SocketIOHolder.emit(SocketIOHolder.EMIT_SCENARIO, currentDataModel));
         }
@@ -73,6 +83,7 @@ public class ScenarioAdapter extends CommonNetworkAdapter<ScenarioAdapter.ViewHo
             String text = scenario.getNom();
             txtName.setText(text);
             img.setImageResource(getImgRes(text));
+            toggleStatus(scenario);
             currentDataModel = scenario;
         }
 
@@ -86,6 +97,22 @@ public class ScenarioAdapter extends CommonNetworkAdapter<ScenarioAdapter.ViewHo
                     return R.mipmap.ic_bed;
                 default:
                     return R.mipmap.ic_play;
+            }
+        }
+
+        private void toggleStatus(final ScenarioDataModel scenario) {
+            if (scenario.getStatus().equals("play")) {
+                if (null != scenario.getRemainingTime()) {
+                    int seconds = scenario.getRemainingTime() / 1000;
+                    Integer minutes = seconds / 60;
+                    Integer hours = minutes / 60;
+                    txtRemainingTime.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds % 60));
+                }
+                txtRemainingTime.setVisibility(View.VISIBLE);
+                imgStop.setVisibility(View.VISIBLE);
+            } else {
+                txtRemainingTime.setVisibility(View.INVISIBLE);
+                imgStop.setVisibility(View.INVISIBLE);
             }
         }
     }
