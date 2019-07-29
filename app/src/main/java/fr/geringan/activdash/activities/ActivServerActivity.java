@@ -98,7 +98,12 @@ public class ActivServerActivity extends RootActivity {
         else state = OFF_STATE;
 
         GetHttp serverSwitch = new GetHttp();
-        serverSwitch.setOnResponseListener(response -> activServerState());
+        serverSwitch.setOnResponseListener(response -> {
+            new android.os.Handler().postDelayed(
+                    this::activServerState,
+                    300
+            );
+        });
         serverSwitch.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, m_switchAddress + state);
     }
 
