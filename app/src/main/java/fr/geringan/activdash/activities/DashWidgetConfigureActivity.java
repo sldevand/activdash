@@ -20,6 +20,7 @@ public class DashWidgetConfigureActivity extends Activity {
     private static final String PREF_PREFIX_KEY = "appwidget_";
     private static final String PREF_TITLE_KEY = "title_";
     private static final String PREF_HTTP_KEY = "http_";
+    private static final String SCENARIOS_COMMAND_PREFILL = "scenarios/command/";
 
     private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private EditText mAppWidgetText, mAppWidgetHttp;
@@ -85,7 +86,7 @@ public class DashWidgetConfigureActivity extends Activity {
         mAppWidgetHttp = findViewById(R.id.appwidget_http);
         findViewById(R.id.add_button).setOnClickListener(mOnClickListener);
 
-        String prefill = PrefsManager.baseAddress + "/" + PrefsManager.entryPointAddress;
+        String prefill = PrefsManager.baseAddress + "/" + PrefsManager.entryPointAddress + "/" + SCENARIOS_COMMAND_PREFILL;
         mAppWidgetHttp.setText(prefill);
 
         Intent intent = getIntent();

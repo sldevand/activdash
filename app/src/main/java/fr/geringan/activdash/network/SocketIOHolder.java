@@ -24,6 +24,7 @@ public final class SocketIOHolder {
     public static final String EVENT_BOILER = "chaudiere";
     public static final String EVENT_PLAN_SAVE = "therplansave";
     public static final String EVENT_MODE_SAVE = "thermodesave";
+    public static final String EVENT_MESSAGE_CONSOLE = "messageConsole";
     public static final String EMIT_INTER = "updateInter";
     public static final String EMIT_DIMMER = "updateDimmer";
     public static final String EMIT_DIMMERPERSIST = "updateDimmerPersist";

@@ -27,7 +27,10 @@
         android:id="@+id/appwidget_http"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text" />
+        android:minLines="2"
+        android:maxLines="2"
+        android:lines="2"
+        android:inputType="textMultiLine" />
 
     <Button
         android:id="@+id/add_button"
