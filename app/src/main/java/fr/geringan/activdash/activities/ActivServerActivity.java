@@ -1,15 +1,22 @@
 package fr.geringan.activdash.activities;
 
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.SwitchCompat;
+import android.text.Spannable;
+import android.text.TextUtils;
 import android.view.Menu;
-import android.webkit.WebView;
+import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import fr.geringan.activdash.R;
+import fr.geringan.activdash.helpers.PrefsManager;
 import fr.geringan.activdash.network.GetHttp;
 import fr.geringan.activdash.network.SocketIOHolder;
-import fr.geringan.activdash.helpers.PrefsManager;
 
 
 public class ActivServerActivity extends RootActivity {
@@ -17,12 +24,13 @@ public class ActivServerActivity extends RootActivity {
     private final static String ON_STATE = "on";
     private final static String OFF_STATE = "off";
     public String m_baseAddress = PrefsManager.baseAddress + "/" + PrefsManager.entryPointAddress;
-    public String m_stateAddress = m_baseAddress + "getpiassistnode";
-    public String m_switchAddress = m_baseAddress + "piassistnode=";
-    public String m_logAddress = m_baseAddress + "log";
+    public String m_stateAddress = m_baseAddress + "/node/status";
+    public String m_switchAddress = m_baseAddress + "/node/toggle/";
+    public String m_logAddress = m_baseAddress + "/node/log";
     private SwitchCompat activServerSwitch;
-    private WebView logWebView;
+    private TextView tvLog;
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,9 +41,8 @@ public class ActivServerActivity extends RootActivity {
             if (buttonView.isPressed()) activServerSwitch(isChecked);
         });
         activServerState();
-        logWebView = findViewById(R.id.web_view_log);
-        logWebViewRefresh();
-
+        tvLog = findViewById(R.id.tvLog);
+        logTextViewRefresh();
         initializeSocketioListeners();
     }
 
@@ -54,8 +61,23 @@ public class ActivServerActivity extends RootActivity {
         return true;
     }
 
-    private void logWebViewRefresh() {
-        logWebView.loadUrl(m_logAddress);
+    private void logTextViewRefresh() {
+        GetHttp serverState = new GetHttp();
+        serverState.setOnResponseListener(response -> {
+            try {
+                tvLog.setText(prepareMessage(response), TextView.BufferType.SPANNABLE);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                tvLog.setText(e.getMessage());
+            }
+        });
+        serverState.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, m_logAddress);
+    }
+
+    protected void prependLogText(String text) {
+        Spannable currentText = (Spannable) tvLog.getText();
+        CharSequence indexedText = TextUtils.concat(text + "\n", currentText);
+        tvLog.setText(indexedText);
     }
 
     private void activServerState() {
@@ -70,14 +92,43 @@ public class ActivServerActivity extends RootActivity {
     }
 
     private void activServerSwitch(boolean onoff) {
-
         String state;
 
         if (onoff) state = ON_STATE;
         else state = OFF_STATE;
 
         GetHttp serverSwitch = new GetHttp();
-        serverSwitch.setOnResponseListener(response -> activServerState());
+        serverSwitch.setOnResponseListener(response -> {
+            new android.os.Handler().postDelayed(
+                    this::activServerState,
+                    300
+            );
+        });
         serverSwitch.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, m_switchAddress + state);
+    }
+
+    protected String prepareMessage(String response) throws JSONException {
+        JSONObject jsonObject = new JSONObject(response);
+        if (!jsonObject.has("message")) {
+            throw new JSONException("JSONObject has no 'message' key");
+        }
+        String message = jsonObject.getString("message");
+        if (message.isEmpty()) {
+            throw new JSONException("Message is empty");
+        }
+        return message.replaceAll("(<br>)", "");
+    }
+
+    @Override
+    public void initializeSocketioListeners() {
+        super.initializeSocketioListeners();
+        SocketIOHolder.socket.on(SocketIOHolder.EVENT_MESSAGE_CONSOLE, args -> {
+            if (args.length < 1) {
+                return;
+            }
+            runOnUiThread(() ->
+                prependLogText((String) args[0])
+            );
+        });
     }
 }

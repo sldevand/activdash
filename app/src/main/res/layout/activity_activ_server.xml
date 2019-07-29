@@ -40,13 +40,18 @@
             android:layout_below="@id/activ_server_switch_layout"
             android:background="@android:color/darker_gray" />
 
-        <WebView
-            android:id="@+id/web_view_log"
+        <ScrollView
+            android:id="@+id/ScrollView01"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/separator1"
+            android:layout_below="@id/separator1">
 
-            />
+            <TextView
+                android:id="@+id/tvLog"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+        </ScrollView>
 
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
