@@ -75,6 +75,8 @@
     <string name="about_app">A propos de cette app</string>
     <string name="about">A propos…</string>
     <string name="no_version_found">Pas de version trouvée</string>
+    <string name="serialport">Serialport</string>
+    <string name="reset">Reset</string>
 
 
 </resources>

@@ -79,5 +79,7 @@
     <string name="no_version_found">No version found</string>
     <string name="remaining_time" translatable="false">…</string>
     <string name="text" translatable="false">text</string>
+    <string name="serialport">Serialport</string>
+    <string name="reset">Reset</string>
 
 </resources>

@@ -41,6 +41,7 @@ public final class SocketIOHolder {
     public static final String EMIT_THT_REFRESH = "refreshTher";
     public static final String EMIT_THT_UPDATE_CLOCK = "refreshTher";
     public static final String EMIT_THT_GET_CLOCK = "refreshTher";
+    public static final String EMIT_SERIAL_PORT_RESET = "serialportReset";
     public static Socket socket;
     private static SocketEmitTask _task;
     private static SocketIOEventsListener mEventsListener;
