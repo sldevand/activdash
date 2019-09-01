@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.SwitchCompat;
 import android.text.Spannable;
 import android.text.TextUtils;
@@ -28,6 +29,7 @@ public class ActivServerActivity extends RootActivity {
     public String m_switchAddress = m_baseAddress + "/node/toggle/";
     public String m_logAddress = m_baseAddress + "/node/log";
     private SwitchCompat activServerSwitch;
+    private AppCompatImageView serialPortReset;
     private TextView tvLog;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -40,6 +42,12 @@ public class ActivServerActivity extends RootActivity {
         activServerSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (buttonView.isPressed()) activServerSwitch(isChecked);
         });
+
+        serialPortReset = findViewById(R.id.seriaport_reset);
+        serialPortReset.setOnClickListener(view -> {
+            serialPortReset();
+        });
+
         activServerState();
         tvLog = findViewById(R.id.tvLog);
         logTextViewRefresh();
@@ -105,6 +113,10 @@ public class ActivServerActivity extends RootActivity {
             );
         });
         serverSwitch.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, m_switchAddress + state);
+    }
+
+    private void serialPortReset() {
+        SocketIOHolder.socket.emit(SocketIOHolder.EMIT_SERIAL_PORT_RESET);
     }
 
     protected String prepareMessage(String response) throws JSONException {
