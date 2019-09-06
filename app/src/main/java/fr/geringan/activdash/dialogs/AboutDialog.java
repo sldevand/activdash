@@ -29,8 +29,8 @@ public class AboutDialog extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
-        builderSingle.setIcon(android.R.drawable.ic_dialog_info);
-        builderSingle.setTitle(getString(R.string.about_app));
+        builderSingle.setIcon(R.mipmap.ic_launcher);
+        builderSingle.setTitle(getString(R.string.app_name));
         builderSingle.setNegativeButton("OK", (dialog, which) -> dialog.dismiss());
 
         Bundle args = getArguments();

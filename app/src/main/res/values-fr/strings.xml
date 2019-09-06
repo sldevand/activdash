@@ -22,7 +22,7 @@
     <string name="summary_base_url">exemple = "http://192.168.1.52"</string>
     <string name="summary_api_domain">exemple = "activapi.fr/api"</string>
     <string name="summary_node_port">exemple = 5901</string>
-    <string name="summary_entrypoint_url">exemple = dashboard/resultat.php?"</string>
+    <string name="summary_entrypoint_url">exemple = activapi.fr/api"</string>
 
     <string name="default_base_url">http://192.168.1.52</string>
     <string name="default_api_domain">activapi.fr/api</string>
@@ -72,7 +72,6 @@
     <string name="node_connection">Connection à node…</string>
     <string name="select_a_plan">Selection planning</string>
     <string name="select_a_mode">Selection mode</string>
-    <string name="about_app">A propos de cette app</string>
     <string name="about">A propos…</string>
     <string name="no_version_found">Pas de version trouvée</string>
     <string name="serialport">Serialport</string>

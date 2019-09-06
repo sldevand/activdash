@@ -29,7 +29,7 @@
             android:defaultValue="@string/default_entrypoint_url"
             android:dialogTitle="@string/summary_entrypoint_url"
             android:key="@string/key_entrypoint_url"
-            android:summary="@string/summary_entrypoint_url"
+            android:summary="@string/summary_api_domain"
             android:title="@string/title_entrypoint_url" />
 
 

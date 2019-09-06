@@ -6,6 +6,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -52,7 +54,6 @@ public class AppController extends RootActivity implements NetworkChangeReceiver
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Utils.init(this);
         selectedView = 0;
         checkConnectivity();
@@ -158,7 +159,6 @@ public class AppController extends RootActivity implements NetworkChangeReceiver
         createToolbar();
         createViewPager();
         createNavigationDrawer();
-        createProgressBar();
         initializeSocketioListeners();
         selectedView = MAIN_VIEW;
     }

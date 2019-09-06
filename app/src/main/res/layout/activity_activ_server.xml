@@ -29,9 +29,8 @@
                 android:id="@+id/activ_server_switch"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:layout_gravity="end"/>
-
+                android:layout_gravity="end"
+                android:layout_weight="2" />
         </LinearLayout>
 
         <LinearLayout
@@ -53,10 +52,9 @@
                 android:id="@+id/seriaport_reset"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@android:drawable/ic_menu_revert"
-                android:background="?android:selectableItemBackground"
                 android:layout_weight="5"
-              />
+                android:background="?android:selectableItemBackground"
+                android:src="@android:drawable/ic_menu_revert" />
         </LinearLayout>
 
         <View
@@ -75,7 +73,8 @@
             <TextView
                 android:id="@+id/tvLog"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:ellipsize="end" />
         </ScrollView>
 
     </RelativeLayout>

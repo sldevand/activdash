@@ -20,12 +20,12 @@
     <string name="summary_base_url">example = "http://192.168.1.52"</string>
     <string name="summary_api_domain">example = "activapi.fr/api"</string>
     <string name="summary_node_port">example = 5901</string>
-    <string name="summary_entrypoint_url">example = dashboard/resultat.php?"</string>
+    <string name="summary_entrypoint_url">example = activapi.fr/api"</string>
 
     <string name="default_base_url">http://192.168.1.52</string>
     <string name="default_api_domain">activapi.fr/api</string>
     <string name="default_node_port">5901</string>
-    <string name="default_entrypoint_url">dashboard/resultat.php?</string>
+    <string name="default_entrypoint_url">activapi.fr/api</string>
 
     <string name="http_bad_response_error">An error %1$s occurred!</string>
 
@@ -74,7 +74,6 @@
     <string name="node_connection">Connecting to node…</string>
     <string name="select_a_plan">Select a plan</string>
     <string name="select_a_mode">Select a mode</string>
-    <string name="about_app">About this app</string>
     <string name="about">About…</string>
     <string name="no_version_found">No version found</string>
     <string name="remaining_time" translatable="false">…</string>

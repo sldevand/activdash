@@ -1,6 +1,5 @@
 package fr.geringan.activdash.activities;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -9,15 +8,14 @@ import android.view.View;
 import java.util.Arrays;
 
 import fr.geringan.activdash.R;
+import fr.geringan.activdash.helpers.Tools;
 import fr.geringan.activdash.interfaces.SocketIOEventsListener;
 import fr.geringan.activdash.network.SocketIOHolder;
-import fr.geringan.activdash.helpers.Tools;
 
 public abstract class RootActivity extends AppCompatActivity implements SocketIOEventsListener {
 
 
     protected View rootView;
-    protected ProgressDialog progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,15 +28,6 @@ public abstract class RootActivity extends AppCompatActivity implements SocketIO
         if (null == SocketIOHolder.socket) return;
         SocketIOHolder.initEventListeners();
         SocketIOHolder.setEventsListener(this);
-    }
-
-    public void createProgressBar() {
-        progressBar = new ProgressDialog(this);
-        progressBar.setCancelable(true);
-        progressBar.setMessage(getString(R.string.node_connection));
-        progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressBar.setIndeterminate(true);
-        progressBar.show();
     }
 
     @Override
@@ -58,20 +47,17 @@ public abstract class RootActivity extends AppCompatActivity implements SocketIO
     @Override
     public void onSocketIOConnect() {
         supportInvalidateOptionsMenu();
-        if (null != progressBar) progressBar.dismiss();
     }
 
     @Override
     public void onSocketIOTimeout() {
         Tools.shortSnackbar(rootView, R.string.node_timeout);
         supportInvalidateOptionsMenu();
-        if (null != progressBar) progressBar.dismiss();
     }
 
     @Override
     public void onSocketIODisconnect() {
         supportInvalidateOptionsMenu();
-        if (null != progressBar) progressBar.dismiss();
     }
 
     @Override
