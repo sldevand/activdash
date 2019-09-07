@@ -1,5 +1,6 @@
 package fr.geringan.activdash.activities;
 
+import android.icu.util.Calendar;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -8,11 +9,19 @@ import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.SwitchCompat;
 import android.text.Spannable;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.Menu;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.helpers.PrefsManager;
@@ -121,14 +130,26 @@ public class ActivServerActivity extends RootActivity {
 
     protected String prepareMessage(String response) throws JSONException {
         JSONObject jsonObject = new JSONObject(response);
-        if (!jsonObject.has("message")) {
+        if (!jsonObject.has("messages")) {
             throw new JSONException("JSONObject has no 'message' key");
         }
-        String message = jsonObject.getString("message");
-        if (message.isEmpty()) {
-            throw new JSONException("Message is empty");
+
+        return buildLogsString(jsonObject.getJSONArray("messages"));
+    }
+
+    protected String buildLogsString(JSONArray logs) throws JSONException {
+        SimpleDateFormat sDateFormat = new SimpleDateFormat("HH:mm:ss", Locale.FRANCE);
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (int i = 0; i < logs.length(); i++) {
+            long createdAt = logs.getJSONObject(i).getLong("createdAt");
+            stringBuilder.append(sDateFormat.format(new Date(createdAt * 1000)));
+            stringBuilder.append(" ");
+            stringBuilder.append(logs.getJSONObject(i).getString("content"));
+            stringBuilder.append("\n");
         }
-        return message.replaceAll("(<br>)", "");
+
+        return stringBuilder.toString();
     }
 
     @Override
@@ -139,7 +160,7 @@ public class ActivServerActivity extends RootActivity {
                 return;
             }
             runOnUiThread(() ->
-                prependLogText((String) args[0])
+                    prependLogText((String) args[0])
             );
         });
     }
