@@ -56,7 +56,8 @@ public class AppController extends RootActivity implements NetworkChangeReceiver
         super.onCreate(savedInstanceState);
         Utils.init(this);
         selectedView = 0;
-        checkConnectivity();
+        Integer conStatus = NetworkUtil.getConnectivityStatus(this);
+        routeViews(conStatus);
         if (null == networkChangeReceiver) {
             intentFilter = new IntentFilter();
             intentFilter.addAction("android.net.wifi.STATE_CHANGE");
@@ -191,11 +192,6 @@ public class AppController extends RootActivity implements NetworkChangeReceiver
                 startActivity(intent);
             });
         }
-    }
-
-    public void checkConnectivity() {
-        Integer conStatus = NetworkUtil.getConnectivityStatus(this);
-        routeViews(conStatus);
     }
 
     public boolean routeErrorViews(Integer state) {
