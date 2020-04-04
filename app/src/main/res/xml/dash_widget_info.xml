@@ -5,6 +5,6 @@
     android:initialLayout="@layout/dash_widget"
     android:minHeight="@dimen/appwidget_min_height"
     android:minWidth="@dimen/appwidget_min_width"
-    android:previewImage="@mipmap/ic_launcher"
+    android:previewImage="@mipmap/ic_play"
     android:resizeMode="none"
     android:updatePeriodMillis="86400000" />

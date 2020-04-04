@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.widget.RemoteViews;
+
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.network.GetHttp;
 

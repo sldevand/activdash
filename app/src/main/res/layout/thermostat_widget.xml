@@ -1,0 +1,44 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/thermostat_widget_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/widget_bg"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:contentDescription="@string/appwidget_text"
+        android:gravity="center"
+        android:text="@string/app_name"
+        android:textColor="@color/smokeWhite"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_weight="2"
+        android:padding="@dimen/appwidget_padding">
+
+        <TextView
+            android:id="@+id/thermostat_widget_consigne_text"
+            style="@style/ThermostatWidgetDisplayStyle"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/thermostat_consigne" />
+
+        <TextView
+            android:id="@+id/thermostat_widget_sensor_text"
+            style="@style/ThermometerWidgetDisplayStyle"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/thermometer_value" />
+    </LinearLayout>
+
+</LinearLayout>
