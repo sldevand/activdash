@@ -45,6 +45,8 @@ public class DashWidget extends AppWidgetProvider {
                 return R.mipmap.ic_movie;
             case "Coucher":
                 return R.mipmap.ic_bed;
+            case "Off":
+                return R.mipmap.ic_power_off;
             default:
                 return R.mipmap.ic_play;
         }

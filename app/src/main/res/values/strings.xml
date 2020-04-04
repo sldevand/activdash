@@ -17,15 +17,15 @@
     <string name="title_node_port">Node Port</string>
     <string name="title_entrypoint_url">Entrypoint Url</string>
 
-    <string name="summary_base_url">example = "http://192.168.1.52"</string>
-    <string name="summary_api_domain">example = "activapi.fr/api"</string>
+    <string name="summary_base_url">example = http://192.168.1.52</string>
+    <string name="summary_api_domain">example = activapi/api</string>
     <string name="summary_node_port">example = 5901</string>
-    <string name="summary_entrypoint_url">example = activapi.fr/api"</string>
+    <string name="summary_entrypoint_url">example = activapi/api</string>
 
     <string name="default_base_url">http://192.168.1.52</string>
-    <string name="default_api_domain">activapi.fr/api</string>
+    <string name="default_api_domain">activapi/api</string>
     <string name="default_node_port">5901</string>
-    <string name="default_entrypoint_url">activapi.fr/api</string>
+    <string name="default_entrypoint_url">activapi/api</string>
 
     <string name="http_bad_response_error">An error %1$s occurred!</string>
 
