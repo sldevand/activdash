@@ -1,7 +1,5 @@
 package fr.geringan.activdash.activities;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,10 +9,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,11 +19,8 @@ import com.github.mikephil.charting.utils.Utils;
 
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.fragments.ThermostatFragment;
-import fr.geringan.activdash.network.SocketIOHolder;
 
 public class ThermostatControllerActivity extends RootActivity {
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,9 +58,7 @@ public class ThermostatControllerActivity extends RootActivity {
         return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 
-
     public static class PlaceholderFragment extends Fragment {
-
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
@@ -75,8 +66,7 @@ public class ThermostatControllerActivity extends RootActivity {
         }
     }
 
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
+    public static class SectionsPagerAdapter extends FragmentPagerAdapter {
         private SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -86,9 +76,7 @@ public class ThermostatControllerActivity extends RootActivity {
 
             switch (position) {
                 case 0:
-                    return ThermostatFragment.newInstance();
                 case 1:
-                    return ThermostatFragment.newInstance();
                 case 2:
                     return ThermostatFragment.newInstance();
                 default:

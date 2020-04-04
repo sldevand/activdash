@@ -19,15 +19,15 @@
     <string name="title_node_port">Port Node</string>
     <string name="title_entrypoint_url">Entrypoint Url</string>
 
-    <string name="summary_base_url">exemple = "http://192.168.1.52"</string>
-    <string name="summary_api_domain">exemple = "activapi.fr/api"</string>
+    <string name="summary_base_url">exemple = http://192.168.1.52</string>
+    <string name="summary_api_domain">exemple = activapi/api</string>
     <string name="summary_node_port">exemple = 5901</string>
-    <string name="summary_entrypoint_url">exemple = activapi.fr/api"</string>
+    <string name="summary_entrypoint_url">exemple = activapi/api</string>
 
     <string name="default_base_url">http://192.168.1.52</string>
-    <string name="default_api_domain">activapi.fr/api</string>
+    <string name="default_api_domain">activapi/api</string>
     <string name="default_node_port">5901</string>
-    <string name="default_entrypoint_url">dashboard/resultat.php?</string>
+    <string name="default_entrypoint_url">activapi/api</string>
 
     <string name="http_bad_response_error">Une erreur %1$s est survenue!</string>
 

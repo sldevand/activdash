@@ -68,5 +68,17 @@
         <item name="android:textSize">30sp</item>
     </style>
 
+    <style name="ThermostatWidgetDisplayStyle">
+        <item name="android:background">@color/almostBlack</item>
+        <item name="android:textColor">@color/smokeWhite</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="ThermometerWidgetDisplayStyle">
+        <item name="android:background">@color/smokeWhite</item>
+        <item name="android:textColor">@color/almostBlack</item>
+        <item name="android:textSize">14sp</item>
+
+    </style>
 
 </resources>

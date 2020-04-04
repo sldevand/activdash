@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.widget.RemoteViews;
+
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.network.GetHttp;
 
@@ -44,6 +45,8 @@ public class DashWidget extends AppWidgetProvider {
                 return R.mipmap.ic_movie;
             case "Coucher":
                 return R.mipmap.ic_bed;
+            case "Off":
+                return R.mipmap.ic_power_off;
             default:
                 return R.mipmap.ic_play;
         }

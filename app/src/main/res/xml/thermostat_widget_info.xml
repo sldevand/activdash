@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:initialLayout="@layout/thermostat_widget"
+    android:minHeight="@dimen/appwidget_min_height"
+    android:minWidth="@dimen/appwidget_min_width"
+    android:previewImage="@mipmap/ic_thermometer"
+    android:resizeMode="none"
+    android:updatePeriodMillis="1800000" />

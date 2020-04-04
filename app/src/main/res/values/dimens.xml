@@ -13,6 +13,7 @@
     <dimen name="tablayout_height">24dp</dimen>
     <dimen name="appwidget_min_height">56dp</dimen>
     <dimen name="appwidget_min_width">56dp</dimen>
+    <dimen name="appwidget_padding">8dp</dimen>
 
     <dimen name="thermostat_marginTop">40dp</dimen>
     <dimen name="thermostat_rounded_corner">20dp</dimen>
@@ -23,5 +24,4 @@
     <dimen name="thermometer_display_width">120dp</dimen>
     <dimen name="thermometer_display_height">120dp</dimen>
     <dimen name="thermometer_infos_inner_margin">2dp</dimen>
-
 </resources>

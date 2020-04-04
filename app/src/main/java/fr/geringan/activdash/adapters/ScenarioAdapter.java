@@ -95,6 +95,8 @@ public class ScenarioAdapter extends CommonNetworkAdapter<ScenarioAdapter.ViewHo
                     return R.mipmap.ic_movie;
                 case "coucher":
                     return R.mipmap.ic_bed;
+                case "off":
+                    return R.mipmap.ic_power_off;
                 default:
                     return R.mipmap.ic_play;
             }
