@@ -80,5 +80,7 @@
     <string name="text" translatable="false">text</string>
     <string name="serialport">Serialport</string>
     <string name="reset">Reset</string>
+    <string name="thermostat_widget_mode_image">thermostat widget mode image</string>
+    <string name="thermostat_widget_etat_image">thermostat widget etat image</string>
 
 </resources>

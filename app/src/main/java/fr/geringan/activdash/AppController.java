@@ -199,7 +199,6 @@ public class AppController extends RootActivity implements NetworkChangeReceiver
     }
 
     public boolean routeErrorViews(Integer state) {
-        PrefsManager.launch(this);
         if (!PrefsManager.areTherePrefs()) {
             showNoPrefsView();
             Tools.longSnackbar(rootView, R.string.no_prefs);

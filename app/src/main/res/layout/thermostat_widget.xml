@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/thermostat_widget_title_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.5"
@@ -16,11 +17,13 @@
         android:textSize="12sp" />
 
     <LinearLayout
+        android:id="@+id/thermostat_widget_infos_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
-        android:layout_weight="2"
-        android:padding="@dimen/appwidget_padding">
+        android:layout_weight="1.8"
+        android:paddingHorizontal="@dimen/appwidget_padding"
+        android:paddingBottom="0dp">
 
         <TextView
             android:id="@+id/thermostat_widget_consigne_text"
@@ -39,6 +42,36 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/thermometer_value" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:layout_weight="0.7"
+        android:paddingHorizontal="7dp"
+        android:paddingTop="1dp"
+        android:paddingBottom="4dp">
+
+        <ImageView
+            android:id="@+id/thermostat_widget_mode_image"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/ic_hors_gel"
+            android:background="@drawable/border"
+            android:paddingVertical="@dimen/thermometer_infos_inner_margin"
+            android:contentDescription="@string/thermostat_widget_mode_image" />
+        <ImageView
+            android:id="@+id/thermostat_widget_etat_image"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/ic_power"
+            android:background="@drawable/border"
+            android:paddingVertical="@dimen/thermometer_infos_inner_margin"
+            android:contentDescription="@string/thermostat_widget_etat_image" />
+
     </LinearLayout>
 
 </LinearLayout>
