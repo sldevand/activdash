@@ -18,6 +18,7 @@ import java.util.List;
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.models.ScenarioDataModel;
 import fr.geringan.activdash.network.SocketIOHolder;
+import fr.geringan.activdash.providers.IconProvider;
 import fr.geringan.activdash.viewholders.CommonViewHolder;
 
 public class ScenarioAdapter extends CommonNetworkAdapter<ScenarioAdapter.ViewHolder> {
@@ -82,24 +83,9 @@ public class ScenarioAdapter extends CommonNetworkAdapter<ScenarioAdapter.ViewHo
         public void setData(ScenarioDataModel scenario) {
             String text = scenario.getNom();
             txtName.setText(text);
-            img.setImageResource(getImgRes(text));
+            img.setImageResource(IconProvider.getIconFromName(text));
             toggleStatus(scenario);
             currentDataModel = scenario;
-        }
-
-        private Integer getImgRes(final String text) {
-            switch (text.toLowerCase()) {
-                case "tv":
-                    return R.mipmap.ic_tv;
-                case "film":
-                    return R.mipmap.ic_movie;
-                case "coucher":
-                    return R.mipmap.ic_bed;
-                case "off":
-                    return R.mipmap.ic_power_off;
-                default:
-                    return R.mipmap.ic_play;
-            }
         }
 
         private void toggleStatus(final ScenarioDataModel scenario) {
