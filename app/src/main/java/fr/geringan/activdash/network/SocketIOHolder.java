@@ -81,20 +81,21 @@ public final class SocketIOHolder {
 
     public static void emit(String event, String data) {
 
-        if (null == _task) _task = new SocketEmitTask(event);
+        if (null == _task){
+            _task = new SocketEmitTask(event);
+        }
 
         if (_task.getStatus() != AsyncTask.Status.RUNNING) {
             _task = new SocketEmitTask(event);
             _task.execute(data);
-
-        } else {
-            Log.e("emit", "A task is running");
         }
     }
 
     public static void emit(String event, DataModel dm) {
 
-        if (null == _task) _task = new SocketEmitTask(event);
+        if (null == _task) {
+            _task = new SocketEmitTask(event);
+        }
 
         if (_task.getStatus() != AsyncTask.Status.RUNNING) {
             try {
@@ -103,8 +104,6 @@ public final class SocketIOHolder {
             } catch (JSONException | IllegalAccessException | IllegalStateException e) {
                 e.printStackTrace();
             }
-        } else {
-            Log.e("emit", "A task is running");
         }
     }
 
@@ -128,5 +127,4 @@ public final class SocketIOHolder {
     public static void setEventsListener(SocketIOEventsListener mEventsListener) {
         SocketIOHolder.mEventsListener = mEventsListener;
     }
-
 }

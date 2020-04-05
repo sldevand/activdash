@@ -26,6 +26,10 @@ import fr.geringan.activdash.models.ModeDataModel;
 import fr.geringan.activdash.models.ThermostatDataModel;
 import fr.geringan.activdash.network.GetHttp;
 import fr.geringan.activdash.network.SocketIOHolder;
+import fr.geringan.activdash.providers.BoilerState;
+import fr.geringan.activdash.providers.BoilerStateProvider;
+import fr.geringan.activdash.providers.ModeImage;
+import fr.geringan.activdash.providers.ModeImageProvider;
 
 public class ThermostatFragment extends CommonNetworkFragment {
 
@@ -187,14 +191,14 @@ public class ThermostatFragment extends CommonNetworkFragment {
 
         thermostat = new ThermostatDataModel(obj);
         ModeDataModel mode = thermostat.getMode();
-        BoilerState boiler = getBoilerState(thermostat.getEtat());
+        BoilerState boiler = BoilerStateProvider.getBoilerState(thermostat.getEtat());
 
         imgThermostatEtat.setColorFilter(ContextCompat.getColor(getView().getContext(), boiler.getColor()));
         txtThermostatEtat.setText(boiler.getEtat());
         txtConsigne.setText(String.valueOf(thermostat.getConsigne()));
         txtThermostatPlan.setText(thermostat.getPlanningName());
 
-        ModeImage modeImg = getModeImage(mode.getNom());
+        ModeImage modeImg = ModeImageProvider.getModeImage(mode.getNom());
 
         imgThermostatMode.setImageResource(modeImg.getImg());
         imgThermostatMode.setColorFilter(ContextCompat.getColor(getView().getContext(), modeImg.getColor()));
@@ -254,57 +258,6 @@ public class ThermostatFragment extends CommonNetworkFragment {
         SocketIOHolder.emit(SocketIOHolder.EMIT_THT_CONS, thermostat);
     }
 
-    private BoilerState getBoilerState(int etat) {
-        String etatStr;
-        int color;
-
-        switch (etat) {
-            case BoilerState.BOILER_STATE_OFF:
-                color = R.color.colorAccent;
-                etatStr = BoilerState.BOILER_OFF;
-                break;
-            case BoilerState.BOILER_STATE_ON:
-                color = R.color.colorOk;
-                etatStr = BoilerState.BOILER_ON;
-                break;
-            default:
-                color = R.color.almostBlack;
-                etatStr = BoilerState.BOILER_UNDEFINED;
-                break;
-        }
-        return new BoilerState(etatStr, color);
-    }
-
-    private ModeImage getModeImage(String nom) {
-
-        int modeImg;
-        int color;
-
-        switch (nom) {
-            case ModeImage.MODE_NIGHT:
-                modeImg = R.drawable.ic_mode_nuit;
-                color = R.color.colorPrimaryDark;
-                break;
-            case ModeImage.MODE_COMFORT:
-                modeImg = R.drawable.ic_mode_confort;
-                color = R.color.amber;
-                break;
-            case ModeImage.MODE_ECO:
-                modeImg = R.drawable.ic_mode_eco;
-                color = R.color.colorOk;
-                break;
-            case ModeImage.MODE_NO_FREEZE:
-                modeImg = R.drawable.ic_hors_gel;
-                color = R.color.coldBlue;
-                break;
-            default:
-                modeImg = android.R.drawable.ic_menu_close_clear_cancel;
-                color = R.color.almostBlack;
-                break;
-        }
-        return new ModeImage(modeImg, color);
-    }
-
     @Override
     public void initializeSocketioListeners() {
         if (SocketIOHolder.socket != null) {
@@ -320,7 +273,6 @@ public class ThermostatFragment extends CommonNetworkFragment {
                             args -> onSocketIOReceive(SocketIOHolder.EVENT_PLAN_SAVE, args))
                     .on(SocketIOHolder.EVENT_MODE_SAVE,
                             args -> onSocketIOReceive(SocketIOHolder.EVENT_MODE_SAVE, args));
-
         }
     }
 
@@ -380,59 +332,4 @@ public class ThermostatFragment extends CommonNetworkFragment {
     public void onResponseOk(String response) {
         //intentional empty method
     }
-
-    private class BoilerState {
-        private static final String BOILER_ON = "On";
-        private static final String BOILER_OFF = "Off";
-        private static final String BOILER_UNDEFINED = "?";
-        private static final int BOILER_STATE_ON = 1;
-        private static final int BOILER_STATE_OFF = 0;
-        private String etat;
-        private int color;
-
-        private BoilerState(String etat, int color) {
-            this.etat = etat;
-            this.color = color;
-        }
-
-        private String getEtat() {
-            return etat;
-        }
-
-        public int getColor() {
-            return color;
-        }
-
-        public void setColor(int color) {
-            this.color = color;
-        }
-    }
-
-    private class ModeImage {
-        private static final String MODE_NIGHT = "Nuit";
-        private static final String MODE_ECO = "Eco";
-        private static final String MODE_COMFORT = "Confort";
-        private static final String MODE_NO_FREEZE = "Hors gel";
-        private int img;
-        private int color;
-
-        private ModeImage(int img, int color) {
-            this.img = img;
-            this.color = color;
-        }
-
-        private int getImg() {
-            return img;
-        }
-
-        public int getColor() {
-            return color;
-        }
-
-        public void setColor(int color) {
-            this.color = color;
-        }
-    }
-
-
 }

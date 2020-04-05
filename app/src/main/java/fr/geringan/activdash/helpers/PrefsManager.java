@@ -14,9 +14,12 @@ public class PrefsManager {
     public static String apiDomain;
     public static String nodePort;
     public static String entryPointAddress;
+    public static SharedPreferences sharedPreferences;
 
     public static void launch(Context context) {
-
+        if (null != sharedPreferences) {
+            return;
+        }
         Resources res = context.getResources();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 

@@ -8,19 +8,19 @@ import android.view.View;
 import java.util.Arrays;
 
 import fr.geringan.activdash.R;
+import fr.geringan.activdash.helpers.PrefsManager;
 import fr.geringan.activdash.helpers.Tools;
 import fr.geringan.activdash.interfaces.SocketIOEventsListener;
 import fr.geringan.activdash.network.SocketIOHolder;
 
 public abstract class RootActivity extends AppCompatActivity implements SocketIOEventsListener {
-
-
     protected View rootView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         rootView = findViewById(android.R.id.content);
+        PrefsManager.launch(getApplicationContext());
     }
 
     public void initializeSocketioListeners() {
