@@ -1,4 +1,4 @@
-package fr.geringan.activdash.activities;
+package fr.geringan.activdash.appwidgets;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -14,13 +14,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import fr.geringan.activdash.R;
+import fr.geringan.activdash.helpers.PrefsManager;
 import fr.geringan.activdash.models.SensorDataModel;
 import fr.geringan.activdash.models.ThermostatDataModel;
 import fr.geringan.activdash.network.GetHttp;
 
 public class ThermostatWidget extends AppWidgetProvider {
-    public static String thermostatUrl = "http://192.168.1.52/activapi/api/thermostat";
-    public static String thermostatSensorUrl = "http://192.168.1.52/activapi/api/mesures/get-sensors/thermostat";
+    public static final String THERMOSTAT_GET_ENDPOINT = "thermostat";
+    public static final String THERMOSTAT_SENSOR_GET_ENDPOINT = "mesures/get-sensors/thermostat";
     public static RemoteViews remoteViews;
 
     public static void updateAppWidget(
@@ -29,8 +30,11 @@ public class ThermostatWidget extends AppWidgetProvider {
             int appWidgetId
     ) {
         remoteViews = new RemoteViews(context.getPackageName(), R.layout.thermostat_widget);
-        callThermostatApi(appWidgetManager, appWidgetId);
-        callThermostatSensorApi(appWidgetManager, appWidgetId);
+
+        String thermostatUrl= PrefsManager.baseAddress + "/" + PrefsManager.entryPointAddress + "/" + THERMOSTAT_GET_ENDPOINT;
+        String thermostatSensorUrl= PrefsManager.baseAddress + "/" + PrefsManager.entryPointAddress + "/" + THERMOSTAT_SENSOR_GET_ENDPOINT;
+        callThermostatApi(appWidgetManager, appWidgetId,thermostatUrl);
+        callThermostatSensorApi(appWidgetManager, appWidgetId, thermostatSensorUrl);
 
         Intent intentUpdate = new Intent(context, ThermostatWidget.class);
         intentUpdate.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
@@ -50,7 +54,7 @@ public class ThermostatWidget extends AppWidgetProvider {
         }
     }
 
-    public static void callThermostatApi(AppWidgetManager appWidgetManager,int  appWidgetId) {
+    public static void callThermostatApi(AppWidgetManager appWidgetManager,int  appWidgetId, String thermostatUrl) {
         GetHttp getData = new GetHttp();
         getData.setOnResponseListener(response -> {
             try {
@@ -74,7 +78,7 @@ public class ThermostatWidget extends AppWidgetProvider {
         getData.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, thermostatUrl);
     }
 
-    public static void callThermostatSensorApi(AppWidgetManager appWidgetManager,int  appWidgetId) {
+    public static void callThermostatSensorApi(AppWidgetManager appWidgetManager,int  appWidgetId, String thermostatSensorUrl) {
         GetHttp getData = new GetHttp();
         getData.setOnResponseListener(response -> {
             try {
