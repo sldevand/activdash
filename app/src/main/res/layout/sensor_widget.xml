@@ -23,7 +23,8 @@
         android:layout_height="0dp"
         android:layout_weight="2"
         android:gravity="center"
-        android:text="@string/thermometer_value" />
+        android:text="@string/thermometer_value"
+        android:layout_marginHorizontal="@dimen/appwidget_padding"/>
 
     <TextView
         android:id="@+id/sensor_widget_name"
@@ -31,7 +32,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="@string/thermometer_value"
+        android:text="@string/sensor"
         android:textColor="@color/smokeWhite" />
 
 </LinearLayout>
