@@ -1,0 +1,39 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sensor_widget_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/widget_bg"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/sensor_widget_title"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:contentDescription="@string/appwidget_text"
+        android:gravity="center"
+        android:text="@string/app_name"
+        android:textColor="@color/smokeWhite"
+        android:textSize="@dimen/widget_text_size" />
+
+    <TextView
+        android:id="@+id/sensor_widget_value"
+        style="@style/ThermometerWidgetDisplayStyle"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:text="@string/thermometer_value"
+        android:layout_marginHorizontal="@dimen/appwidget_padding"/>
+
+    <TextView
+        android:id="@+id/sensor_widget_name"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/sensor"
+        android:textSize="@dimen/widget_text_size"
+        android:textColor="@color/smokeWhite" />
+
+</LinearLayout>

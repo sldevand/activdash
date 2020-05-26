@@ -3,6 +3,6 @@
     android:initialLayout="@layout/thermostat_widget"
     android:minHeight="@dimen/appwidget_min_height"
     android:minWidth="@dimen/appwidget_min_width"
-    android:previewImage="@mipmap/ic_thermometer"
+    android:previewImage="@mipmap/ic_thermostat"
     android:resizeMode="none"
     android:updatePeriodMillis="1800000" />

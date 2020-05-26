@@ -31,14 +31,8 @@ public class PrefsManager {
     }
 
     public static boolean areTherePrefs() {
-
-        boolean result = true;
-
-        if ("null".equals(baseAddress) || "null".equals(apiDomain) || "null".equals(nodePort) || "null".equals(entryPointAddress))
-            result = false;
-
-        return result;
+        return !("null".equals(baseAddress) || "null".equals(apiDomain)
+                || "null".equals(nodePort)  || "null".equals(entryPointAddress)
+        );
     }
-
-
 }
