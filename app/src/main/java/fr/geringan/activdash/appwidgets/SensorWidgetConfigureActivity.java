@@ -28,10 +28,8 @@ public class SensorWidgetConfigureActivity extends Activity {
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         public void onClick(View v) {
             final Context context = SensorWidgetConfigureActivity.this;
-            String title = mAppWidgetText.getText().toString();
             String HttpQuery = mAppWidgetHttp.getText().toString();
             ArrayList<String> prefs = new ArrayList<>();
-            prefs.add(title);
             prefs.add(HttpQuery);
 
             savePrefs(context, mAppWidgetId, prefs);
@@ -48,18 +46,15 @@ public class SensorWidgetConfigureActivity extends Activity {
 
     public static void savePrefs(Context context, int appWidgetId, ArrayList<String> prefsArray) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.putString(PREF_PREFIX_KEY + PREF_TITLE_KEY + appWidgetId, prefsArray.get(0));
-        prefs.putString(PREF_PREFIX_KEY + PREF_HTTP_KEY + appWidgetId, prefsArray.get(1));
+        prefs.putString(PREF_PREFIX_KEY + PREF_HTTP_KEY + appWidgetId, prefsArray.get(0));
         prefs.apply();
     }
 
     public static ArrayList<String> loadPrefs(Context context, int appWidgetId) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        String titleValue = prefs.getString(PREF_PREFIX_KEY + PREF_TITLE_KEY + appWidgetId, null);
         String httpValue = prefs.getString(PREF_PREFIX_KEY + PREF_HTTP_KEY + appWidgetId, null);
 
         ArrayList<String> prefsArray = new ArrayList<>();
-        prefsArray.add(titleValue);
         prefsArray.add(httpValue);
 
         return prefsArray;
@@ -67,7 +62,6 @@ public class SensorWidgetConfigureActivity extends Activity {
 
     public static void deleteTitlePref(Context context, int appWidgetId) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.remove(PREF_PREFIX_KEY + PREF_TITLE_KEY + appWidgetId);
         prefs.remove(PREF_PREFIX_KEY + PREF_HTTP_KEY + appWidgetId);
 
         prefs.apply();
@@ -81,7 +75,6 @@ public class SensorWidgetConfigureActivity extends Activity {
         setContentView(R.layout.sensor_widget_configure);
         PrefsManager.launch(this);
 
-        mAppWidgetText = findViewById(R.id.sensor_widget_configure_text);
         mAppWidgetHttp = findViewById(R.id.sensor_widget_configure_http);
         findViewById(R.id.sensor_widget_configure_add_button).setOnClickListener(mOnClickListener);
 
@@ -103,7 +96,6 @@ public class SensorWidgetConfigureActivity extends Activity {
         }
 
         ArrayList<String> prefs = loadPrefs(SensorWidgetConfigureActivity.this, mAppWidgetId);
-        mAppWidgetText.setText(prefs.get(0));
     }
 }
 

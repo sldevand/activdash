@@ -1,13 +1,17 @@
 package fr.geringan.activdash.appwidgets;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.DecimalFormat;
 
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.helpers.PrefsManager;
@@ -27,14 +31,19 @@ public class SensorWidget extends AppWidgetProvider {
         remoteViews = new CustomRemoteViews(context.getPackageName(), R.layout.sensor_widget);
         PrefsManager.launch(context);
 
-        CharSequence widgetText = SensorWidgetConfigureActivity.loadPrefs(context, appWidgetId).get(0);
-        remoteViews.setTextViewText(R.id.sensor_widget_configure_text, widgetText);
-
-        CharSequence widgetHttp = SensorWidgetConfigureActivity.loadPrefs(context, appWidgetId).get(1);
+        CharSequence widgetHttp = SensorWidgetConfigureActivity.loadPrefs(context, appWidgetId).get(0);
 
         //Call the REST APIs
         String thermostatUrl = String.valueOf(widgetHttp);
         callSensorApi(appWidgetManager, appWidgetId, thermostatUrl);
+
+        //Refresh the widget informations
+        Intent intentUpdate = new Intent(context, SensorWidget.class);
+        intentUpdate.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        int[] idArray = new int[]{appWidgetId};
+        intentUpdate.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, idArray);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, appWidgetId, intentUpdate, PendingIntent.FLAG_UPDATE_CURRENT);
+        remoteViews.setOnClickPendingIntent(R.id.sensor_widget_value, pendingIntent);
 
         appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
     }
@@ -47,7 +56,8 @@ public class SensorWidget extends AppWidgetProvider {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject obj = jsonArray.getJSONObject(i);
                     SensorDataModel sensor = new SensorDataModel(obj);
-                    String temperature = sensor.getValeur1();
+                    DecimalFormat df = new DecimalFormat("##.#");
+                    String temperature = df.format(Double.valueOf(sensor.getValeur1()));
                     String name = sensor.getNom();
                     if (null != remoteViews) {
                         remoteViews.setTextViewText(R.id.sensor_widget_value, temperature);
