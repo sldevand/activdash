@@ -34,8 +34,8 @@ public class SensorWidget extends AppWidgetProvider {
         CharSequence widgetHttp = SensorWidgetConfigureActivity.loadPrefs(context, appWidgetId).get(0);
 
         //Call the REST APIs
-        String thermostatUrl = String.valueOf(widgetHttp);
-        callSensorApi(appWidgetManager, appWidgetId, thermostatUrl);
+        String sensorUrl = String.valueOf(widgetHttp);
+        callSensorApi(appWidgetManager, appWidgetId, sensorUrl);
 
         //Refresh the widget informations
         Intent intentUpdate = new Intent(context, SensorWidget.class);

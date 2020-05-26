@@ -5,32 +5,40 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.helpers.PrefsManager;
+import fr.geringan.activdash.models.SensorDataModel;
+import fr.geringan.activdash.network.GetHttp;
 
 public class SensorWidgetConfigureActivity extends Activity {
 
     private static final String PREFS_NAME = "fr.geringan.activdash.SensorWidget";
     private static final String PREF_PREFIX_KEY = "sensorwidget_";
-    private static final String PREF_TITLE_KEY = "title_";
     private static final String PREF_HTTP_KEY = "http_";
-    //Example get-sensor24ctn10id4
     private static final String SENSOR_GET_PREFILL = "mesures/get-";
-
+    private static final String SENSORS_GET_PREFILL = "mesures/get-sensors";
+    protected String selectedUrl;
     private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
-    private EditText mAppWidgetText, mAppWidgetHttp;
+    private Spinner spinner;
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         public void onClick(View v) {
             final Context context = SensorWidgetConfigureActivity.this;
-            String HttpQuery = mAppWidgetHttp.getText().toString();
             ArrayList<String> prefs = new ArrayList<>();
-            prefs.add(HttpQuery);
+            prefs.add(selectedUrl);
 
             savePrefs(context, mAppWidgetId, prefs);
 
@@ -75,11 +83,9 @@ public class SensorWidgetConfigureActivity extends Activity {
         setContentView(R.layout.sensor_widget_configure);
         PrefsManager.launch(this);
 
-        mAppWidgetHttp = findViewById(R.id.sensor_widget_configure_http);
+        spinner = findViewById(R.id.sensor_widget_configure_spinner);
+        callSensorsApi(buildSensorsUrl());
         findViewById(R.id.sensor_widget_configure_add_button).setOnClickListener(mOnClickListener);
-
-        String prefill = PrefsManager.baseAddress + "/" + PrefsManager.entryPointAddress + "/" + SENSOR_GET_PREFILL;
-        mAppWidgetHttp.setText(prefill);
 
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
@@ -95,7 +101,68 @@ public class SensorWidgetConfigureActivity extends Activity {
             return;
         }
 
-        ArrayList<String> prefs = loadPrefs(SensorWidgetConfigureActivity.this, mAppWidgetId);
+        loadPrefs(SensorWidgetConfigureActivity.this, mAppWidgetId);
+    }
+
+    public void callSensorsApi(String sensorUrl) {
+        GetHttp getData = new GetHttp();
+        getData.setOnResponseListener(this::onResponse);
+        getData.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, sensorUrl);
+    }
+
+    public List<SensorDataModel> populateSpinnerArray(JSONArray jsonArray) throws JSONException, IllegalAccessException {
+        List<SensorDataModel> spinnerArray = new ArrayList<>();
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject obj = jsonArray.getJSONObject(i);
+            SensorDataModel sensor = new SensorDataModel(obj);
+            spinnerArray.add(sensor);
+        }
+
+        return spinnerArray;
+    }
+
+    public void setSpinnerAdapter(List<SensorDataModel> spinnerArray) {
+        ArrayAdapter<SensorDataModel> adapter = new ArrayAdapter<SensorDataModel>(
+                this, android.R.layout.simple_spinner_item, spinnerArray);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+    }
+
+    public String buildSensorUrl(SensorDataModel sensorDataModel) {
+        return PrefsManager.baseAddress + "/" + PrefsManager.entryPointAddress + "/" +
+                SENSOR_GET_PREFILL + sensorDataModel.getRadioid();
+    }
+
+    public String buildSensorsUrl() {
+        return PrefsManager.baseAddress + "/" + PrefsManager.entryPointAddress + "/" +
+                SENSORS_GET_PREFILL;
+    }
+
+    private void onResponse(String response) {
+        try {
+            JSONArray jsonArray = new JSONArray(response);
+            List<SensorDataModel> spinnerArray = populateSpinnerArray(jsonArray);
+            setSpinnerAdapter(spinnerArray);
+            setSpinnerListener();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setSpinnerListener() {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                selectedUrl = buildSensorUrl((SensorDataModel) adapterView.getSelectedItem());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                selectedUrl = buildSensorUrl((SensorDataModel) adapterView.getSelectedItem());
+            }
+        });
     }
 }
 

@@ -41,5 +41,8 @@ public class SensorDataModel extends DataModel {
         return releve;
     }
 
-
+    @Override
+    public String toString() {
+        return this.getNom();
+    }
 }

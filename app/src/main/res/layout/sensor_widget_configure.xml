@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@color/smokeWhite">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="@string/http_query" />
+        android:text="@string/sensors" />
 
-    <EditText
-        android:id="@+id/sensor_widget_configure_http"
+    <Spinner
+        android:id="@+id/sensor_widget_configure_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minLines="2"
-        android:maxLines="2"
-        android:lines="2"
-        android:inputType="textMultiLine" />
+        android:layout_marginVertical="@dimen/widget_text_size"/>
 
     <Button
         android:id="@+id/sensor_widget_configure_add_button"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="@string/add_widget" />
+        android:paddingVertical="@dimen/activity_vertical_padding"
+        android:text="@string/add_widget"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"/>
 
 </LinearLayout>
