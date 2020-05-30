@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.helpers.PrefsManager;
 
-public class DashWidgetConfigureActivity extends Activity {
+public class ScenarioWidgetConfigureActivity extends Activity {
 
     private static final String PREFS_NAME = "fr.geringan.activdash.DashWidget";
     private static final String PREF_PREFIX_KEY = "appwidget_";
@@ -26,7 +26,7 @@ public class DashWidgetConfigureActivity extends Activity {
     private EditText mAppWidgetText, mAppWidgetHttp;
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         public void onClick(View v) {
-            final Context context = DashWidgetConfigureActivity.this;
+            final Context context = ScenarioWidgetConfigureActivity.this;
             String title = mAppWidgetText.getText().toString();
             String HttpQuery = mAppWidgetHttp.getText().toString();
             ArrayList<String> prefs = new ArrayList<>();
@@ -36,7 +36,7 @@ public class DashWidgetConfigureActivity extends Activity {
             savePrefs(context, mAppWidgetId, prefs);
 
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-            DashWidget.updateAppWidget(context, appWidgetManager, mAppWidgetId);
+            ScenarioWidget.updateAppWidget(context, appWidgetManager, mAppWidgetId);
 
             Intent resultValue = new Intent();
             resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
@@ -79,12 +79,12 @@ public class DashWidgetConfigureActivity extends Activity {
         super.onCreate(icicle);
 
         setResult(RESULT_CANCELED);
-        setContentView(R.layout.dash_widget_configure);
+        setContentView(R.layout.scenario_widget_configure);
         PrefsManager.launch(this);
 
-        mAppWidgetText = findViewById(R.id.appwidget_text);
-        mAppWidgetHttp = findViewById(R.id.appwidget_http);
-        findViewById(R.id.add_button).setOnClickListener(mOnClickListener);
+        mAppWidgetText = findViewById(R.id.scenario_widget_text);
+        mAppWidgetHttp = findViewById(R.id.scenario_widget_http);
+        findViewById(R.id.scenario_add_button).setOnClickListener(mOnClickListener);
 
         String prefill = PrefsManager.baseAddress + "/" + PrefsManager.entryPointAddress + "/" + SCENARIOS_COMMAND_PREFILL;
         mAppWidgetHttp.setText(prefill);
@@ -103,7 +103,7 @@ public class DashWidgetConfigureActivity extends Activity {
             return;
         }
 
-        ArrayList<String> prefs = loadPrefs(DashWidgetConfigureActivity.this, mAppWidgetId);
+        ArrayList<String> prefs = loadPrefs(ScenarioWidgetConfigureActivity.this, mAppWidgetId);
         mAppWidgetText.setText(prefs.get(0));
     }
 }

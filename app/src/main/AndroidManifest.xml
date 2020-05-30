@@ -37,17 +37,17 @@
                 android:value=".AppController" />
         </activity>
 
-        <receiver android:name=".appwidgets.DashWidget">
+        <receiver android:name=".appwidgets.ScenarioWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/dash_widget_info" />
+                android:resource="@xml/scenario_widget_info" />
         </receiver>
 
-        <activity android:name=".appwidgets.DashWidgetConfigureActivity">
+        <activity android:name=".appwidgets.ScenarioWidgetConfigureActivity">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>

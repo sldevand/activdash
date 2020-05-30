@@ -12,27 +12,27 @@ import fr.geringan.activdash.R;
 import fr.geringan.activdash.network.GetHttp;
 import fr.geringan.activdash.providers.IconProvider;
 
-public class DashWidget extends AppWidgetProvider {
-    private final static String ACTION_SCENARIO = "fr.geringan.activdashwidget.action.LAUNCH_SCENARIO";
+public class ScenarioWidget extends AppWidgetProvider {
+    private final static String ACTION_SCENARIO = "fr.geringan.activscenariowidget.action.LAUNCH_SCENARIO";
     public static String ACTIONURL_EXTRA = "actionUrl";
 
     public static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                        int appWidgetId) {
 
-        CharSequence widgetText = DashWidgetConfigureActivity.loadPrefs(context, appWidgetId).get(0);
-        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.dash_widget);
-        remoteViews.setTextViewText(R.id.appwidget_text, widgetText);
+        CharSequence widgetText = ScenarioWidgetConfigureActivity.loadPrefs(context, appWidgetId).get(0);
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.scenario_widget);
+        remoteViews.setTextViewText(R.id.scenario_widget_text, widgetText);
 
         if (widgetText != null) {
-            remoteViews.setImageViewResource(R.id.appwidget_img, IconProvider.getIconFromName(widgetText.toString()));
+            remoteViews.setImageViewResource(R.id.scenario_widget_img, IconProvider.getIconFromName(widgetText.toString()));
         }
 
-        CharSequence widgetHttp = DashWidgetConfigureActivity.loadPrefs(context, appWidgetId).get(1);
-        Intent intent = new Intent(context, DashWidget.class);
+        CharSequence widgetHttp = ScenarioWidgetConfigureActivity.loadPrefs(context, appWidgetId).get(1);
+        Intent intent = new Intent(context, ScenarioWidget.class);
         intent.setAction(ACTION_SCENARIO);
         intent.putExtra(ACTIONURL_EXTRA, widgetHttp);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, appWidgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        remoteViews.setOnClickPendingIntent(R.id.dashWidgetLayout, pendingIntent);
+        remoteViews.setOnClickPendingIntent(R.id.scenario_widget_layout, pendingIntent);
 
         appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
     }
@@ -57,7 +57,7 @@ public class DashWidget extends AppWidgetProvider {
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
-            DashWidgetConfigureActivity.deleteTitlePref(context, appWidgetId);
+            ScenarioWidgetConfigureActivity.deleteTitlePref(context, appWidgetId);
         }
     }
 }
