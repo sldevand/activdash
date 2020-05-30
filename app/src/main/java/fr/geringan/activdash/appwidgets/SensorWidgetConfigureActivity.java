@@ -23,6 +23,7 @@ import fr.geringan.activdash.R;
 import fr.geringan.activdash.helpers.PrefsManager;
 import fr.geringan.activdash.models.SensorDataModel;
 import fr.geringan.activdash.network.GetHttp;
+import fr.geringan.activdash.services.SensorsService;
 
 public class SensorWidgetConfigureActivity extends Activity {
 
@@ -30,7 +31,6 @@ public class SensorWidgetConfigureActivity extends Activity {
     private static final String PREF_PREFIX_KEY = "sensorwidget_";
     private static final String PREF_HTTP_KEY = "http_";
     private static final String SENSOR_GET_PREFILL = "mesures/get-";
-    private static final String SENSORS_GET_PREFILL = "mesures/get-sensors";
     protected String selectedUrl;
     private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private Spinner spinner;
@@ -84,7 +84,7 @@ public class SensorWidgetConfigureActivity extends Activity {
         PrefsManager.launch(this);
 
         spinner = findViewById(R.id.sensor_widget_configure_spinner);
-        callSensorsApi(buildSensorsUrl());
+        callSensorsApi();
         findViewById(R.id.sensor_widget_configure_add_button).setOnClickListener(mOnClickListener);
 
         Intent intent = getIntent();
@@ -104,21 +104,13 @@ public class SensorWidgetConfigureActivity extends Activity {
         loadPrefs(SensorWidgetConfigureActivity.this, mAppWidgetId);
     }
 
-    public void callSensorsApi(String sensorUrl) {
-        GetHttp getData = new GetHttp();
-        getData.setOnResponseListener(this::onResponse);
-        getData.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, sensorUrl);
-    }
-
-    public List<SensorDataModel> populateSpinnerArray(JSONArray jsonArray) throws JSONException, IllegalAccessException {
-        List<SensorDataModel> spinnerArray = new ArrayList<>();
-        for (int i = 0; i < jsonArray.length(); i++) {
-            JSONObject obj = jsonArray.getJSONObject(i);
-            SensorDataModel sensor = new SensorDataModel(obj);
-            spinnerArray.add(sensor);
-        }
-
-        return spinnerArray;
+    public void callSensorsApi() {
+        SensorsService sensorsService = new SensorsService();
+        sensorsService.setOnGetResponseListener(sensorDataList -> {
+            setSpinnerAdapter(sensorDataList);
+            setSpinnerListener();
+        });
+        sensorsService.get();
     }
 
     public void setSpinnerAdapter(List<SensorDataModel> spinnerArray) {
@@ -131,24 +123,6 @@ public class SensorWidgetConfigureActivity extends Activity {
     public String buildSensorUrl(SensorDataModel sensorDataModel) {
         return PrefsManager.baseAddress + "/" + PrefsManager.entryPointAddress + "/" +
                 SENSOR_GET_PREFILL + sensorDataModel.getRadioid();
-    }
-
-    public String buildSensorsUrl() {
-        return PrefsManager.baseAddress + "/" + PrefsManager.entryPointAddress + "/" +
-                SENSORS_GET_PREFILL;
-    }
-
-    private void onResponse(String response) {
-        try {
-            JSONArray jsonArray = new JSONArray(response);
-            List<SensorDataModel> spinnerArray = populateSpinnerArray(jsonArray);
-            setSpinnerAdapter(spinnerArray);
-            setSpinnerListener();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
     }
 
     public void setSpinnerListener() {

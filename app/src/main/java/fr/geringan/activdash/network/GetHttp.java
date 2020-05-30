@@ -34,7 +34,7 @@ public class GetHttp extends AsyncTask<String, Void, String> {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-            return "404";
+            return NOT_FOUND;
         } finally {
             try {
                 if (null != in) in.close();

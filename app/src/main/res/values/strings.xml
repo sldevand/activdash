@@ -43,9 +43,9 @@
     <string name="thermostat">Thermostat</string>
     <string name="thermostat_minus">-</string>
     <string name="thermostat_plus">+</string>
-    <string name="thermostat_consigne">-273 °C</string>
+    <string name="thermostat_consigne">----</string>
 
-    <string name="thermometer_value">-273°C</string>
+    <string name="thermometer_value">----</string>
 
     <string name="thermostat_mode_name">NONE</string>
     <string name="thermostat_plan_name">NONE</string>
