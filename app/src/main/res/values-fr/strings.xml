@@ -40,9 +40,6 @@
     <string name="thermostat">Thermostat</string>
     <string name="thermostat_minus">-</string>
     <string name="thermostat_plus">+</string>
-    <string name="thermostat_consigne">-273 °C</string>
-
-    <string name="thermometer_value">-273°C</string>
     <string name="thermostat_mode_name">AUCUN</string>
     <string name="thermostat_plan_name">AUCUN</string>
     <string name="thermostat_state_name">AUCUN</string>
@@ -76,6 +73,7 @@
     <string name="no_version_found">Pas de version trouvée</string>
     <string name="serialport">Serialport</string>
     <string name="reset">Reset</string>
+    <string name="sensor">Capteur</string>
 
 
 </resources>

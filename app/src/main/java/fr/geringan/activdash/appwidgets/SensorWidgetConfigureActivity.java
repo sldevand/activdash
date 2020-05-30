@@ -5,24 +5,20 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.helpers.PrefsManager;
+import fr.geringan.activdash.interfaces.OnGetListResponseListener;
 import fr.geringan.activdash.models.SensorDataModel;
-import fr.geringan.activdash.network.GetHttp;
 import fr.geringan.activdash.services.SensorsService;
 
 public class SensorWidgetConfigureActivity extends Activity {
@@ -106,8 +102,8 @@ public class SensorWidgetConfigureActivity extends Activity {
 
     public void callSensorsApi() {
         SensorsService sensorsService = new SensorsService();
-        sensorsService.setOnGetResponseListener(sensorDataList -> {
-            setSpinnerAdapter(sensorDataList);
+        sensorsService.setOnGetListResponseListener(dataList -> {
+            setSpinnerAdapter(dataList);
             setSpinnerListener();
         });
         sensorsService.get();

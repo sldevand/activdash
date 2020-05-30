@@ -13,23 +13,25 @@ import fr.geringan.activdash.helpers.PrefsManager;
 import fr.geringan.activdash.models.SensorDataModel;
 import fr.geringan.activdash.network.GetHttp;
 
-public class SensorsService {
+public class SensorsService extends AbstractService<SensorDataModel>{
     private static final String SENSORS_GET_PREFILL = "mesures/get-sensors";
 
-    private OnGetResponseListener onGetResponseListener;
-
     public void get() {
-        GetHttp getData = new GetHttp();
-        getData.setOnResponseListener(this::onResponse);
-        getData.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, buildSensorsUrl());
+        try {
+            GetHttp getData = new GetHttp();
+            getData.setOnResponseListener(this::onResponse);
+            getData.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, buildUrl());
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
     }
 
-    private void onResponse(String response) {
+    protected void onResponse(String response) {
         try {
             JSONArray jsonArray = new JSONArray(response);
             List<SensorDataModel> sensorDataList = populateList(jsonArray);
-            if (null != onGetResponseListener) {
-                onGetResponseListener.onSuccess(sensorDataList);
+            if (null != onGetListResponseListener) {
+                onGetListResponseListener.onSuccess(sensorDataList);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -49,17 +51,9 @@ public class SensorsService {
         return sensorDataList;
     }
 
-    private String buildSensorsUrl() {
+    protected String buildUrl() {
         return PrefsManager.baseAddress + "/"
                 + PrefsManager.entryPointAddress + "/"
                 + SENSORS_GET_PREFILL;
-    }
-
-    public void setOnGetResponseListener(OnGetResponseListener onGetResponseListener) {
-        this.onGetResponseListener = onGetResponseListener;
-    }
-
-    public interface OnGetResponseListener {
-        void onSuccess(List<SensorDataModel> sensorDataList);
     }
 }

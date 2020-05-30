@@ -5,7 +5,9 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Field;
 
-public abstract class DataModel {
+import fr.geringan.activdash.interfaces.DataModelInterface;
+
+public abstract class DataModel implements DataModelInterface {
 
     @SuppressWarnings("WeakerAccess")
     protected JSONObject dataJSON;

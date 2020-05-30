@@ -5,22 +5,14 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.helpers.PrefsManager;
-import fr.geringan.activdash.models.SensorDataModel;
-import fr.geringan.activdash.network.GetHttp;
+import fr.geringan.activdash.services.SensorService;
 
 public class SensorWidget extends AppWidgetProvider {
-    private final static String ACTION_SENSOR = "fr.geringan.activdashwidget.action.REFRESH_SENSOR";
-    public static String ACTIONURL_EXTRA = "actionUrl";
     public static CustomRemoteViews remoteViews;
 
     public static void updateAppWidget(
@@ -31,11 +23,8 @@ public class SensorWidget extends AppWidgetProvider {
         remoteViews = new CustomRemoteViews(context.getPackageName(), R.layout.sensor_widget);
         PrefsManager.launch(context);
 
-        CharSequence widgetHttp = SensorWidgetConfigureActivity.loadPrefs(context, appWidgetId).get(0);
-
-        //Call the REST APIs
-        String sensorUrl = String.valueOf(widgetHttp);
-        callSensorApi(appWidgetManager, appWidgetId, sensorUrl);
+        String sensorUrl =  String.valueOf(SensorWidgetConfigureActivity.loadPrefs(context, appWidgetId).get(0));
+        callSensorApi(context, appWidgetManager, appWidgetId, sensorUrl);
 
         //Refresh the widget informations
         Intent intentUpdate = new Intent(context, SensorWidget.class);
@@ -48,30 +37,22 @@ public class SensorWidget extends AppWidgetProvider {
         appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
     }
 
-    public static void callSensorApi(AppWidgetManager appWidgetManager, int appWidgetId, String sensorUrl) {
-        GetHttp getData = new GetHttp();
-        getData.setOnResponseListener(response -> {
-            try {
-                JSONArray jsonArray = new JSONArray(response);
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject obj = jsonArray.getJSONObject(i);
-                    SensorDataModel sensor = new SensorDataModel(obj);
-                    DecimalFormat df = new DecimalFormat("##.#");
-                    String temperature = df.format(Double.valueOf(sensor.getValeur1()));
-                    String name = sensor.getNom();
-                    if (null != remoteViews) {
-                        remoteViews.setTextViewText(R.id.sensor_widget_value, temperature);
-                        remoteViews.setTextViewText(R.id.sensor_widget_name, name);
-                        appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
-                    }
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
+    public static void callSensorApi(Context context, AppWidgetManager appWidgetManager, int appWidgetId, String sensorUrl) {
+        SensorService sensorService = new SensorService(sensorUrl);
+        sensorService.setOnGetResponseListener(dataModel -> {
+            DecimalFormat df = new DecimalFormat("##.#");
+            String temperature = df.format(Double.valueOf(dataModel.getValeur1()));
+            if (dataModel.getActif() == 0) {
+                temperature = context.getString(R.string.thermometer_value);
+            }
+            String name = dataModel.getNom();
+            if (null != remoteViews) {
+                remoteViews.setTextViewText(R.id.sensor_widget_value, temperature);
+                remoteViews.setTextViewText(R.id.sensor_widget_name, name);
+                appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
             }
         });
-        getData.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, sensorUrl);
+        sensorService.get();
     }
 
     @Override
