@@ -15,7 +15,6 @@ import fr.geringan.activdash.adapters.CommonNetworkAdapter;
 import fr.geringan.activdash.exceptions.DataModelException;
 import fr.geringan.activdash.network.CommonGetHttp;
 
-
 public abstract class CommonNetworkFragment extends Fragment {
 
     public abstract void initializeSocketioListeners() throws IllegalAccessException, DataModelException, JSONException;
@@ -27,14 +26,10 @@ public abstract class CommonNetworkFragment extends Fragment {
         final View v = Objects.requireNonNull(getActivity()).findViewById(android.R.id.content);
 
         get_dat.setOnResponseListener(response -> {
-
-            switch (response) {
-                case "404":
-                    onBadResponse(response, progBar, v);
-                    break;
-                default:
-                    onResponseOk(response);
-                    break;
+            if ("404".equals(response)) {
+                onBadResponse(response, progBar, v);
+            } else {
+                onResponseOk(response);
             }
         });
         get_dat.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, address);
@@ -43,12 +38,8 @@ public abstract class CommonNetworkFragment extends Fragment {
     public abstract void onResponseOk(String response) throws IllegalAccessException, DataModelException, JSONException;
 
     public void onBadResponse(String response, ProgressBar progBar, View v) {
-
-
         String resp = v.getResources().getString(R.string.http_bad_response_error, response);
-
         Snackbar.make(v, resp, Snackbar.LENGTH_SHORT).show();
         progBar.setVisibility(View.GONE);
-
     }
 }

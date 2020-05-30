@@ -18,9 +18,9 @@ import fr.geringan.activdash.exceptions.DataModelException;
 
 public class CommonGetHttp extends AsyncTask<String, Void, String> {
 
+    public static final String HTTP_NOT_FOUND = String.valueOf(HttpURLConnection.HTTP_NOT_FOUND);
     private OnHttpResponseListener responseListener;
     private CommonNetworkAdapter<?> _adapter;
-    private static final String HTTP_NOT_FOUND=String.valueOf(HttpURLConnection.HTTP_NOT_FOUND);
 
     public CommonGetHttp(CommonNetworkAdapter<?> adapter) {
         _adapter = adapter;

@@ -19,9 +19,8 @@ import org.json.JSONObject;
 
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.adapters.GraphsAdapter;
-import fr.geringan.activdash.network.GetHttp;
 import fr.geringan.activdash.helpers.PrefsManager;
-
+import fr.geringan.activdash.network.GetHttp;
 
 public class GraphsFragment extends CommonNetworkFragment {
 
@@ -52,7 +51,6 @@ public class GraphsFragment extends CommonNetworkFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
         RecyclerView recyclerView = view.findViewById(R.id.list_graphs);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new GraphsAdapter();
@@ -76,37 +74,25 @@ public class GraphsFragment extends CommonNetworkFragment {
     }
 
     public View.OnClickListener fabClickListener(final String period) {
-
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getCharts(period);
-            }
-        };
+        return v -> getCharts(period);
     }
 
     public void getCharts(final String period) {
         GetHttp getSensors = new GetHttp();
 
-        getSensors.setOnResponseListener(new GetHttp.OnHttpResponseListener() {
-            @Override
-            public void onResponse(String response) {
+        getSensors.setOnResponseListener(response -> {
+            adapter.clearDataSet();
 
-                adapter.clearDataSet();
+            try {
+                JSONArray jsonArray = new JSONArray(response);
 
-                try {
-                    JSONArray jsonArray = new JSONArray(response);
-
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject obj = jsonArray.getJSONObject(i);
-                        String sensorid = obj.getString("radioid");
-
-                        callGraph(sensorid, period);
-                    }
-
-                } catch (JSONException e) {
-                    //e.printStackTrace();
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject obj = jsonArray.getJSONObject(i);
+                    String sensorid = obj.getString("radioid");
+                    callGraph(sensorid, period);
                 }
+            } catch (JSONException e) {
+                //e.printStackTrace();
             }
         });
 

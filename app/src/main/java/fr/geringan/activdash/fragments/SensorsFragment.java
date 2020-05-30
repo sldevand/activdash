@@ -24,9 +24,9 @@ import java.util.Objects;
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.adapters.SensorAdapter;
 import fr.geringan.activdash.exceptions.DataModelException;
+import fr.geringan.activdash.helpers.PrefsManager;
 import fr.geringan.activdash.models.SensorDataModel;
 import fr.geringan.activdash.network.SocketIOHolder;
-import fr.geringan.activdash.helpers.PrefsManager;
 
 public class SensorsFragment extends CommonNetworkFragment {
 
@@ -68,10 +68,11 @@ public class SensorsFragment extends CommonNetworkFragment {
         adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {
-                if (adapter.getItemCount() > 0)
+                if (adapter.getItemCount() > 0) {
                     progress.setVisibility(View.GONE);
-                else
+                } else {
                     progress.setVisibility(View.VISIBLE);
+                }
             }
         });
         return progress;

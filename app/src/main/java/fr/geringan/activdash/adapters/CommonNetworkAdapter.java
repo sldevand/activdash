@@ -19,7 +19,6 @@ public abstract class CommonNetworkAdapter<V extends CommonViewHolder> extends R
     public Context context;
     private ArrayList<? extends DataModel> dataSet = null;
 
-
     @NonNull
     @Override
     public V onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -46,5 +45,4 @@ public abstract class CommonNetworkAdapter<V extends CommonViewHolder> extends R
     }
 
     protected abstract void httpToDataModel(String response) throws IllegalAccessException, JSONException;
-
 }
