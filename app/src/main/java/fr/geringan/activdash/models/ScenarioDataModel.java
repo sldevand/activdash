@@ -49,4 +49,13 @@ public class ScenarioDataModel extends DataModel implements Comparable<ScenarioD
     public int compareTo(@NonNull ScenarioDataModel dm) {
         return this.id.compareTo(dm.id);
     }
+
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public String toString() {
+        return this.getNom();
+    }
 }

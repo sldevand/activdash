@@ -30,12 +30,4 @@ abstract public class AbstractService<T extends DataModel> {
     public void setOnGetListResponseListener(OnGetListResponseListener<T> onGetListResponseListener) {
         this.onGetListResponseListener = onGetListResponseListener;
     }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
 }

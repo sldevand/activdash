@@ -7,31 +7,31 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.helpers.PrefsManager;
+import fr.geringan.activdash.models.ScenarioDataModel;
+import fr.geringan.activdash.services.ScenariosService;
 
 public class ScenarioWidgetConfigureActivity extends Activity {
 
-    private static final String PREFS_NAME = "fr.geringan.activdash.DashWidget";
-    private static final String PREF_PREFIX_KEY = "appwidget_";
-    private static final String PREF_TITLE_KEY = "title_";
+    private static final String PREFS_NAME = "fr.geringan.activdash.ScenarioWidget";
+    private static final String PREF_PREFIX_KEY = "scenariowidget_";
     private static final String PREF_HTTP_KEY = "http_";
-    private static final String SCENARIOS_COMMAND_PREFILL = "scenarios/command/";
-
+    protected String selectedId;
     private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
-    private EditText mAppWidgetText, mAppWidgetHttp;
+    private Spinner spinner;
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         public void onClick(View v) {
             final Context context = ScenarioWidgetConfigureActivity.this;
-            String title = mAppWidgetText.getText().toString();
-            String HttpQuery = mAppWidgetHttp.getText().toString();
             ArrayList<String> prefs = new ArrayList<>();
-            prefs.add(title);
-            prefs.add(HttpQuery);
+            prefs.add(selectedId);
 
             savePrefs(context, mAppWidgetId, prefs);
 
@@ -47,20 +47,15 @@ public class ScenarioWidgetConfigureActivity extends Activity {
 
     public static void savePrefs(Context context, int appWidgetId, ArrayList<String> prefsArray) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-
-
-        prefs.putString(PREF_PREFIX_KEY + PREF_TITLE_KEY + appWidgetId, prefsArray.get(0));
-        prefs.putString(PREF_PREFIX_KEY + PREF_HTTP_KEY + appWidgetId, prefsArray.get(1));
+        prefs.putString(PREF_PREFIX_KEY + PREF_HTTP_KEY + appWidgetId, prefsArray.get(0));
         prefs.apply();
     }
 
     public static ArrayList<String> loadPrefs(Context context, int appWidgetId) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        String titleValue = prefs.getString(PREF_PREFIX_KEY + PREF_TITLE_KEY + appWidgetId, null);
         String httpValue = prefs.getString(PREF_PREFIX_KEY + PREF_HTTP_KEY + appWidgetId, null);
 
         ArrayList<String> prefsArray = new ArrayList<>();
-        prefsArray.add(titleValue);
         prefsArray.add(httpValue);
 
         return prefsArray;
@@ -68,7 +63,6 @@ public class ScenarioWidgetConfigureActivity extends Activity {
 
     public static void deleteTitlePref(Context context, int appWidgetId) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.remove(PREF_PREFIX_KEY + PREF_TITLE_KEY + appWidgetId);
         prefs.remove(PREF_PREFIX_KEY + PREF_HTTP_KEY + appWidgetId);
 
         prefs.apply();
@@ -82,12 +76,9 @@ public class ScenarioWidgetConfigureActivity extends Activity {
         setContentView(R.layout.scenario_widget_configure);
         PrefsManager.launch(this);
 
-        mAppWidgetText = findViewById(R.id.scenario_widget_text);
-        mAppWidgetHttp = findViewById(R.id.scenario_widget_http);
-        findViewById(R.id.scenario_add_button).setOnClickListener(mOnClickListener);
-
-        String prefill = PrefsManager.baseAddress + "/" + PrefsManager.entryPointAddress + "/" + SCENARIOS_COMMAND_PREFILL;
-        mAppWidgetHttp.setText(prefill);
+        spinner = findViewById(R.id.scenario_widget_configure_spinner);
+        callScenariosApi();
+        findViewById(R.id.scenario_widget_configure_add_button).setOnClickListener(mOnClickListener);
 
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
@@ -103,8 +94,39 @@ public class ScenarioWidgetConfigureActivity extends Activity {
             return;
         }
 
-        ArrayList<String> prefs = loadPrefs(ScenarioWidgetConfigureActivity.this, mAppWidgetId);
-        mAppWidgetText.setText(prefs.get(0));
+        loadPrefs(ScenarioWidgetConfigureActivity.this, mAppWidgetId);
+    }
+
+    public void callScenariosApi() {
+        ScenariosService scenariosService = new ScenariosService();
+        scenariosService.setOnGetListResponseListener(dataList -> {
+            setSpinnerAdapter(dataList);
+            setSpinnerListener();
+        });
+        scenariosService.get();
+    }
+
+    public void setSpinnerAdapter(List<ScenarioDataModel> spinnerArray) {
+        ArrayAdapter<ScenarioDataModel> adapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_spinner_item, spinnerArray);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+    }
+
+    public void setSpinnerListener() {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                ScenarioDataModel scenarioDataModel = (ScenarioDataModel) adapterView.getSelectedItem();
+                selectedId = scenarioDataModel.getId();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                ScenarioDataModel scenarioDataModel = (ScenarioDataModel) adapterView.getSelectedItem();
+                selectedId = scenarioDataModel.getId();
+            }
+        });
     }
 }
 
