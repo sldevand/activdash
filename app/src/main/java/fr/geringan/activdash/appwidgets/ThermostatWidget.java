@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.support.v4.content.res.ResourcesCompat;
+import android.widget.RemoteViews;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,20 +29,19 @@ import fr.geringan.activdash.providers.ModeImageProvider;
 public class ThermostatWidget extends AppWidgetProvider {
     public static final String THERMOSTAT_GET_ENDPOINT = "thermostat";
     public static final String THERMOSTAT_SENSOR_GET_ENDPOINT = "mesures/get-sensors/thermostat";
-    public static CustomRemoteViews remoteViews;
+    public static RemoteViews remoteViews;
 
     public static void updateAppWidget(
             Context context,
             AppWidgetManager appWidgetManager,
             int appWidgetId
     ) {
-        Resources resources = context.getResources();
-        remoteViews = new CustomRemoteViews(context.getPackageName(), R.layout.thermostat_widget);
         PrefsManager.launch(context);
+        remoteViews = new RemoteViews(context.getPackageName(), R.layout.thermostat_widget);
 
         //Call the REST APIs
         String thermostatUrl = PrefsManager.baseAddress + "/" + PrefsManager.entryPointAddress + "/" + THERMOSTAT_GET_ENDPOINT;
-        callThermostatApi(appWidgetManager, appWidgetId, thermostatUrl, resources);
+        callThermostatApi(appWidgetManager, appWidgetId, thermostatUrl,  context.getResources());
         String thermostatSensorUrl = PrefsManager.baseAddress + "/" + PrefsManager.entryPointAddress + "/" + THERMOSTAT_SENSOR_GET_ENDPOINT;
         callThermostatSensorApi(appWidgetManager, appWidgetId, thermostatSensorUrl);
 

@@ -5,6 +5,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.widget.RemoteViews;
 
 import java.text.DecimalFormat;
 
@@ -13,15 +14,15 @@ import fr.geringan.activdash.helpers.PrefsManager;
 import fr.geringan.activdash.services.SensorService;
 
 public class SensorWidget extends AppWidgetProvider {
-    public static CustomRemoteViews remoteViews;
+    public static RemoteViews remoteViews;
 
     public static void updateAppWidget(
             Context context,
             AppWidgetManager appWidgetManager,
             int appWidgetId
     ) {
-        remoteViews = new CustomRemoteViews(context.getPackageName(), R.layout.sensor_widget);
         PrefsManager.launch(context);
+        remoteViews = new RemoteViews(context.getPackageName(), R.layout.sensor_widget);
 
         String sensorUrl =  String.valueOf(SensorWidgetConfigureActivity.loadPrefs(context, appWidgetId).get(0));
         callSensorApi(context, appWidgetManager, appWidgetId, sensorUrl);

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.widget.RemoteViews;
 
 import fr.geringan.activdash.R;
+import fr.geringan.activdash.helpers.PrefsManager;
 import fr.geringan.activdash.providers.IconProvider;
 import fr.geringan.activdash.services.ScenarioCommandService;
 import fr.geringan.activdash.services.ScenarioService;
@@ -20,6 +21,7 @@ public class ScenarioWidget extends AppWidgetProvider {
 
     public static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                        int appWidgetId) {
+        PrefsManager.launch(context);
         remoteViews = new RemoteViews(context.getPackageName(), R.layout.scenario_widget);
         String scenarioId = ScenarioWidgetConfigureActivity.loadPrefs(context, appWidgetId).get(0);
         if (null != scenarioId) {
