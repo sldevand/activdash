@@ -1,6 +1,5 @@
 package fr.geringan.activdash.services;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import fr.geringan.activdash.helpers.PrefsManager;
@@ -16,10 +15,6 @@ public class ScenarioService extends AbstractService<ScenarioDataModel> {
         this.id = id;
     }
 
-    protected void getCommand() {
-
-    }
-
     protected void onResponse(String response) {
         try {
             JSONObject jsonObject = new JSONObject(response);
@@ -28,10 +23,10 @@ public class ScenarioService extends AbstractService<ScenarioDataModel> {
             if (null != onGetResponseListener) {
                 onGetResponseListener.onSuccess(scenarioDataModel);
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            if (null != onGetResponseListener) {
+                onGetResponseListener.onError("Error in Scenario Service " + e.getMessage());
+            }
         }
     }
 

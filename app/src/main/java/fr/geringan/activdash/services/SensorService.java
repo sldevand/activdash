@@ -1,7 +1,6 @@
 package fr.geringan.activdash.services;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import fr.geringan.activdash.models.SensorDataModel;
@@ -20,10 +19,10 @@ public class SensorService extends AbstractService<SensorDataModel> {
             if (null != onGetResponseListener) {
                 onGetResponseListener.onSuccess(sensorDataModel);
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            if (null != onGetResponseListener) {
+                onGetResponseListener.onError("Error in Server Response" + e.getMessage());
+            }
         }
     }
 

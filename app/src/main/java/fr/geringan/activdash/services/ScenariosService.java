@@ -34,10 +34,10 @@ public class ScenariosService extends AbstractService<ScenarioDataModel> {
             if (null != onGetListResponseListener) {
                 onGetListResponseListener.onSuccess(scenarioDataModels);
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            if (null != onGetListResponseListener) {
+                onGetListResponseListener.onError("Error in Scenarios Service " + e.getMessage());
+            }
         }
     }
 

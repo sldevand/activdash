@@ -10,12 +10,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.helpers.PrefsManager;
+import fr.geringan.activdash.interfaces.OnGetListResponseListener;
 import fr.geringan.activdash.models.ScenarioDataModel;
 import fr.geringan.activdash.services.ScenariosService;
 
@@ -99,9 +101,17 @@ public class ScenarioWidgetConfigureActivity extends Activity {
 
     public void callScenariosApi() {
         ScenariosService scenariosService = new ScenariosService();
-        scenariosService.setOnGetListResponseListener(dataList -> {
-            setSpinnerAdapter(dataList);
-            setSpinnerListener();
+        scenariosService.setOnGetListResponseListener(new OnGetListResponseListener<ScenarioDataModel>() {
+            @Override
+            public void onSuccess(List<ScenarioDataModel> dataList) {
+                setSpinnerAdapter(dataList);
+                setSpinnerListener();
+            }
+
+            @Override
+            public void onError(String error) {
+                Toast.makeText(getApplicationContext(), error, Toast.LENGTH_SHORT).show();
+            }
         });
         scenariosService.get();
     }

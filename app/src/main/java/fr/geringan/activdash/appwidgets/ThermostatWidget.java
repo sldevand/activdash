@@ -9,9 +9,9 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.support.v4.content.res.ResourcesCompat;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import fr.geringan.activdash.R;
@@ -41,9 +41,9 @@ public class ThermostatWidget extends AppWidgetProvider {
 
         //Call the REST APIs
         String thermostatUrl = PrefsManager.baseAddress + "/" + PrefsManager.entryPointAddress + "/" + THERMOSTAT_GET_ENDPOINT;
-        callThermostatApi(appWidgetManager, appWidgetId, thermostatUrl,  context.getResources());
+        callThermostatApi(appWidgetManager, appWidgetId, thermostatUrl, context);
         String thermostatSensorUrl = PrefsManager.baseAddress + "/" + PrefsManager.entryPointAddress + "/" + THERMOSTAT_SENSOR_GET_ENDPOINT;
-        callThermostatSensorApi(appWidgetManager, appWidgetId, thermostatSensorUrl);
+        callThermostatSensorApi(appWidgetManager, appWidgetId, thermostatSensorUrl, context);
 
         //Refresh the widget informations
         Intent intentUpdate = new Intent(context, ThermostatWidget.class);
@@ -61,7 +61,7 @@ public class ThermostatWidget extends AppWidgetProvider {
         appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
     }
 
-    public static void callThermostatApi(AppWidgetManager appWidgetManager, int appWidgetId, String thermostatUrl, Resources resources) {
+    public static void callThermostatApi(AppWidgetManager appWidgetManager, int appWidgetId, String thermostatUrl, Context context) {
         GetHttp getData = new GetHttp();
         getData.setOnResponseListener(response -> {
             if (null == remoteViews) {
@@ -78,6 +78,7 @@ public class ThermostatWidget extends AppWidgetProvider {
                     double consigne = thermostat.getConsigne();
                     remoteViews.setTextViewText(R.id.thermostat_widget_consigne_text, String.valueOf(consigne));
 
+                    Resources resources = context.getResources();
                     //setEtatColor
                     BoilerState boiler = BoilerStateProvider.getBoilerState(thermostat.getEtat());
                     int etatColor = ResourcesCompat.getColor(resources, boiler.getColor(), null);
@@ -92,16 +93,14 @@ public class ThermostatWidget extends AppWidgetProvider {
 
                     appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
         getData.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, thermostatUrl);
     }
 
-    public static void callThermostatSensorApi(AppWidgetManager appWidgetManager, int appWidgetId, String thermostatSensorUrl) {
+    public static void callThermostatSensorApi(AppWidgetManager appWidgetManager, int appWidgetId, String thermostatSensorUrl, Context context) {
         GetHttp getData = new GetHttp();
         getData.setOnResponseListener(response -> {
             try {
@@ -115,10 +114,8 @@ public class ThermostatWidget extends AppWidgetProvider {
                         appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
                     }
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
         getData.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, thermostatSensorUrl);

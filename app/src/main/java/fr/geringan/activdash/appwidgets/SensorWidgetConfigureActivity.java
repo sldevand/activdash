@@ -6,11 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,9 +102,17 @@ public class SensorWidgetConfigureActivity extends Activity {
 
     public void callSensorsApi() {
         SensorsService sensorsService = new SensorsService();
-        sensorsService.setOnGetListResponseListener(dataList -> {
-            setSpinnerAdapter(dataList);
-            setSpinnerListener();
+        sensorsService.setOnGetListResponseListener(new OnGetListResponseListener<SensorDataModel>() {
+            @Override
+            public void onSuccess(List<SensorDataModel> dataList) {
+                setSpinnerAdapter(dataList);
+                setSpinnerListener();
+            }
+
+            @Override
+            public void onError(String error) {
+                Toast.makeText(getApplicationContext(), error, Toast.LENGTH_SHORT).show();
+            }
         });
         sensorsService.get();
     }

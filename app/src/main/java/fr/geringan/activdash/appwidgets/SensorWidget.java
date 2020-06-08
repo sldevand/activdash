@@ -6,11 +6,14 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import java.text.DecimalFormat;
 
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.helpers.PrefsManager;
+import fr.geringan.activdash.interfaces.OnGetResponseListener;
+import fr.geringan.activdash.models.SensorDataModel;
 import fr.geringan.activdash.services.SensorService;
 
 public class SensorWidget extends AppWidgetProvider {
@@ -24,7 +27,7 @@ public class SensorWidget extends AppWidgetProvider {
         PrefsManager.launch(context);
         remoteViews = new RemoteViews(context.getPackageName(), R.layout.sensor_widget);
 
-        String sensorUrl =  String.valueOf(SensorWidgetConfigureActivity.loadPrefs(context, appWidgetId).get(0));
+        String sensorUrl = String.valueOf(SensorWidgetConfigureActivity.loadPrefs(context, appWidgetId).get(0));
         callSensorApi(context, appWidgetManager, appWidgetId, sensorUrl);
 
         //Refresh the widget informations
@@ -40,17 +43,25 @@ public class SensorWidget extends AppWidgetProvider {
 
     public static void callSensorApi(Context context, AppWidgetManager appWidgetManager, int appWidgetId, String sensorUrl) {
         SensorService sensorService = new SensorService(sensorUrl);
-        sensorService.setOnGetResponseListener(dataModel -> {
-            DecimalFormat df = new DecimalFormat("##.#");
-            String temperature = df.format(Double.valueOf(dataModel.getValeur1()));
-            if (dataModel.getActif() == 0) {
-                temperature = context.getString(R.string.thermometer_value);
+        sensorService.setOnGetResponseListener(new OnGetResponseListener<SensorDataModel>() {
+            @Override
+            public void onSuccess(SensorDataModel dataModel) {
+                DecimalFormat df = new DecimalFormat("##.#");
+                String temperature = df.format(Double.valueOf(dataModel.getValeur1()));
+                if (dataModel.getActif() == 0) {
+                    temperature = context.getString(R.string.thermometer_value);
+                }
+                String name = dataModel.getNom();
+                if (null != remoteViews) {
+                    remoteViews.setTextViewText(R.id.sensor_widget_value, temperature);
+                    remoteViews.setTextViewText(R.id.sensor_widget_name, name);
+                    appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
+                }
             }
-            String name = dataModel.getNom();
-            if (null != remoteViews) {
-                remoteViews.setTextViewText(R.id.sensor_widget_value, temperature);
-                remoteViews.setTextViewText(R.id.sensor_widget_name, name);
-                appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
+
+            @Override
+            public void onError(String error) {
+                Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
             }
         });
         sensorService.get();
@@ -60,6 +71,13 @@ public class SensorWidget extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
+        }
+    }
+
+    @Override
+    public void onDeleted(Context context, int[] appWidgetIds) {
+        for (int appWidgetId : appWidgetIds) {
+            SensorWidgetConfigureActivity.deleteTitlePref(context, appWidgetId);
         }
     }
 }
