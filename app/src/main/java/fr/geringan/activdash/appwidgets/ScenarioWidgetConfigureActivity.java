@@ -17,6 +17,7 @@ import java.util.List;
 
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.helpers.PrefsManager;
+import fr.geringan.activdash.helpers.Scenario.UrlBuilder;
 import fr.geringan.activdash.interfaces.OnGetListResponseListener;
 import fr.geringan.activdash.models.ScenarioDataModel;
 import fr.geringan.activdash.services.ScenariosService;
@@ -25,15 +26,18 @@ public class ScenarioWidgetConfigureActivity extends Activity {
 
     private static final String PREFS_NAME = "fr.geringan.activdash.ScenarioWidget";
     private static final String PREF_PREFIX_KEY = "scenariowidget_";
-    private static final String PREF_HTTP_KEY = "http_";
-    protected String selectedId;
+    private static final String PREF_URL_KEY = "http_url";
+    private static final String PREF_COMMAND_URL_KEY = "http_command_url";
+    protected String selectedUrl;
+    protected String selectedCommandUrl;
     private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private Spinner spinner;
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         public void onClick(View v) {
             final Context context = ScenarioWidgetConfigureActivity.this;
             ArrayList<String> prefs = new ArrayList<>();
-            prefs.add(selectedId);
+            prefs.add(selectedUrl);
+            prefs.add(selectedCommandUrl);
 
             savePrefs(context, mAppWidgetId, prefs);
 
@@ -49,23 +53,27 @@ public class ScenarioWidgetConfigureActivity extends Activity {
 
     public static void savePrefs(Context context, int appWidgetId, ArrayList<String> prefsArray) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.putString(PREF_PREFIX_KEY + PREF_HTTP_KEY + appWidgetId, prefsArray.get(0));
+        prefs.putString(PREF_PREFIX_KEY + PREF_URL_KEY + appWidgetId, prefsArray.get(0));
+        prefs.putString(PREF_PREFIX_KEY + PREF_COMMAND_URL_KEY + appWidgetId, prefsArray.get(1));
         prefs.apply();
     }
 
     public static ArrayList<String> loadPrefs(Context context, int appWidgetId) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        String httpValue = prefs.getString(PREF_PREFIX_KEY + PREF_HTTP_KEY + appWidgetId, null);
+        String urlPref = prefs.getString(PREF_PREFIX_KEY + PREF_URL_KEY + appWidgetId, null);
+        String commandUrlPref = prefs.getString(PREF_PREFIX_KEY + PREF_COMMAND_URL_KEY + appWidgetId, null);
 
         ArrayList<String> prefsArray = new ArrayList<>();
-        prefsArray.add(httpValue);
+        prefsArray.add(urlPref);
+        prefsArray.add(commandUrlPref);
 
         return prefsArray;
     }
 
-    public static void deleteTitlePref(Context context, int appWidgetId) {
+    public static void deletePrefs(Context context, int appWidgetId) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, 0).edit();
-        prefs.remove(PREF_PREFIX_KEY + PREF_HTTP_KEY + appWidgetId);
+        prefs.remove(PREF_PREFIX_KEY + PREF_URL_KEY + appWidgetId);
+        prefs.remove(PREF_PREFIX_KEY + PREF_COMMAND_URL_KEY + appWidgetId);
 
         prefs.apply();
     }
@@ -127,14 +135,14 @@ public class ScenarioWidgetConfigureActivity extends Activity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                ScenarioDataModel scenarioDataModel = (ScenarioDataModel) adapterView.getSelectedItem();
-                selectedId = scenarioDataModel.getId();
+                selectedUrl = UrlBuilder.buildUrl((ScenarioDataModel) adapterView.getSelectedItem());
+                selectedCommandUrl = UrlBuilder.buildCommandUrl((ScenarioDataModel) adapterView.getSelectedItem());
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                ScenarioDataModel scenarioDataModel = (ScenarioDataModel) adapterView.getSelectedItem();
-                selectedId = scenarioDataModel.getId();
+                selectedUrl = UrlBuilder.buildUrl((ScenarioDataModel) adapterView.getSelectedItem());
+                selectedCommandUrl = UrlBuilder.buildCommandUrl((ScenarioDataModel) adapterView.getSelectedItem());
             }
         });
     }

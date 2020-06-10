@@ -5,7 +5,6 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -19,29 +18,29 @@ import fr.geringan.activdash.services.ScenarioService;
 
 public class ScenarioWidget extends AppWidgetProvider {
     private final static String ACTION_SCENARIO = "fr.geringan.activscenariowidget.action.LAUNCH_SCENARIO";
-    public static String ACTIONURL_EXTRA = "actionUrl";
+    public static String ACTION_SCENARIO_COMMAND_URL_EXTRA = "actionScenarioCommandUrl";
     public static RemoteViews remoteViews;
 
     public static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                        int appWidgetId) {
-        PrefsManager.launch(context);
         remoteViews = new RemoteViews(context.getPackageName(), R.layout.scenario_widget);
-        String scenarioId = ScenarioWidgetConfigureActivity.loadPrefs(context, appWidgetId).get(0);
-        if (null != scenarioId) {
-            callScenarioApi(appWidgetManager, appWidgetId, context, scenarioId);
+        String scenarioUrl = ScenarioWidgetConfigureActivity.loadPrefs(context, appWidgetId).get(0);
+        String scenarioCommandUrl = ScenarioWidgetConfigureActivity.loadPrefs(context, appWidgetId).get(1);
+        if (null != scenarioUrl) {
+            callScenarioApi(appWidgetManager, appWidgetId, context, scenarioUrl);
         }
 
         Intent intent = new Intent(context, ScenarioWidget.class);
         intent.setAction(ACTION_SCENARIO);
-        intent.putExtra(ACTIONURL_EXTRA, scenarioId);
+        intent.putExtra(ACTION_SCENARIO_COMMAND_URL_EXTRA, scenarioCommandUrl);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, appWidgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.scenario_widget_layout, pendingIntent);
 
         appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
     }
 
-    public static void callScenarioApi(AppWidgetManager appWidgetManager, int appWidgetId, Context context, String scenarioId) {
-        ScenarioService scenarioService = new ScenarioService(scenarioId);
+    public static void callScenarioApi(AppWidgetManager appWidgetManager, int appWidgetId, Context context, String scenarioUrl) {
+        ScenarioService scenarioService = new ScenarioService(scenarioUrl);
         scenarioService.setOnGetResponseListener(new OnGetResponseListener<ScenarioDataModel>() {
             @Override
             public void onSuccess(ScenarioDataModel dataModel) {
@@ -67,6 +66,7 @@ public class ScenarioWidget extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        PrefsManager.launch(context);
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
@@ -75,13 +75,14 @@ public class ScenarioWidget extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
+        PrefsManager.launch(context);
         if (ACTION_SCENARIO.equals(intent.getAction())) {
-            String id = intent.getStringExtra(ACTIONURL_EXTRA);
-            ScenarioCommandService scenarioCommandService = new ScenarioCommandService(id);
+            String url = intent.getStringExtra(ACTION_SCENARIO_COMMAND_URL_EXTRA);
+            ScenarioCommandService scenarioCommandService = new ScenarioCommandService(url);
             scenarioCommandService.setOnGetResponseListener(new OnGetResponseListener<ScenarioDataModel>() {
                 @Override
                 public void onSuccess(ScenarioDataModel dataModel) {
-                    //Intentionally empty statement
+                    //Intentionnally empty
                 }
 
                 @Override
@@ -96,7 +97,7 @@ public class ScenarioWidget extends AppWidgetProvider {
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
-            ScenarioWidgetConfigureActivity.deleteTitlePref(context, appWidgetId);
+            ScenarioWidgetConfigureActivity.deletePrefs(context, appWidgetId);
         }
     }
 }

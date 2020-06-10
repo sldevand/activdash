@@ -17,6 +17,7 @@ import java.util.List;
 
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.helpers.PrefsManager;
+import fr.geringan.activdash.helpers.Sensor.UrlBuilder;
 import fr.geringan.activdash.interfaces.OnGetListResponseListener;
 import fr.geringan.activdash.models.SensorDataModel;
 import fr.geringan.activdash.services.SensorsService;
@@ -26,7 +27,7 @@ public class SensorWidgetConfigureActivity extends Activity {
     private static final String PREFS_NAME = "fr.geringan.activdash.SensorWidget";
     private static final String PREF_PREFIX_KEY = "sensorwidget_";
     private static final String PREF_HTTP_KEY = "http_";
-    private static final String SENSOR_GET_PREFILL = "mesures/get-";
+
     protected String selectedUrl;
     private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private Spinner spinner;
@@ -124,21 +125,16 @@ public class SensorWidgetConfigureActivity extends Activity {
         spinner.setAdapter(adapter);
     }
 
-    public String buildSensorUrl(SensorDataModel sensorDataModel) {
-        return PrefsManager.baseAddress + "/" + PrefsManager.entryPointAddress + "/" +
-                SENSOR_GET_PREFILL + sensorDataModel.getRadioid();
-    }
-
     public void setSpinnerListener() {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                selectedUrl = buildSensorUrl((SensorDataModel) adapterView.getSelectedItem());
+                selectedUrl = UrlBuilder.buildUrl((SensorDataModel) adapterView.getSelectedItem());
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                selectedUrl = buildSensorUrl((SensorDataModel) adapterView.getSelectedItem());
+                selectedUrl = UrlBuilder.buildUrl((SensorDataModel) adapterView.getSelectedItem());
             }
         });
     }
