@@ -19,17 +19,16 @@ import fr.geringan.activdash.services.ScenarioService;
 public class ScenarioWidget extends AppWidgetProvider {
     private final static String ACTION_SCENARIO = "fr.geringan.activscenariowidget.action.LAUNCH_SCENARIO";
     public static String ACTION_SCENARIO_COMMAND_URL_EXTRA = "actionScenarioCommandUrl";
-    public static RemoteViews remoteViews;
 
     public static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                        int appWidgetId) {
-        remoteViews = new RemoteViews(context.getPackageName(), R.layout.scenario_widget);
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.scenario_widget);
         String scenarioUrl = ScenarioWidgetConfigureActivity.loadPrefs(context, appWidgetId).get(0);
-        String scenarioCommandUrl = ScenarioWidgetConfigureActivity.loadPrefs(context, appWidgetId).get(1);
         if (null != scenarioUrl) {
-            callScenarioApi(appWidgetManager, appWidgetId, context, scenarioUrl);
+            callScenarioApi(appWidgetManager, appWidgetId, context, scenarioUrl, remoteViews);
         }
 
+        String scenarioCommandUrl = ScenarioWidgetConfigureActivity.loadPrefs(context, appWidgetId).get(1);
         Intent intent = new Intent(context, ScenarioWidget.class);
         intent.setAction(ACTION_SCENARIO);
         intent.putExtra(ACTION_SCENARIO_COMMAND_URL_EXTRA, scenarioCommandUrl);
@@ -39,7 +38,7 @@ public class ScenarioWidget extends AppWidgetProvider {
         appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
     }
 
-    public static void callScenarioApi(AppWidgetManager appWidgetManager, int appWidgetId, Context context, String scenarioUrl) {
+    public static void callScenarioApi(AppWidgetManager appWidgetManager, int appWidgetId, Context context, String scenarioUrl, RemoteViews remoteViews) {
         ScenarioService scenarioService = new ScenarioService(scenarioUrl);
         scenarioService.setOnGetResponseListener(new OnGetResponseListener<ScenarioDataModel>() {
             @Override
@@ -47,7 +46,6 @@ public class ScenarioWidget extends AppWidgetProvider {
                 if (null != remoteViews) {
                     String name = dataModel.getNom();
                     remoteViews.setTextViewText(R.id.scenario_widget_text, name);
-                    appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
                     if (name != null) {
                         Integer icon = IconProvider.getIconFromName(name);
                         remoteViews.setImageViewResource(R.id.scenario_widget_img, icon);
@@ -58,7 +56,7 @@ public class ScenarioWidget extends AppWidgetProvider {
 
             @Override
             public void onError(String error) {
-                Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
+                remoteViews.setTextViewText(R.id.scenario_widget_text, context.getString(R.string.undefined));
             }
         });
         scenarioService.get();

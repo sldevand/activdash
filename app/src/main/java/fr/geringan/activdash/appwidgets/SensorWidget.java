@@ -17,18 +17,18 @@ import fr.geringan.activdash.models.SensorDataModel;
 import fr.geringan.activdash.services.SensorService;
 
 public class SensorWidget extends AppWidgetProvider {
-    public static RemoteViews remoteViews;
-
     public static void updateAppWidget(
             Context context,
             AppWidgetManager appWidgetManager,
             int appWidgetId
     ) {
         PrefsManager.launch(context);
-        remoteViews = new RemoteViews(context.getPackageName(), R.layout.sensor_widget);
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.sensor_widget);
 
-        String sensorUrl = String.valueOf(SensorWidgetConfigureActivity.loadPrefs(context, appWidgetId).get(0));
-        callSensorApi(context, appWidgetManager, appWidgetId, sensorUrl);
+        String sensorUrl = SensorWidgetConfigureActivity.loadPrefs(context, appWidgetId).get(0);
+        if (null != sensorUrl) {
+            callSensorApi(context, appWidgetManager, appWidgetId, sensorUrl, remoteViews);
+        }
 
         //Refresh the widget informations
         Intent intentUpdate = new Intent(context, SensorWidget.class);
@@ -41,7 +41,7 @@ public class SensorWidget extends AppWidgetProvider {
         appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
     }
 
-    public static void callSensorApi(Context context, AppWidgetManager appWidgetManager, int appWidgetId, String sensorUrl) {
+    public static void callSensorApi(Context context, AppWidgetManager appWidgetManager, int appWidgetId, String sensorUrl, RemoteViews remoteViews) {
         SensorService sensorService = new SensorService(sensorUrl);
         sensorService.setOnGetResponseListener(new OnGetResponseListener<SensorDataModel>() {
             @Override

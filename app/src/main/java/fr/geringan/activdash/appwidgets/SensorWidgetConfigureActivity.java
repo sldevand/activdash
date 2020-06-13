@@ -76,14 +76,6 @@ public class SensorWidgetConfigureActivity extends Activity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
 
-        setResult(RESULT_CANCELED);
-        setContentView(R.layout.sensor_widget_configure);
-        PrefsManager.launch(this);
-
-        spinner = findViewById(R.id.sensor_widget_configure_spinner);
-        callSensorsApi();
-        findViewById(R.id.sensor_widget_configure_add_button).setOnClickListener(mOnClickListener);
-
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if (null != extras) {
@@ -94,11 +86,17 @@ public class SensorWidgetConfigureActivity extends Activity {
         }
 
         if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+            setResult(RESULT_CANCELED);
             finish();
             return;
         }
 
-        loadPrefs(SensorWidgetConfigureActivity.this, mAppWidgetId);
+        PrefsManager.launch(this);
+        setContentView(R.layout.sensor_widget_configure);
+
+        spinner = findViewById(R.id.sensor_widget_configure_spinner);
+        findViewById(R.id.sensor_widget_configure_add_button).setOnClickListener(mOnClickListener);
+        callSensorsApi();
     }
 
     public void callSensorsApi() {

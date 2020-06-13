@@ -83,5 +83,6 @@
     <string name="thermostat_widget_mode_image" translatable="false">thermostat widget mode image</string>
     <string name="thermostat_widget_etat_image" translatable="false">thermostat widget etat image</string>
     <string name="sensor">Sensor</string>
+    <string name="undefined">Undefined</string>
 
 </resources>

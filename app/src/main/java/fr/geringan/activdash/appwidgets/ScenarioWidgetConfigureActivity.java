@@ -81,15 +81,6 @@ public class ScenarioWidgetConfigureActivity extends Activity {
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-
-        setResult(RESULT_CANCELED);
-        setContentView(R.layout.scenario_widget_configure);
-        PrefsManager.launch(this);
-
-        spinner = findViewById(R.id.scenario_widget_configure_spinner);
-        callScenariosApi();
-        findViewById(R.id.scenario_widget_configure_add_button).setOnClickListener(mOnClickListener);
-
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if (null != extras) {
@@ -100,11 +91,17 @@ public class ScenarioWidgetConfigureActivity extends Activity {
         }
 
         if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+            setResult(RESULT_CANCELED);
             finish();
             return;
         }
 
-        loadPrefs(ScenarioWidgetConfigureActivity.this, mAppWidgetId);
+        PrefsManager.launch(this);
+        setContentView(R.layout.scenario_widget_configure);
+
+        spinner = findViewById(R.id.scenario_widget_configure_spinner);
+        findViewById(R.id.scenario_widget_configure_add_button).setOnClickListener(mOnClickListener);
+        callScenariosApi();
     }
 
     public void callScenariosApi() {
