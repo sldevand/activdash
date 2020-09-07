@@ -94,7 +94,7 @@ public class ThermostatWidget extends AppWidgetProvider {
                     appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
                 }
             } catch (Exception e) {
-                Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                //Intentionnally empty
             }
         });
         getData.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, thermostatUrl);
@@ -115,7 +115,7 @@ public class ThermostatWidget extends AppWidgetProvider {
                     }
                 }
             } catch (Exception e) {
-                Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                //Intentionnally empty
             }
         });
         getData.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, thermostatSensorUrl);

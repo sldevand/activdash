@@ -61,7 +61,7 @@ public class SensorWidget extends AppWidgetProvider {
 
             @Override
             public void onError(String error) {
-                Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
+                //Intentionnally empty
             }
         });
         sensorService.get();
