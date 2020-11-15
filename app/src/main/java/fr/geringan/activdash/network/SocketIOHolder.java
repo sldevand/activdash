@@ -24,6 +24,7 @@ public final class SocketIOHolder {
     public static final String EVENT_BOILER = "chaudiere";
     public static final String EVENT_PLAN_SAVE = "therplansave";
     public static final String EVENT_MODE_SAVE = "thermodesave";
+    public static final String EVENT_THER_GET_PWR = "therpowget";
     public static final String EVENT_MESSAGE_CONSOLE = "messageConsole";
     public static final String EMIT_INTER = "updateInter";
     public static final String EMIT_DIMMER = "updateDimmer";
@@ -41,6 +42,7 @@ public final class SocketIOHolder {
     public static final String EMIT_THT_REFRESH = "refreshTher";
     public static final String EMIT_THT_UPDATE_CLOCK = "refreshTher";
     public static final String EMIT_THT_GET_CLOCK = "refreshTher";
+    public static final String EMIT_THT_SET_PWR = "setTherPwr";
     public static final String EMIT_SERIAL_PORT_RESET = "serialportReset";
     public static Socket socket;
     private static SocketEmitTask _task;

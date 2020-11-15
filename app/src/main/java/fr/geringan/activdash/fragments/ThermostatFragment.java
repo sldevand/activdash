@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,8 +52,10 @@ public class ThermostatFragment extends CommonNetworkFragment {
     private LinearLayout llThermostatMode = null;
     private AppCompatTextView txtThermostatEtat = null;
     private AppCompatImageView imgThermostatEtat = null;
+    private AppCompatImageView imgThermostatPwr = null;
     private AppCompatImageView imgThermostatMode = null;
     private ThermostatDataModel thermostat;
+    private CardView cvThermostatEtat;
 
     private ProgressBar progressBar;
 
@@ -99,7 +103,9 @@ public class ThermostatFragment extends CommonNetworkFragment {
         txtThermostatMode = view.findViewById(R.id.txtThermostatMode);
         llThermostatMode = view.findViewById(R.id.layoutThermostatMode);
         imgThermostatEtat = view.findViewById(R.id.imgThermostatEtat);
+        imgThermostatPwr = view.findViewById(R.id.imgThermostatPwr);
         imgThermostatMode = view.findViewById(R.id.imgThermostatMode);
+        cvThermostatEtat = view.findViewById(R.id.cvThermostatEtat);
         progressBar = view.findViewById(R.id.progressTher);
     }
 
@@ -186,15 +192,26 @@ public class ThermostatFragment extends CommonNetworkFragment {
     }
 
     public void updateThermostatDisplays(JSONObject obj) throws JSONException, IllegalAccessException {
-        if (obj == null)
+        if (obj == null) {
             throw new JSONException("updateThermostatDisplay : JSON Object is null !!");
+        }
 
-        thermostat = new ThermostatDataModel(obj);
+        createThermostatDataModel(obj);
+
         ModeDataModel mode = thermostat.getMode();
         BoilerState boiler = BoilerStateProvider.getBoilerState(thermostat.getEtat());
 
+
         imgThermostatEtat.setColorFilter(ContextCompat.getColor(getView().getContext(), boiler.getColor()));
         txtThermostatEtat.setText(boiler.getEtat());
+
+        if (thermostat.getPwr() == 0 ) {
+            imgThermostatPwr.setColorFilter(ContextCompat.getColor(getView().getContext(), R.color.colorAccent));
+            imgThermostatPwr.setVisibility(View.VISIBLE);
+        } else {
+            imgThermostatPwr.setVisibility(View.INVISIBLE);
+        }
+
         txtConsigne.setText(String.valueOf(thermostat.getConsigne()));
         txtThermostatPlan.setText(thermostat.getPlanningName());
 
@@ -205,17 +222,33 @@ public class ThermostatFragment extends CommonNetworkFragment {
         txtThermostatMode.setText(mode.getNom());
     }
 
+    private void createThermostatDataModel(JSONObject obj) throws JSONException, IllegalAccessException {
+        if (null == thermostat) {
+            thermostat = new ThermostatDataModel(obj);
+        } else {
+            thermostat.setDataJSON(obj);
+        }
+    }
+
     private void initClickEvents() {
         txtPlus.setOnClickListener(v -> setConsigne(THT_CHANGE_VALUE));
         txtConsigne.setOnClickListener(v -> SocketIOHolder.emit(SocketIOHolder.EMIT_THT_REFRESH, ""));
         txtMinus.setOnClickListener(v -> setConsigne(-THT_CHANGE_VALUE));
+        cvThermostatEtat.setOnLongClickListener(v -> togglePwr());
+    }
+
+    private boolean togglePwr() {
+        int pwrStat = thermostat.getPwr() == 1 ? 0 : 1;
+        SocketIOHolder.emit(SocketIOHolder.EMIT_THT_SET_PWR, String.valueOf(pwrStat));
+
+        return false;
     }
 
     private void openModeList(String modes) {
         final FragmentManager fm = getFragmentManager();
         final ModeDialogFragment dialog = ModeDialogFragment.newInstance(modes);
 
-        if (null == fm || null == dialog) return;
+        if (null == fm) return;
 
         dialog.setSelectionListener(mode -> {
             if (mode.has("id")) {
@@ -272,7 +305,9 @@ public class ThermostatFragment extends CommonNetworkFragment {
                     .on(SocketIOHolder.EVENT_PLAN_SAVE,
                             args -> onSocketIOReceive(SocketIOHolder.EVENT_PLAN_SAVE, args))
                     .on(SocketIOHolder.EVENT_MODE_SAVE,
-                            args -> onSocketIOReceive(SocketIOHolder.EVENT_MODE_SAVE, args));
+                            args -> onSocketIOReceive(SocketIOHolder.EVENT_MODE_SAVE, args))
+                    .on(SocketIOHolder.EVENT_THER_GET_PWR,
+                            args -> onSocketIOReceive(SocketIOHolder.EVENT_THER_GET_PWR, args));
         }
     }
 
@@ -317,6 +352,7 @@ public class ThermostatFragment extends CommonNetworkFragment {
 
     private void eventDispatch(String event, JSONObject obj) throws JSONException, IllegalAccessException {
         switch (event) {
+            case SocketIOHolder.EVENT_THER_GET_PWR:
             case SocketIOHolder.EVENT_THERMOSTAT:
                 updateThermostatDisplays(obj);
                 break;

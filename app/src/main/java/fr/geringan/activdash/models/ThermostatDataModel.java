@@ -11,6 +11,7 @@ public class ThermostatDataModel extends DataModel {
     private double consigne;
     private double delta;
     private int etat;
+    private int pwr;
 
     private ModeDataModel mode;
 
@@ -28,6 +29,7 @@ public class ThermostatDataModel extends DataModel {
         this.delta = this.dataJSON.getDouble("delta");
         this.etat = this.dataJSON.getInt("etat");
         this.nom = this.dataJSON.getString("nom");
+        this.pwr = this.dataJSON.getInt("pwr");
 
         if (dataJSON.has("planningName")) {
             if (dataJSON.get("planningName").equals("Aucun")) {
@@ -94,5 +96,13 @@ public class ThermostatDataModel extends DataModel {
 
     public void setEtat(int etat) {
         this.etat = etat;
+    }
+
+    public int getPwr() {
+        return pwr;
+    }
+
+    public void setPwr(int pwr) {
+        this.pwr = pwr;
     }
 }

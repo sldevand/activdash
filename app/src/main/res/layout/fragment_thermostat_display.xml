@@ -166,15 +166,18 @@
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
+            android:id="@+id/cvThermostatEtat"
             android:layout_width="match_parent"
             android:layout_height="@dimen/thermometer_display_height"
-
             android:layout_weight="3"
             app:cardBackgroundColor="@color/white"
             tools:style="@style/CardView">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
             <LinearLayout
-
+                android:id="@+id/llThermostatEtat"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -195,8 +198,16 @@
                     android:gravity="center"
                     android:text="@string/thermostat_state_name" />
 
-
             </LinearLayout>
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/imgThermostatPwr"
+                    android:layout_width="@dimen/mini_icon"
+                    android:layout_height="@dimen/mini_icon"
+                    android:padding="@dimen/mini_icon_padding"
+                    app:srcCompat="@drawable/ic_block"
+                    android:layout_alignEnd="@id/llThermostatEtat"
+                    android:layout_alignRight="@id/llThermostatEtat" />
+            </RelativeLayout>
 
         </android.support.v7.widget.CardView>
 
