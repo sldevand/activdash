@@ -110,7 +110,7 @@ public class SensorAdapter extends CommonNetworkAdapter<SensorAdapter.ViewHolder
             String value1Units = "°C";
             String value2Units = "";
 
-            if (radioId.contains("dht11")) value2Units = "%RH";
+            if (radioId.contains("dht")) value2Units = "%RH";
             if (radioId.contains("tinfo")) {
                 img.setImageResource(R.mipmap.ic_electricity);
                 value1Units = "kWH";

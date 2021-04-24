@@ -5,6 +5,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -46,17 +47,35 @@ public class SensorWidget extends AppWidgetProvider {
         sensorService.setOnGetResponseListener(new OnGetResponseListener<SensorDataModel>() {
             @Override
             public void onSuccess(SensorDataModel dataModel) {
-                DecimalFormat df = new DecimalFormat("##.#");
-                String temperature = df.format(Double.valueOf(dataModel.getValeur1()));
+                if (null == remoteViews) {
+                    return;
+                }
+
+                remoteViews.setTextViewText(R.id.sensor_widget_name, dataModel.getNom());
+
                 if (dataModel.getActif() == 0) {
-                    temperature = context.getString(R.string.thermometer_value);
-                }
-                String name = dataModel.getNom();
-                if (null != remoteViews) {
-                    remoteViews.setTextViewText(R.id.sensor_widget_value, temperature);
-                    remoteViews.setTextViewText(R.id.sensor_widget_name, name);
+                    remoteViews.setViewVisibility(R.id.sensor_widget_value_2, View.GONE);
+                    remoteViews.setTextViewText(
+                            R.id.sensor_widget_value,
+                            context.getString(R.string.thermometer_value)
+                    );
+
                     appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
+                    return;
                 }
+
+                DecimalFormat df = new DecimalFormat("##.#");
+
+                String value2 = dataModel.getValeur2();
+                if (null != value2 && !value2.isEmpty()) {
+                    String formattedValue2 = df.format(Double.valueOf(value2));
+                    remoteViews.setViewVisibility(R.id.sensor_widget_value_2, View.VISIBLE);
+                    remoteViews.setTextViewText(R.id.sensor_widget_value_2, formattedValue2);
+                }
+
+                String temperature = df.format(Double.valueOf(dataModel.getValeur1()));
+                remoteViews.setTextViewText(R.id.sensor_widget_value, temperature);
+                appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
             }
 
             @Override
