@@ -1,16 +1,13 @@
 package fr.geringan.activdash.activities;
 
-import android.icu.util.Calendar;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
-import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.SwitchCompat;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.SwitchCompat;
 import android.text.Spannable;
 import android.text.TextUtils;
-import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.Menu;
 import android.widget.TextView;
 
@@ -20,7 +17,6 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import fr.geringan.activdash.R;

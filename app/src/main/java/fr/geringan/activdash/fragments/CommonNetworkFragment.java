@@ -1,8 +1,8 @@
 package fr.geringan.activdash.fragments;
 
 import android.os.AsyncTask;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.fragment.app.Fragment;
 import android.view.View;
 import android.widget.ProgressBar;
 

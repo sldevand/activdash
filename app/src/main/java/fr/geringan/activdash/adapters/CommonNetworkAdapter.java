@@ -1,8 +1,8 @@
 package fr.geringan.activdash.adapters;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import org.json.JSONException;
@@ -21,9 +21,7 @@ public abstract class CommonNetworkAdapter<V extends CommonViewHolder> extends R
 
     @NonNull
     @Override
-    public V onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
-    }
+    abstract public V onCreateViewHolder(@NonNull ViewGroup parent, int viewType);
 
     @Override
     public void onBindViewHolder(@NonNull V holder, int i) {
