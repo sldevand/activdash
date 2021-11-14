@@ -6,24 +6,23 @@ import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.tabs.TabLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.core.view.GravityCompat;
-import androidx.viewpager.widget.ViewPager;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.Toolbar;
-
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import com.github.mikephil.charting.utils.Utils;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.tabs.TabLayout;
 
 import fr.geringan.activdash.activities.ActivServerActivity;
 import fr.geringan.activdash.activities.RootActivity;
@@ -68,28 +67,31 @@ public class AppController extends RootActivity implements NetworkChangeReceiver
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                Intent settingsIntent = new Intent(AppController.this, SettingsActivity.class);
-                startActivity(settingsIntent);
-                return true;
-            case R.id.action_about:
-                try {
-                    PackageInfo pinfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-                    final FragmentManager fm = getSupportFragmentManager();
-                    AboutDialog dialog = AboutDialog.newInstance(pinfo.versionName);
-                    dialog.show(fm, "About");
-                    return true;
-                } catch (PackageManager.NameNotFoundException e) {
-                    Tools.longSnackbar(rootView, R.string.no_version_found);
-                    return true;
-                }
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (R.id.action_settings == item.getItemId()) {
+            Intent settingsIntent = new Intent(AppController.this, SettingsActivity.class);
+            startActivity(settingsIntent);
+            return true;
         }
+
+        if (R.id.action_about == item.getItemId()) {
+            try {
+                PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+                final FragmentManager fm = getSupportFragmentManager();
+                AboutDialog dialog = AboutDialog.newInstance(packageInfo.versionName);
+                dialog.show(fm, "About");
+                return true;
+            } catch (PackageManager.NameNotFoundException e) {
+                Tools.longSnackbar(rootView, R.string.no_version_found);
+                return true;
+            }
+        }
+
+        if (R.id.home == item.getItemId()) {
+            mDrawerLayout.openDrawer(GravityCompat.START);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -119,19 +121,18 @@ public class AppController extends RootActivity implements NetworkChangeReceiver
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
             mDrawerLayout.closeDrawers();
-            Intent intent;
-            switch (menuItem.getItemId()) {
-                case R.id.nav_activ_server:
-                    intent = new Intent(AppController.this, ActivServerActivity.class);
-                    startActivity(intent);
-                    return true;
-                case R.id.nav_thermostat:
-                    intent = new Intent(AppController.this, ThermostatControllerActivity.class);
-                    startActivity(intent);
-                    return true;
-                default:
-                    return true;
+            Class<?> activityClass = R.id.nav_activ_server == menuItem.getItemId()
+                    ? ActivServerActivity.class
+                    : R.id.nav_thermostat == menuItem.getItemId()
+                    ? ThermostatControllerActivity.class
+                    : null;
+
+            if (null != activityClass) {
+                Intent intent = new Intent(AppController.this, activityClass);
+                startActivity(intent);
             }
+
+            return true;
         });
     }
 
@@ -240,7 +241,7 @@ public class AppController extends RootActivity implements NetworkChangeReceiver
                 case 3:
                     return GraphsFragment.newInstance(position);
                 default:
-                    return null;
+                    return new Fragment();
             }
         }
 
