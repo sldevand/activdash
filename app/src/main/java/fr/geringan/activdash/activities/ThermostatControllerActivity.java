@@ -1,21 +1,27 @@
 package fr.geringan.activdash.activities;
 
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.tabs.TabLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Lifecycle;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
+
 import com.github.mikephil.charting.utils.Utils;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.fragments.ThermostatFragment;
@@ -32,8 +38,23 @@ public class ThermostatControllerActivity extends RootActivity {
     public void createMainView() {
         createToolbar();
         TabLayout tabLayout = findViewById(R.id.tabsThermostat);
-        tabLayout.setupWithViewPager(createViewPager());
+        ViewPager2 viewPager = createViewPager();
+        Map<Integer, String> tabTitlesMap = this.getTabTitlesMap();
+        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
+            String text = null != tabTitlesMap.get(position)
+                    ? tabTitlesMap.get(position)
+                    : "Tab " + position;
+            tab.setText(text);
+        }).attach();
+
         initializeSocketioListeners();
+    }
+
+    protected Map<Integer, String> getTabTitlesMap() {
+        Map<Integer, String> map = new HashMap<>();
+        map.put(0, getString(R.string.title_activity_thermostat_controller));
+
+        return map;
     }
 
     public void createToolbar() {
@@ -44,12 +65,17 @@ public class ThermostatControllerActivity extends RootActivity {
         actionbar.setDisplayHomeAsUpEnabled(true);
     }
 
-    public ViewPager createViewPager(){
-        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        ViewPager mViewPager = findViewById(R.id.containerThermostat);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.setOffscreenPageLimit(3);
-        return mViewPager;
+    public ViewPager2 createViewPager() {
+        ThermostatControllerActivity.SectionsPagerAdapter mSectionsPagerAdapter =
+                new ThermostatControllerActivity.SectionsPagerAdapter(
+                        getSupportFragmentManager(),
+                        getLifecycle()
+                );
+        ViewPager2 viewPager = findViewById(R.id.containerThermostat);
+        viewPager.setAdapter(mSectionsPagerAdapter);
+        viewPager.setOffscreenPageLimit(1);
+
+        return viewPager;
     }
 
     @Override
@@ -66,42 +92,31 @@ public class ThermostatControllerActivity extends RootActivity {
         }
     }
 
-    public static class SectionsPagerAdapter extends FragmentPagerAdapter {
-        private SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
+    public static class SectionsPagerAdapter extends FragmentStateAdapter {
+        private SectionsPagerAdapter(FragmentManager fragmentManager, Lifecycle lifecycle) {
+            super(fragmentManager, lifecycle);
         }
 
+        @NonNull
         @Override
-        public Fragment getItem(int position) {
-
-            switch (position) {
-                case 0:
-                case 1:
-                case 2:
-                    return ThermostatFragment.newInstance();
-                default:
-                    return null;
+        public Fragment createFragment(int position) {
+            if (position == 0) {
+                return ThermostatFragment.newInstance();
             }
-        }
-
-        @Override
-        public int getCount() {
-            return 1;
+            return new Fragment();
         }
 
         @Nullable
-        @Override
         public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "Thermostat";
-                case 1:
-                    return "Graphs";
-                case 2:
-                    return "Planification";
-                default:
-                    return null;
+            if (position == 0) {
+                return "Thermostat";
             }
+            return null;
+        }
+
+        @Override
+        public int getItemCount() {
+            return 1;
         }
     }
 }

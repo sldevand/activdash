@@ -18,9 +18,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.lifecycle.Lifecycle;
-import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -93,7 +91,7 @@ public class AppController extends RootActivity implements NetworkChangeReceiver
             return true;
         }
 
-        if (R.id.home == item.getItemId()) {
+        if (android.R.id.home == item.getItemId()) {
             mDrawerLayout.openDrawer(GravityCompat.START);
             return true;
         }
@@ -149,11 +147,13 @@ public class AppController extends RootActivity implements NetworkChangeReceiver
         ViewPager2 viewPager = findViewById(R.id.container);
         viewPager.setAdapter(mSectionsPagerAdapter);
         viewPager.setOffscreenPageLimit(3);
-        new TabLayoutMediator(tabLayout, viewPager,
-                (tab, position) -> {
-                    Map<Integer, String> tabTitlesMap = this.getTabTitlesMap();
-                    tab.setText(tabTitlesMap.get(position));
-                }).attach();
+        Map<Integer, String> tabTitlesMap = this.getTabTitlesMap();
+        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
+            String text = null != tabTitlesMap.get(position)
+                    ? tabTitlesMap.get(position)
+                    : "Tab " + position;
+            tab.setText(text);
+        }).attach();
     }
 
     protected Map<Integer, String> getTabTitlesMap() {
