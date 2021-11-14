@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
@@ -18,11 +19,18 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.lifecycle.Lifecycle;
 import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.github.mikephil.charting.utils.Utils;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import fr.geringan.activdash.activities.ActivServerActivity;
 import fr.geringan.activdash.activities.RootActivity;
@@ -79,11 +87,10 @@ public class AppController extends RootActivity implements NetworkChangeReceiver
                 final FragmentManager fm = getSupportFragmentManager();
                 AboutDialog dialog = AboutDialog.newInstance(packageInfo.versionName);
                 dialog.show(fm, "About");
-                return true;
             } catch (PackageManager.NameNotFoundException e) {
                 Tools.longSnackbar(rootView, R.string.no_version_found);
-                return true;
             }
+            return true;
         }
 
         if (R.id.home == item.getItemId()) {
@@ -137,13 +144,26 @@ public class AppController extends RootActivity implements NetworkChangeReceiver
     }
 
     public void createViewPager() {
-        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        ViewPager mViewPager = findViewById(R.id.container);
+        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), getLifecycle());
         TabLayout tabLayout = findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(mViewPager);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.setOffscreenPageLimit(3);
+        ViewPager2 viewPager = findViewById(R.id.container);
+        viewPager.setAdapter(mSectionsPagerAdapter);
+        viewPager.setOffscreenPageLimit(3);
+        new TabLayoutMediator(tabLayout, viewPager,
+                (tab, position) -> {
+                    Map<Integer, String> tabTitlesMap = this.getTabTitlesMap();
+                    tab.setText(tabTitlesMap.get(position));
+                }).attach();
+    }
 
+    protected Map<Integer, String> getTabTitlesMap() {
+        Map<Integer, String> map = new HashMap<>();
+        map.put(0, getString(R.string.scenarios));
+        map.put(1, getString(R.string.actuators));
+        map.put(2, getString(R.string.sensors));
+        map.put(3, getString(R.string.graphs));
+
+        return map;
     }
 
     public void createToolbar() {
@@ -223,14 +243,14 @@ public class AppController extends RootActivity implements NetworkChangeReceiver
         }
     }
 
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        private SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
+    public static class SectionsPagerAdapter extends FragmentStateAdapter {
+        private SectionsPagerAdapter(FragmentManager fragment, Lifecycle lifecycle) {
+            super(fragment, lifecycle);
         }
 
+        @NonNull
         @Override
-        public Fragment getItem(int position) {
+        public Fragment createFragment(int position) {
             switch (position) {
                 case 0:
                     return ScenariosFragment.newInstance();
@@ -246,24 +266,8 @@ public class AppController extends RootActivity implements NetworkChangeReceiver
         }
 
         @Override
-        public int getCount() {
+        public int getItemCount() {
             return 4;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return getString(R.string.scenarios);
-                case 1:
-                    return getString(R.string.actuators);
-                case 2:
-                    return getString(R.string.sensors);
-                case 3:
-                    return getString(R.string.graphs);
-                default:
-                    return null;
-            }
         }
     }
 }
