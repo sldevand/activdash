@@ -2,8 +2,8 @@ package fr.geringan.activdash.helpers;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog.Builder;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.appcompat.app.AlertDialog.Builder;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 

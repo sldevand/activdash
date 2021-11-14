@@ -7,14 +7,14 @@
     android:orientation="horizontal"
     android:padding="4dp">
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageInter"
         android:layout_width="match_parent"
         android:layout_height="@dimen/actionneur_icon_minheight"
         android:layout_weight="3"
         android:src="@mipmap/ic_power_off" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textInter"
         style="@style/RecycleItemsStyle"
         android:layout_width="match_parent"

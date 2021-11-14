@@ -13,7 +13,7 @@
         android:layout_alignParentRight="true"
         android:visibility="gone"/>
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/thermostat_cardView"
         android:layout_width="@dimen/thermostat_display_width"
         android:layout_height="@dimen/thermostat_display_width"
@@ -29,12 +29,12 @@
             android:layout_height="@dimen/thermostat_display_height"
             android:orientation="vertical">
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/plus_thermostat"
                 style="@style/ThermostatControlsStyle"
                 android:text="@string/thermostat_plus" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/consigne_thermostat"
                 style="@style/ThermostatDisplayStyle"
                 android:layout_width="match_parent"
@@ -43,16 +43,16 @@
                 android:gravity="center"
                 android:text="@string/thermostat_consigne" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/minus_thermostat"
                 style="@style/ThermostatControlsStyle"
                 android:text="@string/thermostat_minus" />
         </LinearLayout>
 
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="@dimen/thermometer_display_width"
         android:layout_height="@dimen/thermometer_display_height"
         android:layout_below="@id/thermostat_cardView"
@@ -63,7 +63,7 @@
         tools:style="@style/CardView">
 
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/value_thermometer"
             style="@style/ThermometerDisplayStyle"
             android:layout_width="match_parent"
@@ -72,7 +72,7 @@
             android:gravity="center"
             android:text="@string/thermometer_value" />
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 
     <LinearLayout
@@ -84,7 +84,7 @@
         android:layout_marginBottom="@dimen/appwidget_min_height"
         android:orientation="horizontal">
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="@dimen/thermometer_display_height"
 
@@ -98,7 +98,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/imgThermostatMode"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -107,7 +107,7 @@
                     android:src="@drawable/ic_mode_eco"
                     android:tint="@color/almostBlack" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/txtThermostatMode"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -121,9 +121,9 @@
             </LinearLayout>
 
 
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="@dimen/thermometer_display_height"
             android:layout_marginLeft="@dimen/thermometer_infos_inner_margin"
@@ -138,7 +138,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
@@ -149,7 +149,7 @@
 
                     />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/txtThermostatPlan"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -163,9 +163,9 @@
 
             </LinearLayout>
 
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/cvThermostatEtat"
             android:layout_width="match_parent"
             android:layout_height="@dimen/thermometer_display_height"
@@ -182,7 +182,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/imgThermostatEtat"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -190,7 +190,7 @@
                     android:padding="@dimen/activity_vertical_padding"
                     app:srcCompat="@drawable/ic_power" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/txtThermostatEtat"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -199,7 +199,7 @@
                     android:text="@string/thermostat_state_name" />
 
             </LinearLayout>
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/imgThermostatPwr"
                     android:layout_width="@dimen/mini_icon"
                     android:layout_height="@dimen/mini_icon"
@@ -209,7 +209,7 @@
                     android:layout_alignRight="@id/llThermostatEtat" />
             </RelativeLayout>
 
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
     </LinearLayout>
 

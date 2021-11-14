@@ -7,9 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.AsyncTask;
-import android.support.v4.content.res.ResourcesCompat;
+import androidx.core.content.res.ResourcesCompat;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
