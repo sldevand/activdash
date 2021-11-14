@@ -21,9 +21,7 @@ public abstract class CommonNetworkAdapter<V extends CommonViewHolder> extends R
 
     @NonNull
     @Override
-    public V onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
-    }
+    abstract public V onCreateViewHolder(@NonNull ViewGroup parent, int viewType);
 
     @Override
     public void onBindViewHolder(@NonNull V holder, int i) {
