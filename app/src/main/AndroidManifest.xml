@@ -13,12 +13,14 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".AppController"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,7 +39,8 @@
                 android:value=".AppController" />
         </activity>
 
-        <receiver android:name=".appwidgets.ScenarioWidget">
+        <receiver android:name=".appwidgets.ScenarioWidget"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -47,13 +50,15 @@
                 android:resource="@xml/scenario_widget_info" />
         </receiver>
 
-        <activity android:name=".appwidgets.ScenarioWidgetConfigureActivity">
+        <activity android:name=".appwidgets.ScenarioWidgetConfigureActivity"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
 
-        <receiver android:name=".appwidgets.SensorWidget">
+        <receiver android:name=".appwidgets.SensorWidget"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -63,13 +68,15 @@
                 android:resource="@xml/sensor_widget_info" />
         </receiver>
 
-        <activity android:name=".appwidgets.SensorWidgetConfigureActivity">
+        <activity android:name=".appwidgets.SensorWidgetConfigureActivity"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
 
-        <receiver android:name=".appwidgets.ThermostatWidget">
+        <receiver android:name=".appwidgets.ThermostatWidget"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>

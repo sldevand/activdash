@@ -6,24 +6,29 @@ import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.tabs.TabLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.core.view.GravityCompat;
-import androidx.viewpager.widget.ViewPager;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.Toolbar;
-
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Lifecycle;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
+
 import com.github.mikephil.charting.utils.Utils;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import fr.geringan.activdash.activities.ActivServerActivity;
 import fr.geringan.activdash.activities.RootActivity;
@@ -68,28 +73,30 @@ public class AppController extends RootActivity implements NetworkChangeReceiver
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                Intent settingsIntent = new Intent(AppController.this, SettingsActivity.class);
-                startActivity(settingsIntent);
-                return true;
-            case R.id.action_about:
-                try {
-                    PackageInfo pinfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-                    final FragmentManager fm = getSupportFragmentManager();
-                    AboutDialog dialog = AboutDialog.newInstance(pinfo.versionName);
-                    dialog.show(fm, "About");
-                    return true;
-                } catch (PackageManager.NameNotFoundException e) {
-                    Tools.longSnackbar(rootView, R.string.no_version_found);
-                    return true;
-                }
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (R.id.action_settings == item.getItemId()) {
+            Intent settingsIntent = new Intent(AppController.this, SettingsActivity.class);
+            startActivity(settingsIntent);
+            return true;
         }
+
+        if (R.id.action_about == item.getItemId()) {
+            try {
+                PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+                final FragmentManager fm = getSupportFragmentManager();
+                AboutDialog dialog = AboutDialog.newInstance(packageInfo.versionName);
+                dialog.show(fm, "About");
+            } catch (PackageManager.NameNotFoundException e) {
+                Tools.longSnackbar(rootView, R.string.no_version_found);
+            }
+            return true;
+        }
+
+        if (android.R.id.home == item.getItemId()) {
+            mDrawerLayout.openDrawer(GravityCompat.START);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -119,30 +126,44 @@ public class AppController extends RootActivity implements NetworkChangeReceiver
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
             mDrawerLayout.closeDrawers();
-            Intent intent;
-            switch (menuItem.getItemId()) {
-                case R.id.nav_activ_server:
-                    intent = new Intent(AppController.this, ActivServerActivity.class);
-                    startActivity(intent);
-                    return true;
-                case R.id.nav_thermostat:
-                    intent = new Intent(AppController.this, ThermostatControllerActivity.class);
-                    startActivity(intent);
-                    return true;
-                default:
-                    return true;
+            Class<?> activityClass = R.id.nav_activ_server == menuItem.getItemId()
+                    ? ActivServerActivity.class
+                    : R.id.nav_thermostat == menuItem.getItemId()
+                    ? ThermostatControllerActivity.class
+                    : null;
+
+            if (null != activityClass) {
+                Intent intent = new Intent(AppController.this, activityClass);
+                startActivity(intent);
             }
+
+            return true;
         });
     }
 
     public void createViewPager() {
-        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        ViewPager mViewPager = findViewById(R.id.container);
+        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), getLifecycle());
         TabLayout tabLayout = findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(mViewPager);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.setOffscreenPageLimit(3);
+        ViewPager2 viewPager = findViewById(R.id.container);
+        viewPager.setAdapter(mSectionsPagerAdapter);
+        viewPager.setOffscreenPageLimit(3);
+        Map<Integer, String> tabTitlesMap = this.getTabTitlesMap();
+        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
+            String text = null != tabTitlesMap.get(position)
+                    ? tabTitlesMap.get(position)
+                    : "Tab " + position;
+            tab.setText(text);
+        }).attach();
+    }
 
+    protected Map<Integer, String> getTabTitlesMap() {
+        Map<Integer, String> map = new HashMap<>();
+        map.put(0, getString(R.string.scenarios));
+        map.put(1, getString(R.string.actuators));
+        map.put(2, getString(R.string.sensors));
+        map.put(3, getString(R.string.graphs));
+
+        return map;
     }
 
     public void createToolbar() {
@@ -222,14 +243,14 @@ public class AppController extends RootActivity implements NetworkChangeReceiver
         }
     }
 
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        private SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
+    public static class SectionsPagerAdapter extends FragmentStateAdapter {
+        private SectionsPagerAdapter(FragmentManager fragment, Lifecycle lifecycle) {
+            super(fragment, lifecycle);
         }
 
+        @NonNull
         @Override
-        public Fragment getItem(int position) {
+        public Fragment createFragment(int position) {
             switch (position) {
                 case 0:
                     return ScenariosFragment.newInstance();
@@ -240,29 +261,13 @@ public class AppController extends RootActivity implements NetworkChangeReceiver
                 case 3:
                     return GraphsFragment.newInstance(position);
                 default:
-                    return null;
+                    return new Fragment();
             }
         }
 
         @Override
-        public int getCount() {
+        public int getItemCount() {
             return 4;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return getString(R.string.scenarios);
-                case 1:
-                    return getString(R.string.actuators);
-                case 2:
-                    return getString(R.string.sensors);
-                case 3:
-                    return getString(R.string.graphs);
-                default:
-                    return null;
-            }
         }
     }
 }
