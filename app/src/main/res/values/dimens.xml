@@ -11,8 +11,8 @@
     <dimen name="appbar_padding_top">8dp</dimen>
     <dimen name="item_padding_left">8dp</dimen>
     <dimen name="tablayout_height">24dp</dimen>
-    <dimen name="appwidget_min_height">56dp</dimen>
-    <dimen name="appwidget_min_width">56dp</dimen>
+    <dimen name="appwidget_min_height">40dp</dimen>
+    <dimen name="appwidget_min_width">40dp</dimen>
     <dimen name="appwidget_padding">8dp</dimen>
 
     <dimen name="thermostat_marginTop">40dp</dimen>
