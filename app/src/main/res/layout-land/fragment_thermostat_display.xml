@@ -12,7 +12,7 @@
 
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/appwidget_min_height">
+        android:layout_marginBottom="@dimen/thermostat_marginBottom">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/thermostat_cardView"
