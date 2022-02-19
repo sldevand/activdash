@@ -122,7 +122,12 @@ public class GraphsFragment extends CommonNetworkFragment {
     }
 
     @Override
-    public void onResponseOk(String response) {
+    public void onResponseOk(String response, ProgressBar progBar, View v) {
         progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onEmptyResponse(ProgressBar progBar, View v) {
+        //intentional empty method
     }
 }

@@ -67,7 +67,7 @@ public class InterAdapter extends CommonNetworkAdapter<InterAdapter.ViewHolder> 
         }
     }
 
-    public class ViewHolder extends CommonViewHolder<InterDataModel> {
+    public static class ViewHolder extends CommonViewHolder<InterDataModel> {
 
         private TextView txtName;
         private ImageView img;

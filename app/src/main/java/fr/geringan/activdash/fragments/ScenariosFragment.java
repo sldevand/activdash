@@ -51,7 +51,7 @@ public class ScenariosFragment extends CommonNetworkFragment {
         adapter = new ScenarioAdapter();
         recyclerView.setAdapter(adapter);
         RecyclerView.ItemDecoration itemDecoration =
-                new DividerItemDecoration(Objects.requireNonNull(this.getContext()),
+                new DividerItemDecoration(this.requireContext(),
                         DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(itemDecoration);
 
@@ -78,8 +78,13 @@ public class ScenariosFragment extends CommonNetworkFragment {
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
-    public void onResponseOk(String response) {
+    public void onResponseOk(String response, ProgressBar progBar, View v) {
         initializeSocketioListeners();
+    }
+
+    @Override
+    public void onEmptyResponse(ProgressBar progBar, View v) {
+        //intentional empty method
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)

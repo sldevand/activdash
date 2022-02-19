@@ -80,8 +80,13 @@ public class SensorsFragment extends CommonNetworkFragment {
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
-    public void onResponseOk(String response) {
+    public void onResponseOk(String response, ProgressBar progBar, View v) {
         initializeSocketioListeners();
+    }
+
+    @Override
+    public void onEmptyResponse(ProgressBar progBar, View v) {
+        //intentional empty method
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)

@@ -365,7 +365,12 @@ public class ThermostatFragment extends CommonNetworkFragment {
     }
 
     @Override
-    public void onResponseOk(String response) {
+    public void onResponseOk(String response, ProgressBar progBar, View v) {
+        //intentional empty method
+    }
+
+    @Override
+    public void onEmptyResponse(ProgressBar progBar, View v) {
         //intentional empty method
     }
 }

@@ -1,43 +1,38 @@
 package fr.geringan.activdash.fragments;
 
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Objects;
-
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.adapters.DimmerAdapter;
 import fr.geringan.activdash.adapters.InterAdapter;
+import fr.geringan.activdash.helpers.PrefsManager;
 import fr.geringan.activdash.interfaces.IActionneurAdapter;
 import fr.geringan.activdash.models.DataModel;
 import fr.geringan.activdash.models.DimmerDataModel;
 import fr.geringan.activdash.models.InterDataModel;
 import fr.geringan.activdash.network.SocketIOHolder;
-import fr.geringan.activdash.helpers.PrefsManager;
-
 
 public class ActuatorsFragment extends CommonNetworkFragment {
-
     public String m_baseAddress = PrefsManager.baseAddress + "/" + PrefsManager.apiDomain + "/actionneurs/";
     public String m_interAddress = m_baseAddress + "inter";
     public String m_dimmerAddress = m_baseAddress + "dimmer";
 
     private InterAdapter interAdapter;
     private DimmerAdapter dimmerAdapter;
-    private ProgressBar progressDimmer;
-    private ProgressBar progressInter;
 
 
     public static ActuatorsFragment newInstance() {
@@ -56,66 +51,33 @@ public class ActuatorsFragment extends CommonNetworkFragment {
         super.onViewCreated(view, savedInstanceState);
 
         RecyclerView interRecyclerView = view.findViewById(R.id.listInters);
-        interRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        if (null == interAdapter) interAdapter = new InterAdapter();
-        interRecyclerView.setAdapter(interAdapter);
-        RecyclerView.ItemDecoration itemDecoration =
-                new DividerItemDecoration(Objects.requireNonNull(this.getContext()),
-                        DividerItemDecoration.VERTICAL);
-        interRecyclerView.addItemDecoration(itemDecoration);
-
-        progressInter = view.findViewById(R.id.progressInter);
-        interAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onChanged() {
-                if (interAdapter.getItemCount() > 0)
-                    progressInter.setVisibility(View.GONE);
-                else
-                    progressInter.setVisibility(View.VISIBLE);
-            }
-        });
-
-        RecyclerView dimmerRecyclerView = view.findViewById(R.id.listDimmers);
-        dimmerRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        dimmerAdapter = new DimmerAdapter();
-        dimmerRecyclerView.setAdapter(dimmerAdapter);
-        dimmerRecyclerView.addItemDecoration(itemDecoration);
-
-
-        progressDimmer = view.findViewById(R.id.progressDimmer);
-
-        dimmerAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onChanged() {
-
-                if (dimmerAdapter.getItemCount() > 0)
-                    progressDimmer.setVisibility(View.GONE);
-                else
-                    progressDimmer.setVisibility(View.VISIBLE);
-            }
-        });
-
-        execGetData(m_dimmerAddress, dimmerAdapter, progressDimmer);
+        ProgressBar progressInter = view.findViewById(R.id.progressInter);
+        if (null == interAdapter) {
+            interAdapter = (InterAdapter) populateRecyclerView(interRecyclerView, new InterAdapter());
+        }
         execGetData(m_interAddress, interAdapter, progressInter);
 
+        RecyclerView dimRecyclerView = view.findViewById(R.id.listDimmers);
+        ProgressBar progressDimmer = view.findViewById(R.id.progressDimmer);
+        if (null == dimmerAdapter) {
+            dimmerAdapter = (DimmerAdapter) populateRecyclerView(dimRecyclerView, new DimmerAdapter());
+        }
+        execGetData(m_dimmerAddress, dimmerAdapter, progressDimmer);
     }
 
     public void initializeSocketioListeners() {
         if (null == SocketIOHolder.socket) return;
 
         SocketIOHolder.socket.on(SocketIOHolder.EVENT_INTER, args -> {
-            final InterDataModel dataModel = new InterDataModel();
-            adapterHydrate(dataModel,interAdapter,args);
+            adapterHydrate(new InterDataModel(), interAdapter, args);
         });
 
         SocketIOHolder.socket.on(SocketIOHolder.EVENT_DIMMER, args -> {
-            final DimmerDataModel dataModel = new DimmerDataModel();
-            adapterHydrate(dataModel,dimmerAdapter,args);
+            adapterHydrate(new DimmerDataModel(), dimmerAdapter, args);
         });
-
     }
 
-    private void adapterHydrate(final DataModel dataModel, IActionneurAdapter adapter , Object args){
+    private void adapterHydrate(final DataModel dataModel, IActionneurAdapter adapter, Object args) {
         if (null == getActivity()) return;
 
         JSONObject jsonObject;
@@ -138,11 +100,31 @@ public class ActuatorsFragment extends CommonNetworkFragment {
         }
     }
 
+    protected RecyclerView.Adapter<?> populateRecyclerView(
+            RecyclerView recyclerView,
+            RecyclerView.Adapter<?> adapter
+    ) {
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(
+                this.requireContext(),
+                DividerItemDecoration.VERTICAL
+        );
+        recyclerView.addItemDecoration(itemDecoration);
+        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+        });
+        recyclerView.setAdapter(adapter);
 
-
+        return adapter;
+    }
 
     @Override
-    public void onResponseOk(String response) {
+    public void onResponseOk(String response, ProgressBar progBar, View v) {
+        progBar.setVisibility(View.GONE);
         initializeSocketioListeners();
+    }
+
+    @Override
+    public void onEmptyResponse(ProgressBar progBar, View v) {
+        progBar.setVisibility(View.GONE);
     }
 }
