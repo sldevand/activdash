@@ -1,11 +1,13 @@
 package fr.geringan.activdash.fragments;
 
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,8 @@ import com.github.clans.fab.FloatingActionButton;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Objects;
 
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.adapters.GraphsAdapter;
@@ -55,7 +59,10 @@ public class GraphsFragment extends CommonNetworkFragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new GraphsAdapter();
         recyclerView.setAdapter(adapter);
-        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this.getContext(), DividerItemDecoration.VERTICAL);
+        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(
+                this.requireContext(),
+                DividerItemDecoration.VERTICAL
+        );
 
         recyclerView.addItemDecoration(itemDecoration);
         progressBar = view.findViewById(R.id.progressGraph);
@@ -112,11 +119,6 @@ public class GraphsFragment extends CommonNetworkFragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
     public void initializeSocketioListeners() {
         //intentional empty method
     }
@@ -128,6 +130,6 @@ public class GraphsFragment extends CommonNetworkFragment {
 
     @Override
     public void onEmptyResponse(ProgressBar progBar, View v) {
-        //intentional empty method
+        progressBar.setVisibility(View.GONE);
     }
 }

@@ -34,7 +34,6 @@ public class ActivServerActivity extends RootActivity {
     public String m_switchAddress = m_baseAddress + "/node/toggle/";
     public String m_logAddress = m_baseAddress + "/node/log";
     private SwitchCompat activServerSwitch;
-    private AppCompatImageView serialPortReset;
     private TextView tvLog;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -48,7 +47,7 @@ public class ActivServerActivity extends RootActivity {
             if (buttonView.isPressed()) activServerSwitch(isChecked);
         });
 
-        serialPortReset = findViewById(R.id.seriaport_reset);
+        AppCompatImageView serialPortReset = findViewById(R.id.seriaport_reset);
         serialPortReset.setOnClickListener(view -> {
             serialPortReset();
         });
@@ -61,8 +60,11 @@ public class ActivServerActivity extends RootActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        menu.findItem(R.id.node_status)
-                .setIcon((SocketIOHolder.socket.connected()) ? R.mipmap.ic_node_on : R.mipmap.ic_node_off);
+        int nodeIconResource = SocketIOHolder.socket.connected()
+                ? R.mipmap.ic_node_on
+                : R.mipmap.ic_node_off;
+
+        menu.findItem(R.id.node_status).setIcon(nodeIconResource);
 
         return super.onPrepareOptionsMenu(menu);
     }

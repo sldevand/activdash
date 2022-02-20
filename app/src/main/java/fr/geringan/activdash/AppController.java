@@ -36,7 +36,6 @@ import fr.geringan.activdash.activities.SettingsActivity;
 import fr.geringan.activdash.activities.ThermostatControllerActivity;
 import fr.geringan.activdash.dialogs.AboutDialog;
 import fr.geringan.activdash.fragments.ActuatorsFragment;
-import fr.geringan.activdash.fragments.GraphsFragment;
 import fr.geringan.activdash.fragments.ScenariosFragment;
 import fr.geringan.activdash.fragments.SensorsFragment;
 import fr.geringan.activdash.helpers.PrefsManager;
@@ -142,7 +141,10 @@ public class AppController extends RootActivity implements NetworkChangeReceiver
     }
 
     public void createViewPager() {
-        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), getLifecycle());
+        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(
+                getSupportFragmentManager(),
+                getLifecycle()
+        );
         TabLayout tabLayout = findViewById(R.id.tabs);
         ViewPager2 viewPager = findViewById(R.id.container);
         viewPager.setAdapter(mSectionsPagerAdapter);
@@ -161,7 +163,6 @@ public class AppController extends RootActivity implements NetworkChangeReceiver
         map.put(0, getString(R.string.scenarios));
         map.put(1, getString(R.string.actuators));
         map.put(2, getString(R.string.sensors));
-        map.put(3, getString(R.string.graphs));
 
         return map;
     }
@@ -258,8 +259,6 @@ public class AppController extends RootActivity implements NetworkChangeReceiver
                     return ActuatorsFragment.newInstance();
                 case 2:
                     return SensorsFragment.newInstance();
-                case 3:
-                    return GraphsFragment.newInstance(position);
                 default:
                     return new Fragment();
             }
@@ -267,7 +266,7 @@ public class AppController extends RootActivity implements NetworkChangeReceiver
 
         @Override
         public int getItemCount() {
-            return 4;
+            return 3;
         }
     }
 }
