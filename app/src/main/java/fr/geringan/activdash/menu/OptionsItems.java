@@ -28,6 +28,7 @@ public class OptionsItems {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) throws PackageManager.NameNotFoundException {
         if (R.id.action_settings == item.getItemId()) {
             Intent settingsIntent = new Intent(context, SettingsActivity.class);
+            settingsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(settingsIntent);
             return true;
         }
