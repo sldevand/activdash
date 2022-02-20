@@ -2,6 +2,11 @@ package fr.geringan.activdash.fragments;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ProgressBar;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -9,10 +14,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,10 +58,11 @@ public class SensorsFragment extends CommonNetworkFragment {
         adapter = new SensorAdapter();
         recyclerView.setAdapter(adapter);
         RecyclerView.ItemDecoration itemDecoration =
-                new DividerItemDecoration(Objects.requireNonNull(this.getContext()),
+                new DividerItemDecoration(this.requireContext(),
                         DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(itemDecoration);
-        ((SimpleItemAnimator) recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+        ((SimpleItemAnimator) Objects.requireNonNull(recyclerView.getItemAnimator()))
+                .setSupportsChangeAnimations(false);
     }
 
     private ProgressBar initProgressBar(View view) {
@@ -129,7 +131,7 @@ public class SensorsFragment extends CommonNetworkFragment {
             if (id.equals(idToChange)) {
                 sensor.setDataJSON(socketioSensor.getDataJSON());
                 final int finalIter = iter;
-                Objects.requireNonNull(getActivity()).runOnUiThread(() ->
+                requireActivity().runOnUiThread(() ->
                         adapter.notifyItemChanged(finalIter)
                 );
             }

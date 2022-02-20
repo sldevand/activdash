@@ -104,6 +104,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".AppController" />
         </activity>
+        <activity
+            android:name=".activities.GraphsActivity"
+            android:label="@string/title_graphs_activity"
+            android:parentActivityName=".AppController"
+            tools:targetApi="jelly_bean">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".AppController" />
+        </activity>
 
     </application>
 

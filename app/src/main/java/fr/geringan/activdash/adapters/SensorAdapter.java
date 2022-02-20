@@ -3,6 +3,8 @@ package fr.geringan.activdash.adapters;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.geringan.activdash.R;
+import fr.geringan.activdash.activities.GraphsActivity;
 import fr.geringan.activdash.models.SensorDataModel;
 import fr.geringan.activdash.helpers.Tools;
 import fr.geringan.activdash.viewholders.CommonViewHolder;
@@ -80,8 +83,11 @@ public class SensorAdapter extends CommonNetworkAdapter<SensorAdapter.ViewHolder
             txtDate = itemView.findViewById(R.id.textLastmeasureCapteur);
             img = itemView.findViewById(R.id.imageCapteur);
 
-            itemView.setOnClickListener(v ->
-                    Tools.shortSnackbar(v, _currentCapteur.getNom()));
+            itemView.setOnClickListener(v -> {
+                //Tools.shortSnackbar(v, _currentCapteur.getNom());
+                Intent intent = new Intent(context, GraphsActivity.class);
+                context.startActivity(intent);
+            });
         }
 
         @Override
