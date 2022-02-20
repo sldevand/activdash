@@ -1,5 +1,6 @@
 package fr.geringan.activdash.activities;
 
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import androidx.appcompat.widget.SwitchCompat;
 import android.text.Spannable;
 import android.text.TextUtils;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -21,6 +23,8 @@ import java.util.Locale;
 
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.helpers.PrefsManager;
+import fr.geringan.activdash.helpers.Tools;
+import fr.geringan.activdash.menu.OptionsItems;
 import fr.geringan.activdash.network.GetHttp;
 import fr.geringan.activdash.network.SocketIOHolder;
 
@@ -71,9 +75,27 @@ public class ActivServerActivity extends RootActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        OptionsItems optionsItems= new OptionsItems(
+                getSupportFragmentManager(),
+                getApplicationContext()
+        );
+        try {
+            if (optionsItems.onOptionsItemSelected(item)) {
+                return true;
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            Tools.longSnackbar(rootView, R.string.no_version_found);
+        } catch (Exception exception) {
+            Tools.longSnackbar(rootView, exception.getMessage());
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void logTextViewRefresh() {

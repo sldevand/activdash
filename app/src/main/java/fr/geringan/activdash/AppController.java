@@ -40,6 +40,7 @@ import fr.geringan.activdash.fragments.ScenariosFragment;
 import fr.geringan.activdash.fragments.SensorsFragment;
 import fr.geringan.activdash.helpers.PrefsManager;
 import fr.geringan.activdash.helpers.Tools;
+import fr.geringan.activdash.menu.OptionsItems;
 import fr.geringan.activdash.network.NetworkChangeReceiver;
 import fr.geringan.activdash.network.NetworkUtil;
 import fr.geringan.activdash.network.SocketIOHolder;
@@ -72,22 +73,19 @@ public class AppController extends RootActivity implements NetworkChangeReceiver
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (R.id.action_settings == item.getItemId()) {
-            Intent settingsIntent = new Intent(AppController.this, SettingsActivity.class);
-            startActivity(settingsIntent);
-            return true;
-        }
+        OptionsItems optionsItems= new OptionsItems(
+                getSupportFragmentManager(),
+                AppController.this
+        );
 
-        if (R.id.action_about == item.getItemId()) {
-            try {
-                PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-                final FragmentManager fm = getSupportFragmentManager();
-                AboutDialog dialog = AboutDialog.newInstance(packageInfo.versionName);
-                dialog.show(fm, "About");
-            } catch (PackageManager.NameNotFoundException e) {
-                Tools.longSnackbar(rootView, R.string.no_version_found);
+        try {
+            if (optionsItems.onOptionsItemSelected(item)) {
+                return true;
             }
-            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            Tools.longSnackbar(rootView, R.string.no_version_found);
+        } catch (Exception exception) {
+            Tools.longSnackbar(rootView, exception.getMessage());
         }
 
         if (android.R.id.home == item.getItemId()) {

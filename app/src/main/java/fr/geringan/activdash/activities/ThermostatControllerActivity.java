@@ -1,5 +1,6 @@
 package fr.geringan.activdash.activities;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
@@ -23,8 +25,11 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import java.util.HashMap;
 import java.util.Map;
 
+import fr.geringan.activdash.AppController;
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.fragments.ThermostatFragment;
+import fr.geringan.activdash.helpers.Tools;
+import fr.geringan.activdash.menu.OptionsItems;
 
 public class ThermostatControllerActivity extends RootActivity {
     @Override
@@ -80,8 +85,21 @@ public class ThermostatControllerActivity extends RootActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        return id == R.id.action_settings || super.onOptionsItemSelected(item);
+        OptionsItems optionsItems= new OptionsItems(
+                getSupportFragmentManager(),
+                getApplicationContext()
+        );
+        try {
+            if (optionsItems.onOptionsItemSelected(item)) {
+                return true;
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            Tools.longSnackbar(rootView, R.string.no_version_found);
+        } catch (Exception exception) {
+            Tools.longSnackbar(rootView, exception.getMessage());
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public static class PlaceholderFragment extends Fragment {
