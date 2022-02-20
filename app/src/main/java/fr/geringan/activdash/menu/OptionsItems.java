@@ -7,8 +7,6 @@ import android.content.pm.PackageManager;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 
 import fr.geringan.activdash.R;
