@@ -31,7 +31,7 @@ public class SensorWidgetConfigureActivity extends Activity {
     protected String selectedUrl;
     private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private Spinner spinner;
-    private View.OnClickListener mOnClickListener = new View.OnClickListener() {
+    private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         public void onClick(View v) {
             final Context context = SensorWidgetConfigureActivity.this;
             ArrayList<String> prefs = new ArrayList<>();
@@ -117,7 +117,7 @@ public class SensorWidgetConfigureActivity extends Activity {
     }
 
     public void setSpinnerAdapter(List<SensorDataModel> spinnerArray) {
-        ArrayAdapter<SensorDataModel> adapter = new ArrayAdapter<SensorDataModel>(
+        ArrayAdapter<SensorDataModel> adapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_spinner_item, spinnerArray);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);

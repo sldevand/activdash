@@ -141,3 +141,4 @@ app/debug/output.json
 debug/output.json
 
 release/output.json
+/gradle/

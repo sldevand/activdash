@@ -9,14 +9,13 @@ public class InterDataModel extends DataModel {
 
     public String nom;
     public int etat;
-    protected String id;
+    protected Integer id;
     protected String module;
     protected String protocole;
     protected String adresse;
     protected String type;
-    protected String radioid;
+    protected Integer radioid;
     protected String categorie;
-
 
     public InterDataModel() {
         super();
@@ -34,5 +33,4 @@ public class InterDataModel extends DataModel {
     public void setEtat(int etat) {
         this.etat = etat;
     }
-
 }

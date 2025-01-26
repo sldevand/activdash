@@ -6,7 +6,7 @@ public class BoilerState {
     static final String BOILER_UNDEFINED = "?";
     static final int BOILER_STATE_ON = 1;
     static final int BOILER_STATE_OFF = 0;
-    private String etat;
+    private final String etat;
     private int color;
 
     BoilerState(String etat, int color) {

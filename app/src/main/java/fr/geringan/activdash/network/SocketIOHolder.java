@@ -6,6 +6,7 @@ import android.util.Log;
 import org.json.JSONException;
 
 import java.net.URISyntaxException;
+import java.util.Arrays;
 
 import fr.geringan.activdash.interfaces.SocketIOEventsListener;
 import fr.geringan.activdash.models.DataModel;
@@ -16,7 +17,6 @@ import static fr.geringan.activdash.helpers.PrefsManager.baseAddress;
 import static fr.geringan.activdash.helpers.PrefsManager.nodePort;
 
 public final class SocketIOHolder {
-
     public static final String EVENT_INTER = "inter";
     public static final String EVENT_DIMMER = "dimmer";
     public static final String EVENT_THERMOMETER = "thermo";
@@ -44,6 +44,7 @@ public final class SocketIOHolder {
     public static final String EMIT_THT_GET_CLOCK = "refreshTher";
     public static final String EMIT_THT_SET_PWR = "setTherPwr";
     public static final String EMIT_SERIAL_PORT_RESET = "serialportReset";
+    private static final String TAG = "SocketIOHolder";
     public static Socket socket;
     private static SocketEmitTask _task;
     private static SocketIOEventsListener mEventsListener;
@@ -59,7 +60,7 @@ public final class SocketIOHolder {
             start();
 
         } catch (URISyntaxException e) {
-            e.printStackTrace();
+            Log.e(TAG, Arrays.toString(e.getStackTrace()));
         }
     }
 
@@ -104,7 +105,7 @@ public final class SocketIOHolder {
                 _task = new SocketEmitTask(event);
                 _task.execute(dm.getDataJSON());
             } catch (JSONException | IllegalAccessException | IllegalStateException e) {
-                e.printStackTrace();
+                Log.e(TAG, Arrays.toString(e.getStackTrace()));
             }
         }
     }

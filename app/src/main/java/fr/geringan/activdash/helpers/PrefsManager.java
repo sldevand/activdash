@@ -3,7 +3,7 @@ package fr.geringan.activdash.helpers;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 
 import fr.geringan.activdash.R;
 
@@ -32,7 +32,7 @@ public class PrefsManager {
 
     public static boolean areTherePrefs() {
         return !("null".equals(baseAddress) || "null".equals(apiDomain)
-                || "null".equals(nodePort)  || "null".equals(entryPointAddress)
+                || "null".equals(nodePort) || "null".equals(entryPointAddress)
         );
     }
 }

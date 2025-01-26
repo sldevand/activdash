@@ -1,12 +1,12 @@
 package fr.geringan.activdash.adapters;
 
 import android.annotation.SuppressLint;
-import androidx.annotation.NonNull;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.appcompat.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -14,6 +14,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,6 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.models.GraphsDataModel;
@@ -31,15 +33,11 @@ import fr.geringan.activdash.network.CommonGetHttp;
 import fr.geringan.activdash.viewholders.CommonViewHolder;
 
 public class GraphsAdapter extends CommonNetworkAdapter<GraphsAdapter.ViewHolder> {
-    private ArrayList<GraphsDataModel> dataSet = new ArrayList<>();
+    private final ArrayList<GraphsDataModel> dataSet = new ArrayList<>();
 
     @Override
     public int getItemCount() {
-        if (dataSet != null) {
-            return dataSet.size();
-        }
-
-        return 0;
+        return dataSet.size();
     }
 
     public void clearDataSet() {
@@ -69,15 +67,17 @@ public class GraphsAdapter extends CommonNetworkAdapter<GraphsAdapter.ViewHolder
         JSONObject graph = new JSONObject(response);
         GraphsDataModel dm = new GraphsDataModel(graph);
 
-        if (!dm.getId().isEmpty()) {
+        if (dm.getId() > 0) {
             dataSet.add(dm);
         }
     }
 
-    public class ViewHolder extends CommonViewHolder<GraphsDataModel> implements OnChartValueSelectedListener {
-        private AppCompatTextView title;
-        private AppCompatTextView radioId;
-        private LineChart chart;
+    public static class ViewHolder extends CommonViewHolder<GraphsDataModel> implements OnChartValueSelectedListener {
+        public static final String HORODATAGE = "horodatage";
+        public static final String TEMPERATURE = "temperature";
+        private final AppCompatTextView title;
+        private final AppCompatTextView radioId;
+        private final LineChart chart;
 
         private ViewHolder(View itemView) {
             super(itemView);
@@ -102,7 +102,7 @@ public class GraphsAdapter extends CommonNetworkAdapter<GraphsAdapter.ViewHolder
                 lineDataSet = fromJSONArrayToLineDataSet(graphDM.getData());
                 lineDataSet.setDrawCircles(false);
                 lineDataSet.setLineWidth(4);
-                lineDataSet.setColor(itemView.getResources().getColor(R.color.colorAccent));
+                lineDataSet.setColor(itemView.getResources().getColor(R.color.colorAccent, null));
                 lineDataSet.setDrawValues(false);
 
                 lineData = new LineData(lineDataSet);
@@ -114,15 +114,13 @@ public class GraphsAdapter extends CommonNetworkAdapter<GraphsAdapter.ViewHolder
                 chart.invalidate();
 
             } catch (Exception e) {
-                Snackbar.make(itemView, e.getMessage(), Snackbar.LENGTH_SHORT);
+                Snackbar.make(itemView, Objects.requireNonNull(e.getMessage()), Snackbar.LENGTH_SHORT).show();
             }
         }
 
         private void chartSetLimits(LineDataSet lineDataSet) {
-            //Limits
             float minTemp = 10.0f;
             float maxTemp = 30.0f;
-            chart.getAxisLeft().getAxisMinimum();
             float yMin = lineDataSet.getYMin();
             float yMax = lineDataSet.getYMax();
             if (yMin < minTemp) {
@@ -141,17 +139,17 @@ public class GraphsAdapter extends CommonNetworkAdapter<GraphsAdapter.ViewHolder
             @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
             JSONObject premierObj = datas.getJSONObject(0);
-            String depart = premierObj.getString("horodatage");
+            String depart = premierObj.getString(HORODATAGE);
 
             long timeDepart = formatDateFromStringToLong(depart, dateFormat);
 
             for (int i = 0; i < datas.length(); i++) {
                 JSONObject obj = datas.getJSONObject(i);
 
-                String heure = obj.getString("horodatage");
+                String heure = obj.getString(HORODATAGE);
                 float time = (formatDateFromStringToLong(heure, dateFormat) - timeDepart) / 3600000f;
 
-                entries.add(new Entry(time, Float.parseFloat(obj.getString("temperature"))));
+                entries.add(new Entry(time, Float.parseFloat(obj.getString(TEMPERATURE))));
             }
 
             return new LineDataSet(entries, "Températures");
@@ -159,7 +157,7 @@ public class GraphsAdapter extends CommonNetworkAdapter<GraphsAdapter.ViewHolder
 
         private long formatDateFromStringToLong(String date, SimpleDateFormat dateFormat) throws ParseException {
             Date dateDepart = dateFormat.parse(date);
-            return dateDepart.getTime();
+            return Objects.requireNonNull(dateDepart).getTime();
         }
 
         @Override

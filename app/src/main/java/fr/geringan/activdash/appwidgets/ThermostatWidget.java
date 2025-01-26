@@ -1,5 +1,7 @@
 package fr.geringan.activdash.appwidgets;
 
+import static android.app.PendingIntent.FLAG_MUTABLE;
+
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -7,11 +9,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.AsyncTask;
-import androidx.core.content.res.ResourcesCompat;
 import android.widget.RemoteViews;
+
+import androidx.core.content.res.ResourcesCompat;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.text.DecimalFormat;
 
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.activities.ThermostatControllerActivity;
@@ -42,7 +47,7 @@ public class ThermostatWidget extends AppWidgetProvider {
         String thermostatUrl = PrefsManager.baseAddress + "/" + PrefsManager.entryPointAddress + "/" + THERMOSTAT_GET_ENDPOINT;
         callThermostatApi(appWidgetManager, appWidgetId, thermostatUrl, context);
         String thermostatSensorUrl = PrefsManager.baseAddress + "/" + PrefsManager.entryPointAddress + "/" + THERMOSTAT_SENSOR_GET_ENDPOINT;
-        callThermostatSensorApi(appWidgetManager, appWidgetId, thermostatSensorUrl, context);
+        callThermostatSensorApi(appWidgetManager, appWidgetId, thermostatSensorUrl);
 
         //Refresh the widget informations
         Intent intentUpdate = new Intent(context, ThermostatWidget.class);
@@ -54,7 +59,7 @@ public class ThermostatWidget extends AppWidgetProvider {
 
         //launch thermostat activity
         Intent thermostatIntent = new Intent(context, ThermostatControllerActivity.class);
-        PendingIntent thermostatPendingIntent = PendingIntent.getActivity(context, 0, thermostatIntent, 0);
+        PendingIntent thermostatPendingIntent = PendingIntent.getActivity(context, 0, thermostatIntent, FLAG_MUTABLE);
         remoteViews.setOnClickPendingIntent(R.id.thermostat_widget_title_layout, thermostatPendingIntent);
 
         appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
@@ -99,7 +104,11 @@ public class ThermostatWidget extends AppWidgetProvider {
         getData.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, thermostatUrl);
     }
 
-    public static void callThermostatSensorApi(AppWidgetManager appWidgetManager, int appWidgetId, String thermostatSensorUrl, Context context) {
+    public static void callThermostatSensorApi(
+        AppWidgetManager appWidgetManager,
+        int appWidgetId,
+        String thermostatSensorUrl
+    ) {
         GetHttp getData = new GetHttp();
         getData.setOnResponseListener(response -> {
             try {
@@ -107,9 +116,10 @@ public class ThermostatWidget extends AppWidgetProvider {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject obj = jsonArray.getJSONObject(i);
                     SensorDataModel sensor = new SensorDataModel(obj);
-                    String temperature = sensor.getValeur1();
+                    Double temperature = sensor.getValeur1();
                     if (null != remoteViews) {
-                        remoteViews.setTextViewText(R.id.thermostat_widget_sensor_text, temperature);
+                        DecimalFormat df = new DecimalFormat("0.#");
+                        remoteViews.setTextViewText(R.id.thermostat_widget_sensor_text, df.format(temperature));
                         appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
                     }
                 }

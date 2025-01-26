@@ -8,10 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
@@ -25,7 +23,6 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import java.util.HashMap;
 import java.util.Map;
 
-import fr.geringan.activdash.AppController;
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.fragments.ThermostatFragment;
 import fr.geringan.activdash.helpers.Tools;
@@ -84,8 +81,8 @@ public class ThermostatControllerActivity extends RootActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        OptionsItems optionsItems= new OptionsItems(
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        OptionsItems optionsItems = new OptionsItems(
                 getSupportFragmentManager(),
                 getApplicationContext()
         );
@@ -122,14 +119,6 @@ public class ThermostatControllerActivity extends RootActivity {
                 return ThermostatFragment.newInstance();
             }
             return new Fragment();
-        }
-
-        @Nullable
-        public CharSequence getPageTitle(int position) {
-            if (position == 0) {
-                return "Thermostat";
-            }
-            return null;
         }
 
         @Override

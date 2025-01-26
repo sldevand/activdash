@@ -11,7 +11,6 @@ import fr.geringan.activdash.R;
 
 public class NetworkChangeReceiver extends BroadcastReceiver {
 
-
     private OnNetworkChangedListener onNetworkChangedListener;
 
     public void setOnNetworkChangedListener(OnNetworkChangedListener onNetworkChangedListener) {

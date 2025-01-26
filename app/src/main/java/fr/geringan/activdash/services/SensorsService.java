@@ -1,12 +1,14 @@
 package fr.geringan.activdash.services;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import fr.geringan.activdash.helpers.PrefsManager;
@@ -15,14 +17,15 @@ import fr.geringan.activdash.network.GetHttp;
 
 public class SensorsService extends AbstractService<SensorDataModel>{
     private static final String SENSORS_GET_PREFILL = "mesures/get-sensors";
+    private static final String TAG = "SensorsService";
 
     public void get() {
         try {
             GetHttp getData = new GetHttp();
             getData.setOnResponseListener(this::onResponse);
             getData.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, buildUrl());
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        } catch (Exception e) {
+            Log.e(TAG, Arrays.toString(e.getStackTrace()));
         }
     }
 
@@ -33,10 +36,8 @@ public class SensorsService extends AbstractService<SensorDataModel>{
             if (null != onGetListResponseListener) {
                 onGetListResponseListener.onSuccess(sensorDataList);
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        } catch (JSONException | IllegalAccessException e) {
+            Log.e(TAG, Arrays.toString(e.getStackTrace()));
         }
     }
 

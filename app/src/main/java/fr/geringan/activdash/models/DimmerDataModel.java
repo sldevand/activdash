@@ -1,10 +1,14 @@
 package fr.geringan.activdash.models;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class DimmerDataModel extends DataModel {
+import java.util.Arrays;
 
+public class DimmerDataModel extends DataModel {
+    private static final String TAG = "DimmerDataModel";
     private int etat;
     public String nom;
 
@@ -32,7 +36,7 @@ public class DimmerDataModel extends DataModel {
             this.etat = etat;
             dataJSON.put("etat", etat);
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e(TAG, Arrays.toString(e.getStackTrace()));
         }
     }
 

@@ -3,7 +3,6 @@ package fr.geringan.activdash;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -34,7 +33,6 @@ import fr.geringan.activdash.activities.ActivServerActivity;
 import fr.geringan.activdash.activities.RootActivity;
 import fr.geringan.activdash.activities.SettingsActivity;
 import fr.geringan.activdash.activities.ThermostatControllerActivity;
-import fr.geringan.activdash.dialogs.AboutDialog;
 import fr.geringan.activdash.fragments.ActuatorsFragment;
 import fr.geringan.activdash.fragments.ScenariosFragment;
 import fr.geringan.activdash.fragments.SensorsFragment;
@@ -72,8 +70,8 @@ public class AppController extends RootActivity implements NetworkChangeReceiver
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        OptionsItems optionsItems= new OptionsItems(
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        OptionsItems optionsItems = new OptionsItems(
                 getSupportFragmentManager(),
                 AppController.this
         );

@@ -9,10 +9,6 @@ public class ModeDataModel extends DataModel {
     private double consigne;
     private double delta;
 
-    public ModeDataModel() {
-        super();
-    }
-
     ModeDataModel(JSONObject data) throws JSONException, IllegalAccessException {
         super(data);
     }

@@ -2,10 +2,11 @@ package fr.geringan.activdash.dialogs;
 
 import android.app.Dialog;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
 
 import fr.geringan.activdash.R;
 
@@ -28,7 +29,7 @@ public class AboutDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
-        AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(requireActivity());
         builderSingle.setIcon(R.mipmap.ic_launcher);
         builderSingle.setTitle(getString(R.string.app_name));
         builderSingle.setNegativeButton("OK", (dialog, which) -> dialog.dismiss());
