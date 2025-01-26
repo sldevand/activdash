@@ -1,11 +1,13 @@
 package fr.geringan.activdash.network;
 
 import android.os.AsyncTask;
+import android.util.Log;
+
+import java.util.Arrays;
 
 public class SocketEmitTask extends AsyncTask<Object, Void, String> {
-
-
-    private String _event;
+    private static final String TAG = "SocketEmitTask";
+    private final String _event;
 
     SocketEmitTask(String event) {
         _event = event;
@@ -19,7 +21,7 @@ public class SocketEmitTask extends AsyncTask<Object, Void, String> {
             SocketIOHolder.socket.emit(_event, args[0]);
             result = "OK";
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Log.e(TAG, Arrays.toString(e.getStackTrace()));
         }
         return result;
     }
@@ -27,10 +29,5 @@ public class SocketEmitTask extends AsyncTask<Object, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         //intentional empty method
-    }
-
-    @Override
-    protected void onCancelled() {
-        super.onCancelled();
     }
 }

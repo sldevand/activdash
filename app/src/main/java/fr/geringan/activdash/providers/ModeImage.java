@@ -6,7 +6,7 @@ public class ModeImage {
     static final String MODE_COMFORT = "Confort";
     static final String MODE_NO_FREEZE = "Hors gel";
 
-    private int img;
+    private final int img;
     private int color;
 
     ModeImage(int img, int color) {

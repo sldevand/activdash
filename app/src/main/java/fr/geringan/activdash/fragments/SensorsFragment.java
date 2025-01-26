@@ -1,7 +1,7 @@
 package fr.geringan.activdash.fragments;
 
-import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +9,6 @@ import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,7 +30,7 @@ import fr.geringan.activdash.models.SensorDataModel;
 import fr.geringan.activdash.network.SocketIOHolder;
 
 public class SensorsFragment extends CommonNetworkFragment {
-
+    private static final String TAG = "SensorsFragment";
     public String m_address = PrefsManager.baseAddress + "/" + PrefsManager.apiDomain + "/mesures/get-sensors";
     private SensorAdapter adapter;
 
@@ -80,7 +80,6 @@ public class SensorsFragment extends CommonNetworkFragment {
         return progress;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onResponseOk(String response, ProgressBar progBar, View v) {
         initializeSocketioListeners();
@@ -91,7 +90,6 @@ public class SensorsFragment extends CommonNetworkFragment {
         //intentional empty method
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void initializeSocketioListeners() {
         if (SocketIOHolder.socket == null) return;
@@ -101,7 +99,6 @@ public class SensorsFragment extends CommonNetworkFragment {
                 .on("chaudiere", this::sensorsDataUpdate);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void sensorsDataUpdate(Object... args) {
         JSONObject jsonObject;
         try {
@@ -110,7 +107,7 @@ public class SensorsFragment extends CommonNetworkFragment {
             dataModel.setDataJSON(jsonObject);
             onSocketioUpdate(dataModel);
         } catch (JSONException | IllegalAccessException | DataModelException e) {
-            e.printStackTrace();
+            Log.e(TAG, Arrays.toString(e.getStackTrace()));
         }
     }
 

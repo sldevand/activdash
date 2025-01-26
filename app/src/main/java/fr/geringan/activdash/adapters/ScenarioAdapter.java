@@ -22,7 +22,7 @@ import fr.geringan.activdash.providers.IconProvider;
 import fr.geringan.activdash.viewholders.CommonViewHolder;
 
 public class ScenarioAdapter extends CommonNetworkAdapter<ScenarioAdapter.ViewHolder> {
-    private List<ScenarioDataModel> dataSet = new ArrayList<>();
+    private final List<ScenarioDataModel> dataSet = new ArrayList<>();
 
     @Override
     public int getItemCount() {
@@ -60,11 +60,11 @@ public class ScenarioAdapter extends CommonNetworkAdapter<ScenarioAdapter.ViewHo
         return dataSet;
     }
 
-    public class ViewHolder extends CommonViewHolder<ScenarioDataModel> {
-        private TextView txtName;
-        private ImageView img;
-        private TextView txtRemainingTime;
-        private ImageView imgStop;
+    public static class ViewHolder extends CommonViewHolder<ScenarioDataModel> {
+        private final TextView txtName;
+        private final ImageView img;
+        private final TextView txtRemainingTime;
+        private final ImageView imgStop;
         private ScenarioDataModel currentDataModel;
 
         ViewHolder(final View itemView) {
@@ -92,9 +92,11 @@ public class ScenarioAdapter extends CommonNetworkAdapter<ScenarioAdapter.ViewHo
             if (scenario.getStatus().equals("play")) {
                 if (null != scenario.getRemainingTime()) {
                     int seconds = scenario.getRemainingTime() / 1000;
-                    Integer minutes = seconds / 60;
+                    int minutes = seconds / 60;
                     Integer hours = minutes / 60;
-                    txtRemainingTime.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds % 60));
+                    txtRemainingTime.setText(
+                            String.format("%02d:%02d:%02d", hours, minutes, seconds % 60)
+                    );
                 }
                 txtRemainingTime.setVisibility(View.VISIBLE);
                 imgStop.setVisibility(View.VISIBLE);

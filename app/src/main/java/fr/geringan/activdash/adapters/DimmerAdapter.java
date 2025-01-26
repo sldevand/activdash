@@ -1,11 +1,12 @@
 package fr.geringan.activdash.adapters;
 
-import androidx.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,7 +24,7 @@ import fr.geringan.activdash.viewholders.CommonViewHolder;
 
 
 public class DimmerAdapter extends CommonNetworkAdapter<DimmerAdapter.ViewHolder> implements IActionneurAdapter {
-    private List<DimmerDataModel> dataSet = new ArrayList<>();
+    private final List<DimmerDataModel> dataSet = new ArrayList<>();
 
     @Override
     public int getItemCount() {
@@ -62,7 +63,7 @@ public class DimmerAdapter extends CommonNetworkAdapter<DimmerAdapter.ViewHolder
         String id = obj.getString("id");
         for (DimmerDataModel dm : dataSet) {
             if (dm.getDataJSON().getString("id").equalsIgnoreCase(id)) {
-                dataSet.get(iter).setEtat( obj.getInt("etat"));
+                dataSet.get(iter).setEtat(obj.getInt("etat"));
                 notifyItemChanged(iter);
                 return;
             }
@@ -77,8 +78,8 @@ public class DimmerAdapter extends CommonNetworkAdapter<DimmerAdapter.ViewHolder
 
     public class ViewHolder extends CommonViewHolder<DimmerDataModel> {
 
-        private TextView txtName;
-        private SeekBar dimmer;
+        private final TextView txtName;
+        private final SeekBar dimmer;
 
         ViewHolder(View itemView) {
             super(itemView);

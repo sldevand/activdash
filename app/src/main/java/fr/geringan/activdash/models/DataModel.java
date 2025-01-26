@@ -1,9 +1,12 @@
 package fr.geringan.activdash.models;
 
+import androidx.annotation.NonNull;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Field;
+import java.util.Objects;
 
 import fr.geringan.activdash.interfaces.DataModelInterface;
 
@@ -20,7 +23,7 @@ public abstract class DataModel implements DataModelInterface {
     }
 
     protected void hydrateFromJSON() throws JSONException, IllegalAccessException {
-        Class c = this.getClass();
+        Class<? extends DataModel> c = this.getClass();
         Field[] fields = c.getDeclaredFields();
         for (Field field : fields) {
             field.setAccessible(true);
@@ -56,6 +59,7 @@ public abstract class DataModel implements DataModelInterface {
         hydrateFromJSON();
     }
 
+    @NonNull
     @Override
     public String toString() {
         StringBuilder descriptif = new StringBuilder();
@@ -65,14 +69,15 @@ public abstract class DataModel implements DataModelInterface {
             String name = field.getName();
             String type = field.getType().getSimpleName();
             String value = null;
+
             try {
                 if (null != field.get(this)) {
-                    value = field.get(this).toString();
+                    value = Objects.requireNonNull(field.get(this)).toString();
                 }
                 if ("JSONArray".equals(type)) value = "JSONArray [...]";
                 descriptif.append(type).append(" ").append(name).append(" = ").append(value).append("\n");
             } catch (IllegalAccessException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         }
 

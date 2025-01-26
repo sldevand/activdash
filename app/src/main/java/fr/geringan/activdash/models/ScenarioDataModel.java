@@ -9,7 +9,7 @@ import org.json.JSONObject;
 public class ScenarioDataModel extends DataModel implements Comparable<ScenarioDataModel> {
 
     protected String nom;
-    private String id;
+    private Integer id;
     protected String status;
     protected Integer remainingTime;
 
@@ -50,10 +50,11 @@ public class ScenarioDataModel extends DataModel implements Comparable<ScenarioD
         return this.id.compareTo(dm.id);
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return this.getNom();

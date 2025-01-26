@@ -2,15 +2,17 @@ package fr.geringan.activdash.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
+
 
 public class GraphsDataModel extends DataModel implements Parcelable {
-
-
+    private static final String TAG = "GraphsDataModel";
     //PARCELABLE STUFF
     public static final Parcelable.Creator<GraphsDataModel> CREATOR
             = new Parcelable.Creator<GraphsDataModel>() {
@@ -23,7 +25,7 @@ public class GraphsDataModel extends DataModel implements Parcelable {
         }
     };
     private String sensor_id;
-    private String id;
+    private Integer id;
     private String nom;
     private JSONArray data;
 
@@ -35,10 +37,8 @@ public class GraphsDataModel extends DataModel implements Parcelable {
         try {
             data = new JSONArray(in.readString());
             hydrateFromJSON();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        } catch (JSONException | IllegalAccessException e) {
+            Log.e(TAG, Arrays.toString(e.getStackTrace()));
         }
     }
 
@@ -47,11 +47,11 @@ public class GraphsDataModel extends DataModel implements Parcelable {
         return sensor_id;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -82,10 +82,8 @@ public class GraphsDataModel extends DataModel implements Parcelable {
         try {
             writeToJSON();
             parcel.writeString(dataJSON.toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        } catch (JSONException | IllegalAccessException e) {
+            Log.e(TAG, Arrays.toString(e.getStackTrace()));
         }
     }
 }

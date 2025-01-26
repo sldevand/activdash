@@ -2,23 +2,26 @@ package fr.geringan.activdash.fragments;
 
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentManager;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.cardview.widget.CardView;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Arrays;
 
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.dialogs.ModeDialogFragment;
@@ -34,7 +37,7 @@ import fr.geringan.activdash.providers.ModeImage;
 import fr.geringan.activdash.providers.ModeImageProvider;
 
 public class ThermostatFragment extends CommonNetworkFragment {
-
+    private static final String TAG = "ThermostatFragment";
     public static final double THT_CHANGE_VALUE = 0.5;
 
     protected String m_baseAddress = PrefsManager.apiAdress + "/thermostat";
@@ -74,14 +77,12 @@ public class ThermostatFragment extends CommonNetworkFragment {
         llThermostatMode.setVisibility(View.GONE);
     }
 
-    private boolean enableControls() {
+    private void enableControls() {
         progressBar.setVisibility(View.GONE);
         txtMinus.setVisibility(View.VISIBLE);
         txtPlus.setVisibility(View.VISIBLE);
         llThermostatPlan.setVisibility(View.VISIBLE);
         llThermostatMode.setVisibility(View.VISIBLE);
-
-        return true;
     }
 
     @Nullable
@@ -107,11 +108,6 @@ public class ThermostatFragment extends CommonNetworkFragment {
         imgThermostatMode = view.findViewById(R.id.imgThermostatMode);
         cvThermostatEtat = view.findViewById(R.id.cvThermostatEtat);
         progressBar = view.findViewById(R.id.progressTher);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
         getThermostat();
         getThermostatSensor();
         initializeSocketioListeners();
@@ -125,16 +121,12 @@ public class ThermostatFragment extends CommonNetworkFragment {
         getData.setOnResponseListener(response -> {
             try {
                 JSONArray jsonArray = new JSONArray(response);
-
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject obj = jsonArray.getJSONObject(i);
                     updateThermostatDisplays(obj);
                 }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
+            } catch (JSONException | IllegalAccessException e) {
+                Log.e(TAG, Arrays.toString(e.getStackTrace()));
             }
         });
 
@@ -152,7 +144,7 @@ public class ThermostatFragment extends CommonNetworkFragment {
                     updateSensorDisplay(obj);
                 }
             } catch (JSONException e) {
-                e.printStackTrace();
+                Log.e(TAG, Arrays.toString(e.getStackTrace()));
             }
         });
         getData.execute(m_sensorAddress);
@@ -165,7 +157,7 @@ public class ThermostatFragment extends CommonNetworkFragment {
                 JSONArray plannings = new JSONArray(response);
                 llThermostatPlan.setOnClickListener(v -> openPlanList(plannings.toString()));
             } catch (JSONException e) {
-                e.printStackTrace();
+                Log.e(TAG, Arrays.toString(e.getStackTrace()));
             }
         });
         getData.execute(m_planifAddress);
@@ -178,7 +170,7 @@ public class ThermostatFragment extends CommonNetworkFragment {
                 JSONArray modes = new JSONArray(response);
                 llThermostatMode.setOnClickListener(v -> openModeList(modes.toString()));
             } catch (JSONException e) {
-                e.printStackTrace();
+                Log.e(TAG, Arrays.toString(e.getStackTrace()));
             }
         });
         getData.execute(m_modesAddress);
@@ -202,11 +194,11 @@ public class ThermostatFragment extends CommonNetworkFragment {
         BoilerState boiler = BoilerStateProvider.getBoilerState(thermostat.getEtat());
 
 
-        imgThermostatEtat.setColorFilter(ContextCompat.getColor(getView().getContext(), boiler.getColor()));
+        imgThermostatEtat.setColorFilter(ContextCompat.getColor(requireView().getContext(), boiler.getColor()));
         txtThermostatEtat.setText(boiler.getEtat());
 
-        if (thermostat.getPwr() == 0 ) {
-            imgThermostatPwr.setColorFilter(ContextCompat.getColor(getView().getContext(), R.color.colorAccent));
+        if (thermostat.getPwr() == 0) {
+            imgThermostatPwr.setColorFilter(ContextCompat.getColor(requireView().getContext(), R.color.colorAccent));
             imgThermostatPwr.setVisibility(View.VISIBLE);
         } else {
             imgThermostatPwr.setVisibility(View.INVISIBLE);
@@ -218,7 +210,7 @@ public class ThermostatFragment extends CommonNetworkFragment {
         ModeImage modeImg = ModeImageProvider.getModeImage(mode.getNom());
 
         imgThermostatMode.setImageResource(modeImg.getImg());
-        imgThermostatMode.setColorFilter(ContextCompat.getColor(getView().getContext(), modeImg.getColor()));
+        imgThermostatMode.setColorFilter(ContextCompat.getColor(requireView().getContext(), modeImg.getColor()));
         txtThermostatMode.setText(mode.getNom());
     }
 
@@ -245,10 +237,8 @@ public class ThermostatFragment extends CommonNetworkFragment {
     }
 
     private void openModeList(String modes) {
-        final FragmentManager fm = getFragmentManager();
+        final FragmentManager fm = getParentFragmentManager();
         final ModeDialogFragment dialog = ModeDialogFragment.newInstance(modes);
-
-        if (null == fm) return;
 
         dialog.setSelectionListener(mode -> {
             if (mode.has("id")) {
@@ -260,7 +250,7 @@ public class ThermostatFragment extends CommonNetworkFragment {
                                 disableControls();
 
                             } catch (JSONException e) {
-                                e.printStackTrace();
+                                Log.e(TAG, Arrays.toString(e.getStackTrace()));
                             }
                         },
                         300);
@@ -270,10 +260,8 @@ public class ThermostatFragment extends CommonNetworkFragment {
     }
 
     private void openPlanList(String plannings) {
-        final FragmentManager fm = getFragmentManager();
+        final FragmentManager fm = getParentFragmentManager();
         final PlanDialogFragment dialog = PlanDialogFragment.newInstance(plannings);
-
-        if (null == fm || null == dialog) return;
 
         dialog.setSelectionListener(planning -> {
             if (planning.has("id")) {
@@ -311,43 +299,34 @@ public class ThermostatFragment extends CommonNetworkFragment {
         }
     }
 
-    public boolean onSocketIOReceive(final String event, Object... args) {
+    public void onSocketIOReceive(@NonNull final String event, Object... args) {
 
         if (event.equals(SocketIOHolder.EVENT_MODE_SAVE)
                 || event.equals(SocketIOHolder.EVENT_PLAN_SAVE)) {
-            getActivity().runOnUiThread(this::enableControls);
-            return true;
+            requireActivity().runOnUiThread(this::enableControls);
+            return;
         }
 
         try {
-            return eventsDispatch(event, args);
+            eventsDispatch(event, args);
         } catch (JSONException e) {
-            e.printStackTrace();
-            return false;
+            Log.e(TAG, Arrays.toString(e.getStackTrace()));
         }
     }
 
-    private boolean eventsDispatch(String event, Object... args) throws JSONException {
-        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.KITKAT
-                || null == getActivity()) {
-            return false;
-        }
-
+    private void eventsDispatch(String event, Object... args) throws JSONException {
         JSONArray jsonArray = new JSONArray(args);
         for (int i = 0; i < jsonArray.length(); i++) {
             final JSONObject obj = jsonArray.getJSONObject(i);
-            getActivity().runOnUiThread(() -> {
+            requireActivity().runOnUiThread(() -> {
                 try {
                     eventDispatch(event, obj);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                } catch (JSONException | IllegalAccessException e) {
+                    Log.e(TAG, Arrays.toString(e.getStackTrace()));
                 }
             });
         }
 
-        return true;
     }
 
     private void eventDispatch(String event, JSONObject obj) throws JSONException, IllegalAccessException {

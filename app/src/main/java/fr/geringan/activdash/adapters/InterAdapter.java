@@ -1,11 +1,13 @@
 package fr.geringan.activdash.adapters;
 
-import androidx.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,6 +15,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.interfaces.IActionneurAdapter;
@@ -22,8 +25,8 @@ import fr.geringan.activdash.network.SocketIOHolder;
 import fr.geringan.activdash.viewholders.CommonViewHolder;
 
 public class InterAdapter extends CommonNetworkAdapter<InterAdapter.ViewHolder> implements IActionneurAdapter {
-    private List<InterDataModel> dataSet = new ArrayList<>();
-
+    private final List<InterDataModel> dataSet = new ArrayList<>();
+    private static final String TAG = "InterAdapter";
     @Override
     public int getItemCount() {
         return dataSet.size();
@@ -69,8 +72,8 @@ public class InterAdapter extends CommonNetworkAdapter<InterAdapter.ViewHolder> 
 
     public static class ViewHolder extends CommonViewHolder<InterDataModel> {
 
-        private TextView txtName;
-        private ImageView img;
+        private final TextView txtName;
+        private final ImageView img;
         private InterDataModel currentDataModel;
 
         ViewHolder(View itemView) {
@@ -84,7 +87,7 @@ public class InterAdapter extends CommonNetworkAdapter<InterAdapter.ViewHolder> 
                     currentDataModel.changeEtat(state);
                     SocketIOHolder.emit(SocketIOHolder.EMIT_INTER, currentDataModel);
                 } catch (JSONException | IllegalAccessException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, Objects.requireNonNull(e.getMessage()));
                 }
             });
         }

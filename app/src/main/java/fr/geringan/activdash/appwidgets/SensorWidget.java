@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 import java.text.DecimalFormat;
 
@@ -65,6 +64,9 @@ public class SensorWidget extends AppWidgetProvider {
                 }
 
                 DecimalFormat df = new DecimalFormat("##.#");
+                String value1 = df.format(dataModel.getValeur1());
+                remoteViews.setTextViewText(R.id.sensor_widget_value, value1);
+                appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
 
                 String value2 = dataModel.getValeur2();
                 if (null != value2 && !value2.isEmpty()) {
@@ -72,10 +74,6 @@ public class SensorWidget extends AppWidgetProvider {
                     remoteViews.setViewVisibility(R.id.sensor_widget_value_2, View.VISIBLE);
                     remoteViews.setTextViewText(R.id.sensor_widget_value_2, formattedValue2);
                 }
-
-                String temperature = df.format(Double.valueOf(dataModel.getValeur1()));
-                remoteViews.setTextViewText(R.id.sensor_widget_value, temperature);
-                appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
             }
 
             @Override

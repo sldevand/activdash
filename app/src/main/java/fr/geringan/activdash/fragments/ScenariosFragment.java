@@ -1,24 +1,24 @@
 package fr.geringan.activdash.fragments;
 
-import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.adapters.ScenarioAdapter;
@@ -29,6 +29,7 @@ import fr.geringan.activdash.network.SocketIOHolder;
 
 public class ScenariosFragment extends CommonNetworkFragment {
 
+    private static final String TAG = "ScenariosFragment";
     public String m_address = PrefsManager.baseAddress + "/" + PrefsManager.apiDomain + "/scenarios/";
     private ScenarioAdapter adapter;
 
@@ -76,7 +77,6 @@ public class ScenariosFragment extends CommonNetworkFragment {
                 .on("scenarioFeedback", this::scenarioFeedback);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onResponseOk(String response, ProgressBar progBar, View v) {
         initializeSocketioListeners();
@@ -87,7 +87,6 @@ public class ScenariosFragment extends CommonNetworkFragment {
         //intentional empty method
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void scenarioFeedback(Object... args) {
         JSONObject jsonObject;
         try {
@@ -96,7 +95,7 @@ public class ScenariosFragment extends CommonNetworkFragment {
             dataModel.setDataJSON(jsonObject);
             onSocketioUpdate(dataModel);
         } catch (JSONException | IllegalAccessException | DataModelException e) {
-            e.printStackTrace();
+            Log.e(TAG, Arrays.toString(e.getStackTrace()));
         }
     }
 
@@ -118,7 +117,7 @@ public class ScenariosFragment extends CommonNetworkFragment {
             if (id.equals(idToChange)) {
                 scenario.setDataJSON(socketioScenario.getDataJSON());
                 final int finalIter = iter;
-                Objects.requireNonNull(getActivity()).runOnUiThread(() ->
+                requireActivity().runOnUiThread(() ->
                         adapter.notifyItemChanged(finalIter)
                 );
             }

@@ -32,7 +32,7 @@ public class ScenarioWidgetConfigureActivity extends Activity {
     protected String selectedCommandUrl;
     private int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private Spinner spinner;
-    private View.OnClickListener mOnClickListener = new View.OnClickListener() {
+    private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
         public void onClick(View v) {
             final Context context = ScenarioWidgetConfigureActivity.this;
             ArrayList<String> prefs = new ArrayList<>();

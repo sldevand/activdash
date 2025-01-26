@@ -1,6 +1,7 @@
 package fr.geringan.activdash.network;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.json.JSONException;
 
@@ -12,6 +13,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 
 import fr.geringan.activdash.adapters.CommonNetworkAdapter;
 import fr.geringan.activdash.exceptions.DataModelException;
@@ -19,8 +21,9 @@ import fr.geringan.activdash.exceptions.DataModelException;
 public class CommonGetHttp extends AsyncTask<String, Void, String> {
 
     public static final String HTTP_NOT_FOUND = String.valueOf(HttpURLConnection.HTTP_NOT_FOUND);
+    private static final String TAG = "CommonGetHttp";
     private OnHttpResponseListener responseListener;
-    private CommonNetworkAdapter<?> _adapter;
+    private final CommonNetworkAdapter<?> _adapter;
 
     public CommonGetHttp(CommonNetworkAdapter<?> adapter) {
         _adapter = adapter;
@@ -38,9 +41,9 @@ public class CommonGetHttp extends AsyncTask<String, Void, String> {
             return readStream(in);
 
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            Log.e(TAG, Arrays.toString(e.getStackTrace()));
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, Arrays.toString(e.getStackTrace()));
             return HTTP_NOT_FOUND;
         } finally {
             try {
@@ -48,7 +51,7 @@ public class CommonGetHttp extends AsyncTask<String, Void, String> {
                     in.close();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e(TAG, Arrays.toString(e.getStackTrace()));
             }
         }
         return HTTP_NOT_FOUND;
@@ -62,7 +65,7 @@ public class CommonGetHttp extends AsyncTask<String, Void, String> {
             if (this.responseListener != null) responseListener.onResponse(result);
             _adapter.setHttpResponse(result);
         } catch (IllegalAccessException | JSONException | DataModelException e) {
-            e.printStackTrace();
+            Log.e(TAG, Arrays.toString(e.getStackTrace()));
         }
     }
 

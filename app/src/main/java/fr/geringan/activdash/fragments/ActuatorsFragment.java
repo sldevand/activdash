@@ -1,6 +1,7 @@
 package fr.geringan.activdash.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
+
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.adapters.DimmerAdapter;
 import fr.geringan.activdash.adapters.InterAdapter;
@@ -27,6 +30,7 @@ import fr.geringan.activdash.models.InterDataModel;
 import fr.geringan.activdash.network.SocketIOHolder;
 
 public class ActuatorsFragment extends CommonNetworkFragment {
+    public static final String TAG = "ActuatorsFragment";
     public String m_baseAddress = PrefsManager.baseAddress + "/" + PrefsManager.apiDomain + "/actionneurs/";
     public String m_interAddress = m_baseAddress + "inter";
     public String m_dimmerAddress = m_baseAddress + "dimmer";
@@ -67,14 +71,14 @@ public class ActuatorsFragment extends CommonNetworkFragment {
 
     public void initializeSocketioListeners() {
         if (null == SocketIOHolder.socket) return;
-
-        SocketIOHolder.socket.on(SocketIOHolder.EVENT_INTER, args -> {
-            adapterHydrate(new InterDataModel(), interAdapter, args);
-        });
-
-        SocketIOHolder.socket.on(SocketIOHolder.EVENT_DIMMER, args -> {
-            adapterHydrate(new DimmerDataModel(), dimmerAdapter, args);
-        });
+        SocketIOHolder.socket.on(
+                SocketIOHolder.EVENT_INTER,
+                args -> adapterHydrate(new InterDataModel(), interAdapter, args)
+        );
+        SocketIOHolder.socket.on(
+                SocketIOHolder.EVENT_DIMMER,
+                args -> adapterHydrate(new DimmerDataModel(), dimmerAdapter, args)
+        );
     }
 
     private void adapterHydrate(final DataModel dataModel, IActionneurAdapter adapter, Object args) {
@@ -82,21 +86,17 @@ public class ActuatorsFragment extends CommonNetworkFragment {
 
         JSONObject jsonObject;
         try {
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-                jsonObject = new JSONArray(args).getJSONObject(0);
-                dataModel.setDataJSON(jsonObject);
-                getActivity().runOnUiThread(() -> {
-                    try {
-                        adapter.setEtat(dataModel);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
-                });
-            }
+            jsonObject = new JSONArray(args).getJSONObject(0);
+            dataModel.setDataJSON(jsonObject);
+            getActivity().runOnUiThread(() -> {
+                try {
+                    adapter.setEtat(dataModel);
+                } catch (JSONException | IllegalAccessException e) {
+                    Log.e(TAG, Arrays.toString(e.getStackTrace()));
+                }
+            });
         } catch (JSONException | IllegalAccessException e) {
-            e.printStackTrace();
+            Log.e(TAG, Arrays.toString(e.getStackTrace()));
         }
     }
 

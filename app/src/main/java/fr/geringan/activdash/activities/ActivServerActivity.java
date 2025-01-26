@@ -2,16 +2,16 @@ package fr.geringan.activdash.activities;
 
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.SwitchCompat;
 import android.text.Spannable;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.SwitchCompat;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,7 +30,6 @@ import fr.geringan.activdash.network.SocketIOHolder;
 
 
 public class ActivServerActivity extends RootActivity {
-
     private final static String ON_STATE = "on";
     private final static String OFF_STATE = "off";
     public String m_baseAddress = PrefsManager.baseAddress + "/" + PrefsManager.entryPointAddress;
@@ -40,7 +39,6 @@ public class ActivServerActivity extends RootActivity {
     private SwitchCompat activServerSwitch;
     private TextView tvLog;
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,9 +50,7 @@ public class ActivServerActivity extends RootActivity {
         });
 
         AppCompatImageView serialPortReset = findViewById(R.id.seriaport_reset);
-        serialPortReset.setOnClickListener(view -> {
-            serialPortReset();
-        });
+        serialPortReset.setOnClickListener(view -> serialPortReset());
 
         activServerState();
         tvLog = findViewById(R.id.tvLog);
@@ -80,8 +76,8 @@ public class ActivServerActivity extends RootActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        OptionsItems optionsItems= new OptionsItems(
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        OptionsItems optionsItems = new OptionsItems(
                 getSupportFragmentManager(),
                 getApplicationContext()
         );
@@ -104,7 +100,6 @@ public class ActivServerActivity extends RootActivity {
             try {
                 tvLog.setText(prepareMessage(response), TextView.BufferType.SPANNABLE);
             } catch (JSONException e) {
-                e.printStackTrace();
                 tvLog.setText(e.getMessage());
             }
         });
@@ -121,8 +116,7 @@ public class ActivServerActivity extends RootActivity {
 
         GetHttp serverState = new GetHttp();
         serverState.setOnResponseListener(response -> {
-            boolean onoff = false;
-            if (response.contains(ON_STATE)) onoff = true;
+            boolean onoff = response.contains(ON_STATE);
             activServerSwitch.setChecked(onoff);
         });
         serverState.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, m_stateAddress);
@@ -135,12 +129,10 @@ public class ActivServerActivity extends RootActivity {
         else state = OFF_STATE;
 
         GetHttp serverSwitch = new GetHttp();
-        serverSwitch.setOnResponseListener(response -> {
-            new android.os.Handler().postDelayed(
-                    this::activServerState,
-                    300
-            );
-        });
+        serverSwitch.setOnResponseListener(response -> new android.os.Handler().postDelayed(
+                this::activServerState,
+                300
+        ));
         serverSwitch.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, m_switchAddress + state);
     }
 

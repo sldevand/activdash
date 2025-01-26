@@ -1,8 +1,7 @@
 package fr.geringan.activdash.adapters;
 
 
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
+import static java.lang.Float.parseFloat;
 
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -10,6 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,14 +24,11 @@ import java.util.List;
 import fr.geringan.activdash.R;
 import fr.geringan.activdash.activities.GraphsActivity;
 import fr.geringan.activdash.models.SensorDataModel;
-import fr.geringan.activdash.helpers.Tools;
 import fr.geringan.activdash.viewholders.CommonViewHolder;
-
-import static java.lang.Float.parseFloat;
 
 public class SensorAdapter extends CommonNetworkAdapter<SensorAdapter.ViewHolder> {
 
-    private List<SensorDataModel> dataSet = new ArrayList<>();
+    private final List<SensorDataModel> dataSet = new ArrayList<>();
 
     @Override
     public int getItemCount() {
@@ -66,13 +65,13 @@ public class SensorAdapter extends CommonNetworkAdapter<SensorAdapter.ViewHolder
     }
 
     public class ViewHolder extends CommonViewHolder<SensorDataModel> {
-        private TextView txtStatus;
-        private TextView txtName;
-        private TextView txtValue1;
-        private TextView txtValue2;
-        private TextView txtDate;
-        private ImageView img;
-        private SensorDataModel _currentCapteur;
+        public static final int EMPTY_DOUBLE = -255;
+        private final TextView txtStatus;
+        private final TextView txtName;
+        private final TextView txtValue1;
+        private final TextView txtValue2;
+        private final TextView txtDate;
+        private final ImageView img;
 
         private ViewHolder(View itemView) {
             super(itemView);
@@ -84,7 +83,6 @@ public class SensorAdapter extends CommonNetworkAdapter<SensorAdapter.ViewHolder
             img = itemView.findViewById(R.id.imageCapteur);
 
             itemView.setOnClickListener(v -> {
-                //Tools.shortSnackbar(v, _currentCapteur.getNom());
                 Intent intent = new Intent(context, GraphsActivity.class);
                 context.startActivity(intent);
             });
@@ -94,11 +92,12 @@ public class SensorAdapter extends CommonNetworkAdapter<SensorAdapter.ViewHolder
         public void setData(SensorDataModel capteur) {
             txtName.setText(capteur.getNom());
             displayActif(capteur.getActif());
-            displayIconAndValues(capteur.getRadioid(), capteur.getValeur1(), capteur.getValeur2());
+            String valeur2 = capteur.getValeur2();
+            Double value2 = valeur2.isEmpty() ? EMPTY_DOUBLE : Double.parseDouble(valeur2);
+            displayIconAndValues(capteur.getRadioid(), capteur.getValeur1(), value2);
             txtDate.setText(capteur.getReleve());
 
             img.animate().rotationBy(360).setDuration(500).setStartDelay(300);
-            _currentCapteur = capteur;
         }
 
         private void displayActif(int actif) {
@@ -111,7 +110,7 @@ public class SensorAdapter extends CommonNetworkAdapter<SensorAdapter.ViewHolder
             txtStatus.setText(txtActif);
         }
 
-        private void displayIconAndValues(String radioId, String valeur1, String valeur2) {
+        private void displayIconAndValues(String radioId, Double valeur1, Double valeur2) {
 
             String value1Units = "°C";
             String value2Units = "";
@@ -126,17 +125,10 @@ public class SensorAdapter extends CommonNetworkAdapter<SensorAdapter.ViewHolder
             }
 
             DecimalFormat df = new DecimalFormat("0.#");
-            String v1 = "";
+            String v1 = df.format(valeur1);
             String v2 = "";
-
-            if (!valeur1.isEmpty()) {
-                float val1 = parseFloat(valeur1);
-                v1 = df.format(val1);
-            }
-
-            if (!valeur2.isEmpty()) {
-                float val2 = parseFloat(valeur2);
-                v2 = df.format(val2);
+            if (valeur2 != EMPTY_DOUBLE) {
+                v2 = df.format(valeur2);
             }
 
             String val1 = v1 + " " + value1Units;
