@@ -54,7 +54,7 @@ public class ThermostatWidget extends AppWidgetProvider {
         intentUpdate.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
         int[] idArray = new int[]{appWidgetId};
         intentUpdate.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, idArray);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, appWidgetId, intentUpdate, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, appWidgetId, intentUpdate, PendingIntent.FLAG_MUTABLE);
         remoteViews.setOnClickPendingIntent(R.id.thermostat_widget_infos_layout, pendingIntent);
 
         //launch thermostat activity

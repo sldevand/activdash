@@ -34,6 +34,8 @@ public abstract class DataModel implements DataModelInterface {
             }
             if (type.equalsIgnoreCase("int") && dataJSON.has(name)) {
                 field.setInt(this, dataJSON.getInt(name));
+            } else if (type.equalsIgnoreCase("double") && dataJSON.has(name)) {
+                field.setDouble(this, dataJSON.getDouble(name));
             } else if (dataJSON.has(name)) {
                 field.set(this, dataJSON.get(name));
             }

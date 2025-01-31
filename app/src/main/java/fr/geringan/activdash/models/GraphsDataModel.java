@@ -25,7 +25,7 @@ public class GraphsDataModel extends DataModel implements Parcelable {
         }
     };
     private String sensor_id;
-    private Integer id;
+    private int id;
     private String nom;
     private JSONArray data;
 

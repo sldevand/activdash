@@ -9,7 +9,7 @@ import org.json.JSONObject;
 public class SensorDataModel extends DataModel {
 
     private String nom;
-    private Double valeur1;
+    private double valeur1;
     private String valeur2;
     private String radioid;
     private String releve;
@@ -27,7 +27,7 @@ public class SensorDataModel extends DataModel {
     public String getNom() {
         return nom;
     }
-    public Double getValeur1() {
+    public double getValeur1() {
         return valeur1;
     }
     public String getValeur2() {
