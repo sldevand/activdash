@@ -17,12 +17,4 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabs"
-        style="@style/MyCustomTabLayout"
-        android:layout_width="match_parent"
-        android:background="@color/white"
-        app:tabGravity="center"
-        app:tabMode="scrollable" />
-
 </com.google.android.material.appbar.AppBarLayout>

@@ -19,12 +19,20 @@
             android:layout_height="wrap_content"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/container"
+        <ScrollView
+            android:id="@+id/activity_main_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/appbar"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            android:contentDescription="@string/main_scrollview"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+
+            <LinearLayout
+                android:id="@+id/activity_main_vertical_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
+        </ScrollView>
 
     </RelativeLayout>
 

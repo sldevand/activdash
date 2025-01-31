@@ -4,111 +4,42 @@
     android:layout_height="wrap_content"
     android:layout_centerInParent="true"
     android:background="?android:selectableItemBackground"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:padding="4dp">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageCapteur"
         android:layout_width="match_parent"
         android:layout_height="@dimen/actionneur_icon_minheight"
-        android:layout_weight="3"
         android:gravity="center_vertical"
         android:src="@mipmap/ic_thermometer" />
 
-    <LinearLayout
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textNameCapteur"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="2"
-        android:orientation="vertical"
-        android:paddingEnd="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_vertical_margin"
-        android:paddingRight="@dimen/activity_vertical_margin"
-        android:paddingStart="@dimen/activity_vertical_margin">
+        android:gravity="center"
+        android:text="@string/item_capteur_name"
+        android:textColor="@color/colorAccent"
+        tools:ignore="NestedWeights" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/textNameCapteur"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="4"
-            android:gravity="center_vertical"
-            android:text="@string/item_capteur_name"
-            android:textColor="@color/colorAccent"
-            tools:ignore="NestedWeights" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/textValue1Capteur"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="4"
-            android:text="Valeur"
-            android:textColor="@color/almostBlack"
-            android:textSize="@dimen/capteur_value_size" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/textValue2Capteur"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="4"
-
-            android:text="Valeur"
-            android:textColor="@color/almostBlack"
-            android:textSize="@dimen/capteur_value_size" />
-
-    </LinearLayout>
-
-
-    <LinearLayout
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textValue1Capteur"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:orientation="vertical">
+        android:gravity="center"
+        android:text="@string/value1_example"
+        android:textColor="@color/almostBlack"
+        android:textSize="@dimen/capteur_value_size" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="8"
-            android:orientation="horizontal">
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="4"
-                android:text="Etat :"
-                android:textColor="@color/almostBlack" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/textStatusCapteur"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="4"
-                android:text="Etat"
-                android:textColor="@color/colorPrimaryDark" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:orientation="vertical">
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:text="Date :"
-                android:textColor="@color/almostBlack" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/textLastmeasureCapteur"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="Date"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="@dimen/capteur_date_size" />
-        </LinearLayout>
-    </LinearLayout>
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textValue2Capteur"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/value2_example"
+        android:textColor="@color/almostBlack"
+        android:textSize="@dimen/capteur_value_size" />
 </LinearLayout>
-
 
 

@@ -19,7 +19,6 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="RecycleItemsStyle">
-        <item name="android:paddingLeft">@dimen/item_padding_left</item>
         <item name="android:textAppearance">?attr/textAppearanceListItem</item>
         <item name="android:gravity">center_vertical</item>
     </style>
