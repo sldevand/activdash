@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-extraction-rules>
+    <cloud-backup>
+    
+        <!-- Exclude the shared preferences file that contains the GCM registrationId -->
+        <exclude
+            domain="sharedpref"
+            path="fr.geringan.activdash.DashWidget.xml" />
+    </cloud-backup>
+</data-extraction-rules>
