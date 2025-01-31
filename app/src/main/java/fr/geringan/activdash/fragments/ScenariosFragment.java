@@ -57,9 +57,6 @@ public class ScenariosFragment extends CommonNetworkFragment
         recyclerView.setLayoutManager(gridLayoutManager);
         adapter = new ScenarioAdapter();
         recyclerView.setAdapter(adapter);
-        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this.requireContext(), DividerItemDecoration.VERTICAL);
-        recyclerView.addItemDecoration(itemDecoration);
-
         final ProgressBar progress = view.findViewById(R.id.progressScenario);
         adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver()
         {

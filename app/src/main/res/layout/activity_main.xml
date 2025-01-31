@@ -6,11 +6,9 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
 
         <include
             android:id="@+id/appbar"
@@ -23,17 +21,60 @@
             android:id="@+id/activity_main_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_below="@id/appbar"
             android:contentDescription="@string/main_scrollview"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <LinearLayout
                 android:id="@+id/activity_main_vertical_ll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"/>
-        </ScrollView>
+                android:orientation="vertical">
 
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
+                    android:text="@string/actuators"
+                    android:textAlignment="center"
+                    android:textAppearance="?attr/textAppearanceListItem" />
+
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/actuators_fragment_container_view"
+                    android:name="fr.geringan.activdash.fragments.ActuatorsFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
+                    android:text="@string/sensors"
+                    android:textAlignment="center"
+                    android:textAppearance="?attr/textAppearanceListItem" />
+
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/sensors_fragment_container_view"
+                    android:name="fr.geringan.activdash.fragments.SensorsFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
+                    android:text="@string/scenarios"
+                    android:textAlignment="center"
+                    android:textAppearance="?attr/textAppearanceListItem" />
+
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/scenarios_fragment_container_view"
+                    android:name="fr.geringan.activdash.fragments.ScenariosFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </ScrollView>
     </RelativeLayout>
 
     <com.google.android.material.navigation.NavigationView

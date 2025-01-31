@@ -59,10 +59,6 @@ public class SensorsFragment extends CommonNetworkFragment {
         recyclerView.setLayoutManager(gridLayoutManager);
         adapter = new SensorAdapter();
         recyclerView.setAdapter(adapter);
-        RecyclerView.ItemDecoration itemDecoration =
-                new DividerItemDecoration(this.requireContext(),
-                        DividerItemDecoration.VERTICAL);
-        recyclerView.addItemDecoration(itemDecoration);
         ((SimpleItemAnimator) Objects.requireNonNull(recyclerView.getItemAnimator()))
                 .setSupportsChangeAnimations(false);
     }
@@ -137,5 +133,4 @@ public class SensorsFragment extends CommonNetworkFragment {
             iter++;
         }
     }
-
 }

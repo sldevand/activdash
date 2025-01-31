@@ -154,11 +154,7 @@ public class AppController extends RootActivity implements NetworkChangeReceiver
 
     public void createScrollView()
     {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.activity_main_vertical_ll, new SensorsFragment());
-        fragmentTransaction.add(R.id.activity_main_vertical_ll, new ScenariosFragment());
-        fragmentTransaction.add(R.id.activity_main_vertical_ll, new ActuatorsFragment());
-        fragmentTransaction.commit();
+
     }
 
     public void createToolbar()

@@ -104,16 +104,10 @@ public class ActuatorsFragment extends CommonNetworkFragment
 
     protected RecyclerView.Adapter<?> populateRecyclerView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.Adapter<?> adapter)
     {
-        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this.requireContext(), DividerItemDecoration.VERTICAL);
-        recyclerView.addItemDecoration(itemDecoration);
-
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(gridLayoutManager);
-        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver()
-        {
-        });
+        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {});
         recyclerView.setAdapter(adapter);
-
         return adapter;
     }
 
