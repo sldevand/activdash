@@ -10,6 +10,7 @@ import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
@@ -54,13 +55,10 @@ public class SensorsFragment extends CommonNetworkFragment {
 
     private void initRecyclerView(View view) {
         RecyclerView recyclerView = view.findViewById(R.id.listSensors);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
+        recyclerView.setLayoutManager(gridLayoutManager);
         adapter = new SensorAdapter();
         recyclerView.setAdapter(adapter);
-        RecyclerView.ItemDecoration itemDecoration =
-                new DividerItemDecoration(this.requireContext(),
-                        DividerItemDecoration.VERTICAL);
-        recyclerView.addItemDecoration(itemDecoration);
         ((SimpleItemAnimator) Objects.requireNonNull(recyclerView.getItemAnimator()))
                 .setSupportsChangeAnimations(false);
     }
@@ -135,5 +133,4 @@ public class SensorsFragment extends CommonNetworkFragment {
             iter++;
         }
     }
-
 }

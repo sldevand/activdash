@@ -10,7 +10,7 @@ import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONArray;
@@ -29,7 +29,8 @@ import fr.geringan.activdash.models.DimmerDataModel;
 import fr.geringan.activdash.models.InterDataModel;
 import fr.geringan.activdash.network.SocketIOHolder;
 
-public class ActuatorsFragment extends CommonNetworkFragment {
+public class ActuatorsFragment extends CommonNetworkFragment
+{
     public static final String TAG = "ActuatorsFragment";
     public String m_baseAddress = PrefsManager.baseAddress + "/" + PrefsManager.apiDomain + "/actionneurs/";
     public String m_interAddress = m_baseAddress + "inter";
@@ -38,20 +39,15 @@ public class ActuatorsFragment extends CommonNetworkFragment {
     private InterAdapter interAdapter;
     private DimmerAdapter dimmerAdapter;
 
-
-    public static ActuatorsFragment newInstance() {
-        return new ActuatorsFragment();
-    }
-
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         return inflater.inflate(R.layout.fragment_actuators, container, false);
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
+    {
         super.onViewCreated(view, savedInstanceState);
 
         RecyclerView interRecyclerView = view.findViewById(R.id.listInters);
@@ -69,8 +65,11 @@ public class ActuatorsFragment extends CommonNetworkFragment {
         execGetData(m_dimmerAddress, dimmerAdapter, progressDimmer);
     }
 
-    public void initializeSocketioListeners() {
-        if (null == SocketIOHolder.socket) return;
+    public void initializeSocketioListeners()
+    {
+        if (null == SocketIOHolder.socket) {
+            return;
+        }
         SocketIOHolder.socket.on(
                 SocketIOHolder.EVENT_INTER,
                 args -> adapterHydrate(new InterDataModel(), interAdapter, args)
@@ -81,8 +80,11 @@ public class ActuatorsFragment extends CommonNetworkFragment {
         );
     }
 
-    private void adapterHydrate(final DataModel dataModel, IActionneurAdapter adapter, Object args) {
-        if (null == getActivity()) return;
+    private void adapterHydrate(final DataModel dataModel, IActionneurAdapter adapter, Object args)
+    {
+        if (null == getActivity()) {
+            return;
+        }
 
         JSONObject jsonObject;
         try {
@@ -100,31 +102,25 @@ public class ActuatorsFragment extends CommonNetworkFragment {
         }
     }
 
-    protected RecyclerView.Adapter<?> populateRecyclerView(
-            RecyclerView recyclerView,
-            RecyclerView.Adapter<?> adapter
-    ) {
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(
-                this.requireContext(),
-                DividerItemDecoration.VERTICAL
-        );
-        recyclerView.addItemDecoration(itemDecoration);
-        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-        });
+    protected RecyclerView.Adapter<?> populateRecyclerView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.Adapter<?> adapter)
+    {
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
+        recyclerView.setLayoutManager(gridLayoutManager);
+        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {});
         recyclerView.setAdapter(adapter);
-
         return adapter;
     }
 
     @Override
-    public void onResponseOk(String response, ProgressBar progBar, View v) {
+    public void onResponseOk(String response, @NonNull ProgressBar progBar, View v)
+    {
         progBar.setVisibility(View.GONE);
         initializeSocketioListeners();
     }
 
     @Override
-    public void onEmptyResponse(ProgressBar progBar, View v) {
+    public void onEmptyResponse(@NonNull ProgressBar progBar, View v)
+    {
         progBar.setVisibility(View.GONE);
     }
 }

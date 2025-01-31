@@ -17,12 +17,12 @@
     <string name="title_node_port">Node Port</string>
     <string name="title_entrypoint_url">Entrypoint Url</string>
 
-    <string name="summary_base_url">example = http://192.168.1.52</string>
+    <string name="summary_base_url">example = http://domusbox</string>
     <string name="summary_api_domain">example = activapi/api</string>
     <string name="summary_node_port">example = 5901</string>
     <string name="summary_entrypoint_url">example = activapi/api</string>
 
-    <string name="default_base_url">http://192.168.1.52</string>
+    <string name="default_base_url">http://domusbox</string>
     <string name="default_api_domain">activapi/api</string>
     <string name="default_node_port">5901</string>
     <string name="default_entrypoint_url">activapi/api</string>
@@ -76,7 +76,7 @@
     <string name="select_a_mode">Select a mode</string>
     <string name="about">About…</string>
     <string name="no_version_found">No version found</string>
-    <string name="remaining_time" translatable="false">…</string>
+    <string name="remaining_time" translatable="false">00:00:00</string>
     <string name="text" translatable="false">text</string>
     <string name="serialport">Serialport</string>
     <string name="reset">Reset</string>
@@ -86,5 +86,8 @@
     <string name="undefined" translatable="false">Undefined</string>
 
     <string name="title_graphs_activity" translatable="false">Graphs</string>
+    <string name="main_scrollview" translatable="false">main scrollview</string>
+    <string name="value1_example" translatable="false">18.2 °C</string>
+    <string name="value2_example" translatable="false">85 %</string>
 
 </resources>

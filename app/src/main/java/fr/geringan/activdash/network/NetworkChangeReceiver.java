@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import androidx.annotation.NonNull;
+
 import java.util.Objects;
 
 import fr.geringan.activdash.R;
@@ -18,7 +20,7 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
     }
 
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(@NonNull Context context, @NonNull Intent intent) {
 
         if (Objects.requireNonNull(intent.getAction()).equals(context.getString(R.string.wifi_state_change))) {
             Integer status = NetworkUtil.getConnectivityStatus(context);

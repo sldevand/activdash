@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="cardViewStyle">@style/CardView</item>
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -19,7 +19,6 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="RecycleItemsStyle">
-        <item name="android:paddingLeft">@dimen/item_padding_left</item>
         <item name="android:textAppearance">?attr/textAppearanceListItem</item>
         <item name="android:gravity">center_vertical</item>
     </style>
