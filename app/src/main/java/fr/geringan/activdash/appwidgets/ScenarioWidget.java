@@ -31,7 +31,7 @@ public class ScenarioWidget extends AppWidgetProvider {
         Intent intent = new Intent(context, ScenarioWidget.class);
         intent.setAction(ACTION_SCENARIO);
         intent.putExtra(ACTION_SCENARIO_COMMAND_URL_EXTRA, scenarioCommandUrl);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, appWidgetId, intent, PendingIntent.FLAG_MUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, appWidgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         remoteViews.setOnClickPendingIntent(R.id.scenario_widget_layout, pendingIntent);
 
         appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
