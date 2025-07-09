@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -106,6 +108,17 @@ public class GraphsAdapter extends CommonNetworkAdapter<GraphsAdapter.ViewHolder
                 lineDataSet.setDrawValues(false);
 
                 lineData = new LineData(lineDataSet);
+
+                int axisTextColor = itemView.getResources().getColor(R.color.white, null);
+                float axisTextSize = 12f;
+                YAxis axisLeft = chart.getAxisLeft();
+                axisLeft.setTextSize(axisTextSize);
+                axisLeft.setTextColor(axisTextColor);
+
+                XAxis xAxis = chart.getXAxis();
+                xAxis.setTextSize(axisTextSize);
+                xAxis.setTextColor(axisTextColor);
+
                 chart.setData(lineData);
                 chart.setHighlightPerTapEnabled(true);
                 chart.getAxisRight().setEnabled(false);
